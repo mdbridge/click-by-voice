@@ -10,7 +10,10 @@ function add_hints() {
 }
 
 
-
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+	console.log("got hint number: " + request.hint_number);
+    });
 
 $(document).ready(function() {
     add_hints();
