@@ -37,6 +37,10 @@ function each_hintable(callback) {
     $("a[href]").each(function(index) {
 	callback($(this));
     });
+
+    $("[onclick]").each(function(index) {
+	callback($(this));
+    });
 }
 
 
