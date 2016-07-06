@@ -45,7 +45,7 @@ function each_hintable(callback) {
 
 
 function add_hints() {
-    console.log("adding hints");
+    //console.log("adding hints");
 
     each_hintable(function(element) {
 	if (!element.is("[CBV_hint_number]")) {
@@ -55,7 +55,7 @@ function add_hints() {
 	}
     });
 
-    console.log("total hints assigned: " + next_CBV_hint);
+    //console.log("total hints assigned: " + next_CBV_hint);
 }
 
 
@@ -66,12 +66,22 @@ function add_hints() {
 
 function goto_hint(hint) {
     console.log("goto_hint: " + hint);
+    var click_it = true;
+    if (hint.substring(hint.length-1) == "f") {
+	click_it = false;
+	hint = hint.substring(0, hint.length - 1);
+    }
+    console.log("goto_hint: " + hint + "by: " + click_it);
 
     var element = $("[CBV_hint_number='" + hint + "']");
     if (element.length != 0) {
 	element.addClass("CBV_highlight_class");
 	setTimeout(function() {
-	    element[0].click();
+	    if (click_it)
+		element[0].click();
+	    else
+		element[0].focus();
+
 	    setTimeout(function() {
 		element.removeClass("CBV_highlight_class");
 	    }, 500);
