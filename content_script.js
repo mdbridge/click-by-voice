@@ -6,6 +6,22 @@ var next_CBV_hint = 0;
 
 // Enumerate each element that we should hint, possibly more than once:
 function each_hintable(callback) {
+    $("input").each(function(index) {
+	callback($(this));
+    });
+
+    $("button").each(function(index) {
+	callback($(this));
+    });
+
+    $("select").each(function(index) {
+	callback($(this));
+    });
+
+    $("keygen").each(function(index) {
+	callback($(this));
+    });
+
     $("a[href]").each(function(index) {
 	callback($(this));
     });
