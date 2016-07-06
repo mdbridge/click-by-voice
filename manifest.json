@@ -10,8 +10,10 @@
     ],
 
 
+    // browser action: ask for a hint number to activate via a pop up
     "browser_action": {
-	"default_title": "Click by Voice"
+	"default_title": "Click by Voice",
+	"default_popup": "popup.html" 
     },
 
 
