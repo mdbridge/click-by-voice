@@ -9,10 +9,18 @@ function add_hints() {
     });
 }
 
+function goto_hint(hint) {
+    console.log("goto_hint: " + hint);
+
+    var element = $("[CBV_hint_number='" + hint + "']");
+    if (element.length != 0)
+	element[0].click();
+}
+
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-	console.log("got hint number: " + request.hint_number);
+	goto_hint(request.hint_number);
     });
 
 $(document).ready(function() {
