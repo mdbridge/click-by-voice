@@ -7,7 +7,19 @@ var next_CBV_hint = 0;
 // Enumerate each element that we should hint, possibly more than once:
 function each_hintable(callback) {
     $("input").each(function(index) {
-	callback($(this));
+	var input_type = $(this).attr("type");
+	if (input_type)
+	    input_type = input_type.toLowerCase();
+	var usable = true;
+	if (input_type == "hidden") 
+	    usable = false;
+	if ($(this).attr("disabled"))
+	    usable = false;
+	if ($(this).attr("readonly"))
+	    usable = false;
+
+	if (usable)
+	    callback($(this));
     });
 
     $("button").each(function(index) {
