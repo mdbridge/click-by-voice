@@ -61,21 +61,28 @@ function add_hints() {
 
 
 //
-// 
+// Activating a hint by number
 //
 
 function goto_hint(hint) {
     console.log("goto_hint: " + hint);
 
     var element = $("[CBV_hint_number='" + hint + "']");
-    if (element.length != 0)
-	element[0].click();
+    if (element.length != 0) {
+	element.addClass("CBV_highlight_class");
+	setTimeout(function() {
+	    element[0].click();
+	    setTimeout(function() {
+		element.removeClass("CBV_highlight_class");
+	    }, 500);
+	}, 250);
+    }
 }
 
 
 
 //
-// 
+// Main routine
 //
 
 chrome.runtime.onMessage.addListener(

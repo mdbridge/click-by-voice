@@ -19,4 +19,11 @@
     /* background-color: yellow; */
     }
 
+
+    .CBV_highlight_class {
+	background-color: yellow !important;
+	outline-style:    dashed  !important;
+	outline-color:    red !important;
+    }
+
 }
