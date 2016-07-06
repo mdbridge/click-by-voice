@@ -12,5 +12,14 @@
 
     "browser_action": {
 	"default_title": "Click by Voice"
-    }
+    },
+
+
+    "content_scripts": [
+	{
+	    "matches": ["http://*/*", "https://*/*", "file://*/*"],
+	    "css": ["show_hints.css"],
+	    "js": ["jquery-3.0.0.min.js", "content_script.js"]
+	}
+    ]
 }
