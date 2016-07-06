@@ -43,7 +43,8 @@ chrome.runtime.onMessage.addListener(
 
 $(document).ready(function() {
     add_hints();
-//    setTimeout(function() { refresh_hints(); }, 150);
-    setTimeout(function() { refresh_hints(); }, 5000);
+    //setTimeout(function() { refresh_hints(); }, 5000);
+    // This runs even when our tab is in the background:
+    setInterval(refresh_hints, 3000);
 });
 
