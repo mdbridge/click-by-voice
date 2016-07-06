@@ -3,7 +3,7 @@
 
     "name": "Click by Voice",
     "description": "This Chrome browser extension is being developed to provide support for activating links and other HTML elements using voice commands.",
-    "version": "0.0.2",
+    "version": "0.0.3",
 
     "permissions": [
 	"activeTab"
@@ -22,6 +22,12 @@
 		"default": "Ctrl+Shift+Space"
             },
             "description": "Activate (e.g., click or focus) a hint"
+	},
+	"blur": {
+            "suggested_key": {
+		"default": "Ctrl+Shift+Comma"
+            },
+            "description": "Blur (remove keyboard focus from elements)"
 	}
     },
 
@@ -32,5 +38,10 @@
 	    "css": ["show_hints.css"],
 	    "js": ["jquery-3.0.0.min.js", "content_script.js"]
 	}
-    ]
+    ],
+
+    "background": {
+	"scripts": ["background.js"],
+        "persistent": false
+    }
 }
