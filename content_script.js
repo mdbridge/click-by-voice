@@ -110,10 +110,10 @@ function activate(element, operation) {
 	    element[0].focus();
 	    break;
 	case "t":
-	    act("create_tab", {URL: element.attr("href"), active: true});
+	    act("create_tab", {URL: element[0].href, active: true});
 	    break;
 	case "b":
-	    act("create_tab", {URL: element.attr("href"), active: false});
+	    act("create_tab", {URL: element[0].href, active: false});
 	    break;
 	default:
 	    console.log("unknown activate operation: " + operation);
