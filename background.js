@@ -28,7 +28,10 @@ chrome.runtime.onMessage.addListener(
 	case "create_tab":
 	    console.log(request.URL);
 	    console.log(request.active);
-	    chrome.tabs.create({url: request.URL, active: request.active}, function() {});
+	    chrome.tabs.create({url: request.URL, active: request.active,
+				// open new tab immediately to right of current one:
+				index: sender.tab.index+1}, 
+			       function() {});
 	    break;
 	default:
 	    console.log("unknown action: " + request.action);
