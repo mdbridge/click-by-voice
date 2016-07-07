@@ -109,15 +109,20 @@ function activate(element, operation) {
 	case "f":
 	    element[0].focus();
 	    break;
+
 	case "t":
-	    act("create_tab", {URL: element[0].href, active: true});
+	    if (element.attr("href"))
+		act("create_tab", {URL: element[0].href, active: true});
 	    break;
 	case "b":
-	    act("create_tab", {URL: element[0].href, active: false});
+	    if (element.attr("href"))
+		act("create_tab", {URL: element[0].href, active: false});
 	    break;
 	case "w":
-	    act("create_window", {URL: element[0].href});
+	    if (element.attr("href"))
+		act("create_window", {URL: element[0].href});
 	    break;
+
 	default:
 	    console.log("unknown activate operation: " + operation);
 	}
