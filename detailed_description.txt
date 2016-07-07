@@ -1,0 +1,5 @@
+Click by Voice numbers each clickable or focusable item at all times and allows activating them via keyboard.  For example, to open a link numbered 13 in a new window, you could manually hit control shift space then type "13:w" into the resulting pop-up then hit enter.  In practice, a voice command like "window pick 1 3" would be used to type these keys.  
+
+WARNING: this extension by itself provides no voice functionality; procurement of the needed voice commands is the user's responsibility. One recommended means of doing this is to use Vocola (http://vocola.net/). 
+
+Supported functionality includes focusing input elements, clicking elements, opening links in the same tab/a new (focused) tab/a new window, and removing the keyboard focus from the current element.  For how to use Click by Voice, see https://github.com/mdbridge/click-by-voice/blob/master/README.md 
