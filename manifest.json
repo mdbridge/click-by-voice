@@ -3,7 +3,17 @@
 
     "name": "Click by Voice",
     "description": "This Chrome browser extension provides support for activating links and other HTML elements using voice commands.",
-    "version": "0.2.0",
+    "version": "0.2.1",
+    "icons": { 
+	// The favicon for an extension's pages. The 16x16 icon is
+	// also displayed in the experimental extension infobar
+	// feature.
+	"16": "images/icon_16.png",
+	// for extensions management page (chrome://extensions)
+        "48": "images/icon_48.png",
+	// used during installation and by the chrome Web store
+        "128": "images/icon_128.png" 
+    },
 
     "permissions": [
 	"activeTab"
@@ -13,6 +23,11 @@
     // browser action: ask for a hint number to activate via a pop up
     "browser_action": {
 	"default_title": "Click by Voice",
+	"default_icon": {
+	    //"19": "images/icon_19.png",  // default size
+	    "38": "images/icon_38.png"     // resized down automatically to 19 X 19
+	},
+	//	"default_icon": "images/icon_19.png",
 	"default_popup": "popup.html" 
     },
 
