@@ -42,6 +42,7 @@
 
     "background": {
 	"scripts": ["background.js"],
+	//"page": "popup.html",
         "persistent": false
     }
 }

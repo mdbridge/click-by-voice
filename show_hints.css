@@ -26,4 +26,8 @@
 	outline-color:    red !important;
     }
 
+    /* a:focus { */
+    /* 	outline-style: solid; */
+    /* 	outline-color: red; */
+    /* } */
 }

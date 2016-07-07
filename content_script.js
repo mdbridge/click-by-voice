@@ -64,29 +64,67 @@ function add_hints() {
 // Activating a hint by number
 //
 
+// apply heuristics to determine if an element should be clicked or
+// focused
+function wants_click(element) {
+    if (element.is("button")) {
+	return true;
+    } else if (element.is("a")) {
+	return true;
+    } else if (element.is(":input")) {
+	if (element.attr("type") == "submit")
+	    return true;
+	if (element.attr("type") == "checkbox")
+	    return true;
+	if (element.attr("type") == "radio")
+	    return true;
+	if (element.attr("type") == "button")
+	    return true;
+    }
+    if (element.attr("onclick")) {
+	return true;
+    }
+
+    return false;
+}
+
 function goto_hint(hint) {
-    console.log("goto_hint: " + hint);
-    var click_it = true;
+    var operation = "p";
     if (hint.substring(hint.length-1) == "f") {
-	click_it = false;
+	operation = "f";
+	hint = hint.substring(0, hint.length - 1);
+    } else if (hint.substring(hint.length-1) == "c") {
+	operation = "c";
 	hint = hint.substring(0, hint.length - 1);
     }
-    console.log("goto_hint: " + hint + "by: " + click_it);
 
     var element = $("[CBV_hint_number='" + hint + "']");
-    if (element.length != 0) {
-	element.addClass("CBV_highlight_class");
-	setTimeout(function() {
-	    if (click_it)
-		element[0].click();
-	    else
-		element[0].focus();
-
-	    setTimeout(function() {
-		element.removeClass("CBV_highlight_class");
-	    }, 500);
-	}, 250);
+    if (element.length == 0) {
+	console.log("goto_hint: unable to find hint: " + hint);
+	return;
     }
+
+    var click_it;
+    if (operation == "f") {
+	click_it = false;
+    } else if (operation == "c") {
+	click_it = true;
+    } else
+	click_it = wants_click(element);
+	
+    console.log("goto_hint: " + hint + " clicking?: " + click_it);
+
+    element.addClass("CBV_highlight_class");
+    setTimeout(function() {
+	if (click_it)
+	    element[0].click();
+	else
+	    element[0].focus();
+
+	setTimeout(function() {
+	    element.removeClass("CBV_highlight_class");
+	}, 500);
+    }, 250);
 }
 
 
