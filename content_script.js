@@ -1,4 +1,15 @@
 //
+// Requesting background script to perform actions on our behalf
+//
+
+function act(action, arguments) {
+    arguments.action = action;
+    chrome.runtime.sendMessage(arguments);
+}
+
+
+
+//
 // Labeling elements with hint tags
 //
 
@@ -88,6 +99,32 @@ function wants_click(element) {
     return false;
 }
 
+function activate(element, operation) {
+    element.addClass("CBV_highlight_class");
+    setTimeout(function() {
+	switch (operation) {
+	case "c":
+	    element[0].click();
+	    break;
+	case "f":
+	    element[0].focus();
+	    break;
+	case "t":
+	    act("create_tab", {URL: element.attr("href"), active: true});
+	    break;
+	case "b":
+	    act("create_tab", {URL: element.attr("href"), active: false});
+	    break;
+	default:
+	    console.log("unknown activate operation: " + operation);
+	}
+
+	setTimeout(function() {
+	    element.removeClass("CBV_highlight_class");
+	}, 500);
+    }, 250);
+}
+
 function goto_hint(hint, operation) {
     var element = $("[CBV_hint_number='" + hint + "']");
     if (element.length == 0) {
@@ -95,27 +132,14 @@ function goto_hint(hint, operation) {
 	return;
     }
 
-    var click_it;
-    if (operation == "f") {
-	click_it = false;
-    } else if (operation == "c") {
-	click_it = true;
-    } else
-	click_it = wants_click(element);
-	
-    console.log("goto_hint: " + hint + " clicking?: " + click_it);
-
-    element.addClass("CBV_highlight_class");
-    setTimeout(function() {
-	if (click_it)
-	    element[0].click();
+    if (operation == "") {
+	if (wants_click(element))
+	    operation = "c";
 	else
-	    element[0].focus();
+	    operation = "f";
+    }
 
-	setTimeout(function() {
-	    element.removeClass("CBV_highlight_class");
-	}, 500);
-    }, 250);
+    activate(element, operation);
 }
 
 
