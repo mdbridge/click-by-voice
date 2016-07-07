@@ -3,7 +3,7 @@
 
     "name": "Click by Voice",
     "description": "This Chrome browser extension is being developed to provide support for activating links and other HTML elements using voice commands.",
-    "version": "0.0.3",
+    "version": "0.1.0",
 
     "permissions": [
 	"activeTab"

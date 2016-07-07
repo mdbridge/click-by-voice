@@ -88,16 +88,7 @@ function wants_click(element) {
     return false;
 }
 
-function goto_hint(hint) {
-    var operation = "p";
-    if (hint.substring(hint.length-1) == "f") {
-	operation = "f";
-	hint = hint.substring(0, hint.length - 1);
-    } else if (hint.substring(hint.length-1) == "c") {
-	operation = "c";
-	hint = hint.substring(0, hint.length - 1);
-    }
-
+function goto_hint(hint, operation) {
     var element = $("[CBV_hint_number='" + hint + "']");
     if (element.length == 0) {
 	console.log("goto_hint: unable to find hint: " + hint);
@@ -135,7 +126,7 @@ function goto_hint(hint) {
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-	goto_hint(request.hint_number);
+	goto_hint(request.hint_number, request.operation);
     });
 
 $(document).ready(function() {
