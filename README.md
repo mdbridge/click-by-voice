@@ -25,3 +25,9 @@ appropriate.  (Click by Voice uses heuristics to attempt to determine
 whether an element should be clicked were focused; if it guesses wrong,
 you can use one of the more specific commands to force clicking or
 focusing.)
+
+To specify that something different be done with the element, add a
+colon and one of the following operation codes:
+
+* 'c' clicks the element
+* 'f' focuses the element (doesn't work on all elements)
