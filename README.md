@@ -29,5 +29,13 @@ focusing.)
 To specify that something different be done with the element, add a
 colon and one of the following operation codes:
 
-* 'c' clicks the element
+* `c` clicks the element
 * 'f' focuses the element (doesn't work on all elements)
+* 't' opens links in a new tab, changing focus to that tab
+* 'b' opens links in a new tab, but does not change focus to that tab
+* 'w' opens links in a new window, changing focus to that window
+
+For example, "153:t" opens the link with hint number 153 in a new tab.
+
+More command types will be added later.  You can dismiss the command
+dialog box by typing `{escape}`.
