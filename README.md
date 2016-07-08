@@ -53,9 +53,9 @@ printing.
   * elements inside of iframes are missed
   * elements made clickable or focusable via JavaScript are missed
   * some invisible elements still appear to be hinted
-* the placement of hints is suboptimal and disrupts the flow of some webpages
-* sometimes hints are unreadable due to clipping
-* display of hints cannot be turned off
+* The placement of hints is suboptimal and disrupts the flow of some webpages
+* Sometimes hints are unreadable due to clipping
+* Display of hints cannot be turned off
 
 
 ## Using with voice commands
@@ -70,7 +70,13 @@ although delays may need to be incorporated.  As an example, here are
 Vocola 2 commands that provide access to the Click by Voice
 functionality:
 
-    blur me = {ctrl+shift+,};
-
+    blur me = "{ctrl+shift+,}";
+    
     <pick> 0..9 [0..9 [0..9 [0..9]]] = {ctrl+shift+space} Wait(250) $2$3$4$5 $1;
-
+    
+    <pick> := (        pick = ""
+              | push   pick = b     # stay but open new tab w/ link
+              | tab    pick = t
+              | window pick = w
+              | go     pick = f
+              );
