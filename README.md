@@ -22,20 +22,34 @@ right asking for the hint number that should be activated.  At its
 simplest, typing the number displayed next to an element then pressing
 enter will dismiss the dialog box then click or focus that element as
 appropriate.  (Click by Voice uses heuristics to attempt to determine
-whether an element should be clicked were focused; if it guesses wrong,
-you can use one of the more specific commands to force clicking or
+whether an element should be clicked or focused; if it guesses wrong,
+you can use one of the more specific commands below to force clicking or
 focusing.)
 
 To specify that something different be done with the element, add a
 colon and one of the following operation codes:
 
-* `c` clicks the element
+* 'c' clicks the element
 * 'f' focuses the element (doesn't work on all elements)
 * 't' opens links in a new tab, changing focus to that tab
 * 'b' opens links in a new tab, but does not change focus to that tab
 * 'w' opens links in a new window, changing focus to that window
 
-For example, "153:t" opens the link with hint number 153 in a new tab.
+For example, `153:t` opens the link with hint number 153 in a new tab.
 
 More command types will be added later.  You can dismiss the command
 dialog box by typing `{escape}`.
+
+Currently, hint numbers are displayed at all times; commands are planned to
+turn on and off display of them.  Hint numbers are not shown when
+printing.
+
+
+## Known limitations
+
+* The selection of elements that should be given hints needs work:
+  * elements inside of iframes are missed
+  * elements made clickable or focusable via JavaScript are missed
+  * some invisible elements still appear to be hinted
+* the placement of hints is suboptimal and disrupts the flow of some webpages
+* sometimes hints are unreadable due to clipping
