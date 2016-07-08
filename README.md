@@ -36,7 +36,7 @@ colon and one of the following operation codes:
 * 'w' opens links in a new window, changing focus to that window
 
 For example, `153:t` opens the link with hint number 153 in a new tab.
-An empty operation (e.g., `153:`) is equivalent to specifying new
+An empty operation (e.g., `153:`) is equivalent to specifying no
 operation.
 
 More command types will be added later.  You can dismiss the command
@@ -47,23 +47,12 @@ turn on and off display of them.  Hint numbers are not shown when
 printing.
 
 
-## Known limitations
-
-* The selection of elements that should be given hints needs work:
-  * elements inside of iframes are missed
-  * elements made clickable or focusable via JavaScript are missed
-  * some invisible elements still appear to be hinted
-* The placement of hints is suboptimal and disrupts the flow of some webpages
-* Sometimes hints are unreadable due to clipping
-* Display of hints cannot be turned off
-
-
 ## Using with voice commands
 
 WARNING: this extension by itself provides no voice functionality;
 procurement of the needed voice commands is the user's
 responsibility. One recommended means of doing this is to use Vocola
-(http://vocola.net/).
+(http://vocola.net/) to create the needed voice commands.
 
 Writing voice commands to use Click by Voice should be straightforward,
 although delays may need to be incorporated.  As an example, here are
@@ -72,7 +61,7 @@ functionality:
 
     blur me = "{ctrl+shift+,}";
     
-    <pick> 0..9 [0..9 [0..9 [0..9]]] = {ctrl+shift+space} Wait(250) $2$3$4$5 $1;
+    <pick> 0..9 [0..9 [0..9 [0..9]]] = {ctrl+shift+space} Wait(250) $2$3$4$5 $1{enter};
     
     <pick> := (        pick = ""
               | push   pick = b     # stay but open new tab w/ link
@@ -80,3 +69,14 @@ functionality:
               | window pick = w
               | go     pick = f
               );
+
+
+## Known issues
+
+* The selection of elements that should be given hints needs work:
+  * elements inside of iframes are missed
+  * elements made clickable or focusable via JavaScript are missed
+  * some invisible elements still appear to be hinted
+* The placement of hints is suboptimal and disrupts the flow of some webpages
+* Sometimes hints are unreadable due to clipping
+* Display of hints cannot be turned off
