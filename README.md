@@ -84,6 +84,10 @@ functionality:
 
 ## Other
 
-I've been working on this extension for several days now and while it's
-not where I'd like it to be, it is certainly functional enough for most
-uses.
+(July 7, 2016) I've been working on this extension for several days now
+and while it's not where I'd like it to be, it is certainly functional
+enough for most uses.
+
+Please address questions and issues to <a
+href="https://www.knowbrainer.com/forums/forum/messageview.cfm?catid=25&threadid=22663">this
+thread</a>.
