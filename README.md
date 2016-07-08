@@ -36,6 +36,8 @@ colon and one of the following operation codes:
 * 'w' opens links in a new window, changing focus to that window
 
 For example, `153:t` opens the link with hint number 153 in a new tab.
+An empty operation (e.g., `153:`) is equivalent to specifying new
+operation.
 
 More command types will be added later.  You can dismiss the command
 dialog box by typing `{escape}`.
@@ -53,3 +55,22 @@ printing.
   * some invisible elements still appear to be hinted
 * the placement of hints is suboptimal and disrupts the flow of some webpages
 * sometimes hints are unreadable due to clipping
+* display of hints cannot be turned off
+
+
+## Using with voice commands
+
+WARNING: this extension by itself provides no voice functionality;
+procurement of the needed voice commands is the user's
+responsibility. One recommended means of doing this is to use Vocola
+(http://vocola.net/).
+
+Writing voice commands to use Click by Voice should be straightforward,
+although delays may need to be incorporated.  As an example, here are
+Vocola 2 commands that provide access to the Click by Voice
+functionality:
+
+    blur me = {ctrl+shift+,};
+
+    <pick> 0..9 [0..9 [0..9 [0..9]]] = {ctrl+shift+space} Wait(250) $2$3$4$5 $1;
+
