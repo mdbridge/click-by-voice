@@ -80,3 +80,10 @@ functionality:
 * The placement of hints is suboptimal and disrupts the flow of some webpages
 * Sometimes hints are unreadable due to clipping
 * Display of hints cannot be turned off
+
+
+## Other
+
+I've been working on this extension for several days now and while it's
+not where I'd like it to be, it is certainly functional enough for most
+uses.
