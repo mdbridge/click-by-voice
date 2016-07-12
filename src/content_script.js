@@ -54,11 +54,15 @@ function each_hintable(callback) {
     });
 
     $("[role]").each(function(index) {
+	var usable = true;
+	if ($(this).css("display") == "none")
+	    usable = false;
 	var role = $(this).attr("role");
 	switch (role) {
 	    case "button":
 	    case "link":
-	    callback($(this));
+	    if (usable)
+		callback($(this));
 	    break;
 	}
     });
@@ -71,7 +75,11 @@ function add_hints() {
     each_hintable(function(element) {
 	if (!element.is("[CBV_hint_number]")) {
 	    element.attr("CBV_hint_number", next_CBV_hint);
-	    element.after("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+//	    element.after("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+	    if (element.is("a"))
+		element.append("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+	    else
+		element.after("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
 	    next_CBV_hint = next_CBV_hint + 1;
 	}
     });
