@@ -53,6 +53,11 @@ function each_hintable(callback) {
 	callback($(this));
     });
 
+    $("[tabindex]").each(function(index) {
+	//if ($(this).attr("tabindex"))
+	callback($(this));
+    });
+
     $("[role]").each(function(index) {
 	var usable = true;
 	if ($(this).css("display") == "none")
