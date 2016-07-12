@@ -52,6 +52,16 @@ function each_hintable(callback) {
     $("[onclick]").each(function(index) {
 	callback($(this));
     });
+
+    $("[role]").each(function(index) {
+	var role = $(this).attr("role");
+	switch (role) {
+	    case "button":
+	    case "link":
+	    callback($(this));
+	    break;
+	}
+    });
 }
 
 
@@ -94,6 +104,13 @@ function wants_click(element) {
     }
     if (element.attr("onclick")) {
 	return true;
+    }
+    var role = element.attr("role");
+    switch (role) {
+    case "button":
+    case "link":
+	return true;
+	break;
     }
 
     return false;
@@ -145,6 +162,7 @@ function goto_hint(hint, operation) {
 	    operation = "c";
 	else
 	    operation = "f";
+	//console.log("defaulting to: " + operation);
     }
 
     activate(element, operation);
