@@ -42,8 +42,10 @@ operation.
 More command types will be added later.  You can dismiss the command
 dialog box by typing `{escape}`.
 
-Currently, hint numbers are displayed at all times; commands are planned to
-turn on and off display of them.  Hint numbers are not shown when
+Hint numbers are automatically displayed when a page is loaded; enter
+":-" as the hint number to turn them off until a new page is loaded (
+this includes reloading the current page).  Passing ":+" turns the hints
+back on-again and/or refreshes them.  Hint numbers are not shown when
 printing.
 
 

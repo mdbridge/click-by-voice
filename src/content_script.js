@@ -13,7 +13,7 @@ function act(action, arguments) {
 // Labeling elements with hint tags
 //
 
-var next_CBV_hint = 0;
+var next_CBV_hint = 0; // -1 means hints are off
 
 // Enumerate each element that we should hint, possibly more than once:
 function each_hintable(callback) {
@@ -35,7 +35,7 @@ function each_hintable(callback) {
 	    usable = false;
 
 	if (usable)
-	    callback($(this));
+	    inner_callback($(this));
     });
 
     $("button").each(function(index) {
@@ -75,8 +75,20 @@ function each_hintable(callback) {
 }
 
 
+function remove_hints() {
+    //console.log("removing hints");
+
+    $("[CBV_hint_number]").removeAttr("CBV_hint_number");
+    $("[CBV_hint_tag]").remove();
+
+    next_CBV_hint = -1;
+}
+
 function add_hints() {
     //console.log("adding hints");
+
+    if (next_CBV_hint < 0)
+	next_CBV_hint = 0;
 
     each_hintable(function(element) {
 	if (!element.is("[CBV_hint_number]")) {
@@ -90,6 +102,11 @@ function add_hints() {
     });
 
     //console.log("total hints assigned: " + next_CBV_hint);
+}
+
+function refresh_hints() {
+    if (next_CBV_hint >= 0)
+	add_hints();
 }
 
 
@@ -189,12 +206,25 @@ function goto_hint(hint, operation) {
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-	goto_hint(request.hint_number, request.operation);
+	switch (request.operation) {
+	case "+":
+	    remove_hints();
+	    add_hints();
+	    break;
+
+	case "-":
+	    remove_hints();
+	    break;
+
+	default:
+	    goto_hint(request.hint_number, request.operation);
+	    break;
+	}
     });
 
 $(document).ready(function() {
     add_hints();
     //setTimeout(function() { add_hints(); }, 5000);
     // This runs even when our tab is in the background:
-    setInterval(add_hints, 3000);
+    setInterval(refresh_hints, 3000);
 });
