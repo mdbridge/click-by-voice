@@ -43,10 +43,10 @@ More command types will be added later.  You can dismiss the command
 dialog box by typing `{escape}`.
 
 Hint numbers are automatically displayed when a page is loaded; enter
-":-" as the hint number to turn them off until a new page is loaded (
-this includes reloading the current page).  Passing ":+" turns the hints
-back on-again and/or refreshes them.  Hint numbers are not shown when
-printing.
+":-" as the hint number to turn them off until a new page is loaded
+(this includes reloading the current page).  Passing ":+" turns the
+hints back on-again and/or refreshes them.  Hint numbers are not shown
+when printing.
 
 
 ## Using with voice commands
@@ -62,8 +62,10 @@ Vocola 2 commands that provide access to the Click by Voice
 functionality:
 
     blur me = "{ctrl+shift+,}";
+    show numbers = {ctrl+shift+space} Wait(500) :+{enter};
+    hide numbers = {ctrl+shift+space} Wait(500) :-{enter};
     
-    <pick> 0..9 [0..9 [0..9 [0..9]]] = {ctrl+shift+space} Wait(250) $2$3$4$5 $1{enter};
+    <pick> 0..9 [0..9 [0..9 [0..9]]] = {ctrl+shift+space} Wait(500) $2$3$4$5 $1{enter};
     
     <pick> := (        pick = ""
               | push   pick = b     # stay but open new tab w/ link
@@ -83,7 +85,6 @@ functionality:
 * Sometimes hints are unreadable due to clipping
 * Sometime hints are too hard to read due to inadequate contrast between
   foreground and background colors
-* Display of hints cannot be turned off
 
 
 ## Other
