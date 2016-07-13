@@ -18,7 +18,13 @@ var next_CBV_hint = 0; // -1 means hints are off
 // Enumerate each element that we should hint, possibly more than once:
 function each_hintable(callback) {
     inner_callback = function(element) {
-	if (element.css("display") != "none")
+	var usable = true;
+	if (element.css("display") == "none")
+	    usable = false;
+	if (element.attr("aria-hidden"))
+	    usable = false;
+
+	if (usable)
 	    callback(element);
     };
 
