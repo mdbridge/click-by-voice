@@ -17,6 +17,11 @@ var next_CBV_hint = 0;
 
 // Enumerate each element that we should hint, possibly more than once:
 function each_hintable(callback) {
+    inner_callback = function(element) {
+	if (element.css("display") != "none")
+	    callback(element);
+    };
+
     $("input").each(function(index) {
 	var input_type = $(this).attr("type");
 	if (input_type)
@@ -34,40 +39,36 @@ function each_hintable(callback) {
     });
 
     $("button").each(function(index) {
-	callback($(this));
+	inner_callback($(this));
     });
 
     $("select").each(function(index) {
-	callback($(this));
+	inner_callback($(this));
     });
 
     $("keygen").each(function(index) {
-	callback($(this));
+	inner_callback($(this));
     });
 
     $("a[href]").each(function(index) {
-	callback($(this));
+	inner_callback($(this));
     });
 
     $("[onclick]").each(function(index) {
-	callback($(this));
+	inner_callback($(this));
     });
 
     $("[tabindex]").each(function(index) {
 	//if ($(this).attr("tabindex"))
-	callback($(this));
+	inner_callback($(this));
     });
 
     $("[role]").each(function(index) {
-	var usable = true;
-	if ($(this).css("display") == "none")
-	    usable = false;
 	var role = $(this).attr("role");
 	switch (role) {
 	    case "button":
 	    case "link":
-	    if (usable)
-		callback($(this));
+	    inner_callback($(this));
 	    break;
 	}
     });
@@ -80,7 +81,6 @@ function add_hints() {
     each_hintable(function(element) {
 	if (!element.is("[CBV_hint_number]")) {
 	    element.attr("CBV_hint_number", next_CBV_hint);
-//	    element.after("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
 	    if (element.is("a"))
 		element.append("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
 	    else
