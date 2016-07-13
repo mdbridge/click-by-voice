@@ -75,10 +75,12 @@ functionality:
 
 * The selection of elements that should be given hints needs work:
   * elements inside of iframes are missed
-  * elements made clickable or focusable via JavaScript are missed
-  * some invisible elements still appear to be hinted
+  * to cover elements added dynamically over time, Click by Voice
+    automatically refreshes hints every 3 seconds
 * The placement of hints is suboptimal and disrupts the flow of some webpages
 * Sometimes hints are unreadable due to clipping
+* Sometime hints are too hard to read due to inadequate contrast between
+  foreground and background colors
 * Display of hints cannot be turned off
 
 
