@@ -81,10 +81,13 @@ functionality:
   * elements inside of iframes are missed
   * to cover elements added dynamically over time, Click by Voice
     automatically refreshes hints every 3 seconds
+    * this can require waiting several seconds after a click or page load
 * The placement of hints is suboptimal and disrupts the flow of some webpages
 * Sometimes hints are unreadable due to clipping
 * Sometime hints are too hard to read due to inadequate contrast between
   foreground and background colors
+* executing a command (especially the popping up part) is slower than I'd like
+* still some invisible elements that are hinted
 
 
 ## Other
