@@ -99,7 +99,7 @@ function add_hints() {
     each_hintable(function(element) {
 	if (!element.is("[CBV_hint_number]")) {
 	    element.attr("CBV_hint_number", next_CBV_hint);
-	    if (element.is("a"))
+	    if (element.is("a") || element.is("button"))
 		element.append("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
 	    else
 		element.after("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
