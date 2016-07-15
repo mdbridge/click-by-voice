@@ -86,8 +86,10 @@ functionality:
 * Sometimes hints are unreadable due to clipping
 * Sometime hints are too hard to read due to inadequate contrast between
   foreground and background colors
-* executing a command (especially the popping up part) is slower than I'd like
-* still some invisible elements that are hinted
+* Executing a command (especially the popping up part) is slower than I'd like
+* Still some invisible elements that are hinted
+* Does not work on chrome:// URLs like settings and extensions pages;
+  ditto https://chrome.google.com URLS (e.g., developer dashboard)
 
 
 ## Other
