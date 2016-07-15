@@ -37,8 +37,6 @@ function each_hintable(callback) {
 	    usable = false;
 	if ($(this).attr("disabled"))
 	    usable = false;
-	if ($(this).attr("readonly"))
-	    usable = false;
 
 	if (usable)
 	    inner_callback($(this));
