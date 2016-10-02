@@ -90,6 +90,7 @@ functionality:
 * Still some invisible elements that are hinted
 * Does not work on chrome:// URLs like settings and extensions pages;
   ditto https://chrome.google.com URLS (e.g., developer dashboard)
+* Does not work in some pop-ups, for example, the add bookmarks pop up
 
 
 ## Other
