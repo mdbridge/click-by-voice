@@ -63,15 +63,17 @@ function each_hintable(callback) {
     });
 
     $("[tabindex]").each(function(index) {
-	//if ($(this).attr("tabindex"))
+	//if ($(this).attr("tabindex") != "-1")
 	inner_callback($(this));
     });
 
     $("[role]").each(function(index) {
 	var role = $(this).attr("role");
 	switch (role) {
-	    case "button":
-	    case "link":
+	case "button":
+	case "link":
+	//case "heading": // <<<>>>
+	//case "option": // <<<>>>
 	    inner_callback($(this));
 	    break;
 	}
@@ -150,12 +152,22 @@ function wants_click(element) {
     return false;
 }
 
+function dispatch_mouse_events(element, event_names) {
+    event_names.forEach(function(event_name) {
+	var event = document.createEvent('MouseEvents');
+	event.initMouseEvent(event_name, true, true, window, 1, 0, 0, 0, 0, 
+			     false, false, false, false, 0, null);
+	element[0].dispatchEvent(event);
+    });
+}
+
 function activate(element, operation) {
     element.addClass("CBV_highlight_class");
     setTimeout(function() {
 	switch (operation) {
 	case "c":
-	    element[0].click();
+	    dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseup', 
+					    'click']);
 	    break;
 	case "f":
 	    element[0].focus();
@@ -172,6 +184,12 @@ function activate(element, operation) {
 	case "w":
 	    if (element.attr("href"))
 		act("create_window", {URL: element[0].href});
+	    break;
+
+
+	    // old version of c for comparison purposes; depreciated
+	case "C":
+	    element[0].click();
 	    break;
 
 	default:
