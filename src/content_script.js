@@ -161,18 +161,29 @@ function dispatch_mouse_events(element, event_names) {
     });
 }
 
+var last_hover = null;
+
 function activate(element, operation) {
     element.addClass("CBV_highlight_class");
     setTimeout(function() {
 	switch (operation) {
+	case "f":
+	    if (last_hover) {
+		dispatch_mouse_events(last_hover, ['mouseout', 'mouseleave']);	    
+	    }
+	    // focus same element twice => do nothing (except unhover above):
+	    if (last_hover==null || last_hover[0] !== element[0]) {
+		element[0].focus();
+		dispatch_mouse_events(element, ['mouseover', 'mouseenter']);	    
+		last_hover = element;
+	    } else
+		last_hover = null;
+	    break;
+
 	case "c":
 	    dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseup', 
 					    'click']);
 	    break;
-	case "f":
-	    element[0].focus();
-	    break;
-
 	case "t":
 	    if (element.attr("href"))
 		act("create_tab", {URL: element[0].href, active: true});
@@ -186,10 +197,17 @@ function activate(element, operation) {
 		act("create_window", {URL: element[0].href});
 	    break;
 
-
-	    // old version of c for comparison purposes; depreciated
+	    // old versions for comparison purposes; depreciated
 	case "C":
 	    element[0].click();
+	    break;
+	case "F":
+	    element[0].focus();
+	    break;
+
+	    // experimental:
+	case "R":
+	    dispatch_mouse_events(element, ['mouseover', 'contextmenu']);
 	    break;
 
 	default:
