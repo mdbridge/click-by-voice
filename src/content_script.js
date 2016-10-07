@@ -110,6 +110,9 @@ function add_hints() {
 	if (!element.is("[CBV_hint_number]")) {
 	    element.attr("CBV_hint_number", next_CBV_hint);
 	    var span = "<span CBV_hint_tag='" + next_CBV_hint + "'></span>";
+	    if (hinting_parameters.indexOf("c") != -1)
+		span = "<span CBV_hint_tag='" + next_CBV_hint + "' CBV_high_contrast='true'></span>";
+
 	    if (element.is("a") || element.is("button")) {
 		if (hinting_parameters.indexOf("b") != -1)
 		    element.prepend(span);

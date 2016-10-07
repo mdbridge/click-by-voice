@@ -14,11 +14,12 @@
 	margin-left:2px; 
 	//max-width:20px; max-height:10px;
 	overflow:visible;float:none;
-
-    /* color: black; */
-    /* background-color: yellow; */
     }
 
+    [CBV_high_contrast]::after {
+	color: black !important;
+	background-color: yellow !important;
+    }
 
     .CBV_highlight_class {
 	background-color: yellow !important;
