@@ -29,6 +29,14 @@ function each_hintable(callback) {
 	    callback(element);
     };
 
+    // experiment: hint just images, but all images
+    if (hinting_parameters == "I") {
+	$("img").each(function(index) {
+	    inner_callback($(this));
+	});
+	return;
+    }
+
     $("input").each(function(index) {
 	var input_type = $(this).attr("type");
 	if (input_type)
@@ -101,10 +109,17 @@ function add_hints() {
     each_hintable(function(element) {
 	if (!element.is("[CBV_hint_number]")) {
 	    element.attr("CBV_hint_number", next_CBV_hint);
-	    if (element.is("a") || element.is("button"))
-		element.append("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
-	    else
-		element.after("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+	    if (element.is("a") || element.is("button")) {
+		if (hinting_parameters.indexOf("b") != -1)
+		    element.prepend("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+		else
+		    element.append("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+	    } else {
+		if (hinting_parameters.indexOf("b") != -1)
+		    element.before("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+		else
+		    element.after("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+	    }
 	    next_CBV_hint = next_CBV_hint + 1;
 	}
     });
