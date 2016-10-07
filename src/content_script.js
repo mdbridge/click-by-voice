@@ -109,16 +109,17 @@ function add_hints() {
     each_hintable(function(element) {
 	if (!element.is("[CBV_hint_number]")) {
 	    element.attr("CBV_hint_number", next_CBV_hint);
+	    var span = "<span CBV_hint_tag='" + next_CBV_hint + "'></span>";
 	    if (element.is("a") || element.is("button")) {
 		if (hinting_parameters.indexOf("b") != -1)
-		    element.prepend("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+		    element.prepend(span);
 		else
-		    element.append("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+		    element.append(span);
 	    } else {
 		if (hinting_parameters.indexOf("b") != -1)
-		    element.before("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+		    element.before(span);
 		else
-		    element.after("<span CBV_hint_tag='" + next_CBV_hint + "'></span>");
+		    element.after(span);
 	    }
 	    next_CBV_hint = next_CBV_hint + 1;
 	}
