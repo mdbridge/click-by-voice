@@ -13,7 +13,8 @@ function act(action, arguments) {
 // Labeling elements with hint tags
 //
 
-var next_CBV_hint = 0; // -1 means hints are off
+var next_CBV_hint      = 0;  // -1 means hints are off
+var hinting_parameters = ""; // extra argument to :+ if any
 
 // Enumerate each element that we should hint, possibly more than once:
 function each_hintable(callback) {
@@ -90,8 +91,9 @@ function remove_hints() {
     next_CBV_hint = -1;
 }
 
+
 function add_hints() {
-    //console.log("adding hints");
+    console.log("adding hints: " + hinting_parameters);
 
     if (next_CBV_hint < 0)
 	next_CBV_hint = 0;
@@ -246,19 +248,15 @@ function goto_hint(hint, operation) {
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-	switch (request.operation) {
-	case "+":
+	var operation = request.operation;
+	if (operation.startsWith("+")) {
 	    remove_hints();
+	    hinting_parameters = operation.substr(1);
 	    add_hints();
-	    break;
-
-	case "-":
+	} else if (operation == "-") {
 	    remove_hints();
-	    break;
-
-	default:
-	    goto_hint(request.hint_number, request.operation);
-	    break;
+	} else {
+	    goto_hint(request.hint_number, operation);
 	}
     });
 
