@@ -22,7 +22,7 @@ function each_hintable(callback) {
 	var usable = true;
 	if (element.css("display") == "none")
 	    usable = false;
-	if (element.attr("aria-hidden"))
+	if (element.attr("aria-hidden") == "true")
 	    usable = false;
 
 	if (usable)
@@ -72,7 +72,7 @@ function each_hintable(callback) {
 	var usable = true;
 	if (input_type == "hidden") 
 	    usable = false;
-	if ($(this).attr("disabled"))
+	if ($(this).attr("disabled") == "true")
 	    usable = false;
 
 	if (usable)
