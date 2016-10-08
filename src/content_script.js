@@ -29,13 +29,24 @@ function each_hintable(callback) {
 	    callback(element);
     };
 
-    // experiment: hint just images, but all images
-    if (hinting_parameters == "I") {
-	$("img").each(function(index) {
+    // experiment: just particular elements
+    var kind = "";
+    if (hinting_parameters.indexOf("I") != -1)
+	kind = "img";
+    else if (hinting_parameters.indexOf("S") != -1)
+	kind = "span";
+    else if (hinting_parameters.indexOf("D") != -1)
+	kind = "div";
+    else if (hinting_parameters.indexOf("R") != -1)
+	kind = "[role]";
+    if (kind != "") {
+	console.log("hinting: " + kind);
+	$(kind).each(function(index) {
 	    inner_callback($(this));
 	});
 	return;
     }
+
 
     $("input").each(function(index) {
 	var input_type = $(this).attr("type");
