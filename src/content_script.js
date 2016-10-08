@@ -29,7 +29,8 @@ function each_hintable(callback) {
 	    callback(element);
     };
 
-    // experiment: just particular elements
+
+    // experiment: just a particular element kind:
     var kind = "";
     if (hinting_parameters.indexOf("I") != -1)
 	kind = "img";
@@ -48,6 +49,20 @@ function each_hintable(callback) {
     }
 
 
+    //
+    // Standard clickable or focusable HTML elements
+    //
+
+    // Quora has placeholder links with click handlers...
+    //$("a[href]").each(function(index) {
+    $("a").each(function(index) {
+	inner_callback($(this));
+    });
+
+    $("button").each(function(index) {
+	inner_callback($(this));
+    });
+
     $("input").each(function(index) {
 	var input_type = $(this).attr("type");
 	if (input_type)
@@ -62,10 +77,6 @@ function each_hintable(callback) {
 	    inner_callback($(this));
     });
 
-    $("button").each(function(index) {
-	inner_callback($(this));
-    });
-
     $("select").each(function(index) {
 	inner_callback($(this));
     });
@@ -74,11 +85,10 @@ function each_hintable(callback) {
 	inner_callback($(this));
     });
 
-    // Quora has placeholder links with click handlers...
-    //$("a[href]").each(function(index) {
-    $("a").each(function(index) {
-	inner_callback($(this));
-    });
+
+    //
+    // non-Standard HTML elements directly made clickable or focusable
+    //
 
     $("[onclick]").each(function(index) {
 	inner_callback($(this));
@@ -89,13 +99,27 @@ function each_hintable(callback) {
 	inner_callback($(this));
     });
 
+
+    //
+    // non-Standard HTML elements that might be clickable due to event
+    // listeners
+    //
+
     $("[role]").each(function(index) {
 	var role = $(this).attr("role");
 	switch (role) {
 	case "button":
+	case "checkbox":
 	case "link":
-	//case "heading": // <<<>>>
-	//case "option": // <<<>>>
+	case "menuitem":
+	case "menuitemcheckbox":
+	case "menuitemradio":
+	case "option":
+	case "radio":
+	case "slider":
+	case "tab":
+	case "textbox":
+	case "treeitem":
 	    inner_callback($(this));
 	    break;
 	}
