@@ -74,7 +74,9 @@ function each_hintable(callback) {
 	inner_callback($(this));
     });
 
-    $("a[href]").each(function(index) {
+    // Quora has placeholder links with click handlers...
+    //$("a[href]").each(function(index) {
+    $("a").each(function(index) {
 	inner_callback($(this));
     });
 
