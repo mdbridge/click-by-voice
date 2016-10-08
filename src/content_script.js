@@ -38,6 +38,8 @@ function each_hintable(callback) {
 	kind = "span";
     else if (hinting_parameters.indexOf("D") != -1)
 	kind = "div";
+    else if (hinting_parameters.indexOf("L") != -1)
+	kind = "li";
     else if (hinting_parameters.indexOf("R") != -1)
 	kind = "[role]";
     if (kind != "") {
