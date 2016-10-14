@@ -1,5 +1,13 @@
 @media not print {
 
+    [CBV_hint_tag] {
+	/*
+	 * deal with cases where website style rules make spans display: none
+         * example: Office365 login page
+	 */
+	display: inline !important;
+    }
+
     [CBV_hint_tag]::after {
 	content: attr(CBV_hint_tag);
 
