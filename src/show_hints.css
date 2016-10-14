@@ -27,6 +27,10 @@
     [CBV_high_contrast]::after {
 	color: black !important;
 	background-color: yellow !important;
+
+	/* position: absolute; */
+	/* margin-left: -16px; */
+	/* vertical-align: top; */
     }
 
     .CBV_highlight_class {
