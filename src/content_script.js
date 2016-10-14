@@ -30,6 +30,16 @@ function each_hintable(callback) {
     };
 
 
+    // <<<>>>
+    if (hinting_parameters.indexOf("II") != -1) {
+	$("div").each(function(index) {
+	    if ($(this).css("background-image") != "none" &&
+		$(this).parent().css("background-image") == "none")
+		inner_callback($(this));
+	});
+    }
+
+
     // experiment: just a particular element kind:
     var kind = "";
     if (hinting_parameters.indexOf("I") != -1)
