@@ -20,8 +20,11 @@ var hinting_parameters = ""; // extra argument to :+ if any
 function each_hintable(callback) {
     inner_callback = function(element) {
 	var usable = true;
-	if (element.css("display") == "none")
-	    usable = false;
+	try {
+	    // Jquery gives an error error for this if no CSS (e.g., XML files):
+	    if (element.css("display") == "none")
+		usable = false;
+	} catch (e) {}
 	if (element.attr("aria-hidden") == "true")
 	    usable = false;
 
@@ -157,11 +160,17 @@ function each_hintable(callback) {
 
     // innermost div/span/img's are tempting click targets
     $("div, span, img").each(function(index) {
-	if ($(this).outerHeight(true)>8 
-	   && $(this).outerWidth(true)>8
-	   && $(this).children().length==0
-	   && $(this).attr("CBV_hint_tag") == "")
-	    inner_callback($(this));
+	try {
+	    // Jquery gives errors for these if they are auto due to no CSS (e.g., XML files):
+	    if ($(this).outerHeight(true)<8 
+		|| $(this).outerWidth(true)<8)
+		return;
+	} catch (e) {}
+	if ($(this).children().length > 0
+	    || $(this).attr("CBV_hint_tag"))
+	    return;
+	
+	inner_callback($(this));
     });
 }
 
