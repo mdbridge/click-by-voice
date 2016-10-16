@@ -107,8 +107,8 @@ function each_hintable(callback) {
     });
 
     $("[tabindex]").each(function(index) {
-	//if ($(this).attr("tabindex") != "-1")
-	inner_callback($(this));
+	if ($(this).attr("tabindex") != "-1")
+	    inner_callback($(this));
     });
 
 
@@ -199,6 +199,7 @@ function add_hints() {
 }
 
 function refresh_hints() {
+    //console.log(document.activeElement);
     if (next_CBV_hint >= 0)
 	add_hints();
 }
@@ -290,6 +291,10 @@ function activate(element, operation) {
 	    element[0].click();
 	    break;
 	case "F":
+	    element[0].focus();
+	    break;
+	case "FF":
+	    element[0].focusin();
 	    element[0].focus();
 	    break;
 
