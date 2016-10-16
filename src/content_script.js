@@ -30,7 +30,9 @@ function each_hintable(callback) {
     };
 
 
-    // <<<>>>
+    //
+    // Experiments:
+    //
     if (hinting_parameters.indexOf("II") != -1) {
 	$("div").each(function(index) {
 	    if ($(this).css("background-image") != "none" &&
@@ -38,9 +40,7 @@ function each_hintable(callback) {
 		inner_callback($(this));
 	});
     }
-
-
-    // experiment: just a particular element kind:
+    // just a particular element kind:
     var kind = "";
     if (hinting_parameters.indexOf("I") != -1)
 	kind = "img";
@@ -114,7 +114,7 @@ function each_hintable(callback) {
 
     //
     // non-Standard HTML elements that might be clickable due to event
-    // listeners
+    // listeners or focusable via tabindex=-1
     //
 
     $("[role]").each(function(index) {
