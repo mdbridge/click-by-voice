@@ -19,6 +19,7 @@
 	border-width:1px; border-style:solid; -moz-border-radius:2px;
 	padding:0px 2px 0px 2px;
 	vertical-align:center;
+//	vertical-align:top !important;
 	margin-left:2px; 
 	//max-width:20px; max-height:10px;
 	overflow:visible;float:none;
@@ -32,6 +33,22 @@
 	/* margin-left: -16px; */
 	/* vertical-align: top; */
     }
+
+    [CBV_hint_overlay] {
+	position: relative !important;
+    }
+    [CBV_hint_overlay]::after {
+	position: absolute !important;
+
+	color: black !important;
+	background-color: orange !important;
+	left: -1px;
+	top: -1px;
+	/* position: absolute; */
+	/* margin-left: -16px; */
+	/* vertical-align: top; */
+    }
+
 
     .CBV_highlight_class {
 	background-color: yellow !important;
