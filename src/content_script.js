@@ -255,6 +255,11 @@ var last_hover = null;
 function activate(element, operation) {
     element.addClass("CBV_highlight_class");
     setTimeout(function() {
+	// sometimes elements get cloned so do this globally...
+	$(".CBV_highlight_class").removeClass("CBV_highlight_class");
+    }, 500);
+
+    setTimeout(function() {
 	switch (operation) {
 	case "f":
 	    if (last_hover) {
@@ -290,6 +295,18 @@ function activate(element, operation) {
 	case "C":
 	    element[0].click();
 	    break;
+	case "CC":
+	    dispatch_mouse_events(element, ['mouseover', 'mousedown']);
+	    element[0].focus();
+	    dispatch_mouse_events(element, ['mouseup', 'click']);
+	    break;
+	case "DC":
+	    if (element.children().length>0)
+		 element = element.children().first();
+	    element[0].click();
+	    break;
+
+
 	case "F":
 	    element[0].focus();
 	    break;
@@ -306,10 +323,6 @@ function activate(element, operation) {
 	default:
 	    console.log("unknown activate operation: " + operation);
 	}
-
-	setTimeout(function() {
-	    element.removeClass("CBV_highlight_class");
-	}, 500);
     }, 250);
 }
 
