@@ -288,6 +288,86 @@ function dispatch_mouse_events(element, event_names) {
 
 var last_hover = null;
 
+function silently_activate(element, operation) {
+    switch (operation) {
+    case "h":
+	if (last_hover) {
+	    dispatch_mouse_events(last_hover, ['mouseout', 'mouseleave']);	    
+	}
+	// hover same element means unhover
+	if (last_hover==null || last_hover[0] !== element[0]) {
+	    dispatch_mouse_events(element, ['mouseover', 'mouseenter']);	    
+	    last_hover = element;
+	} else
+	    last_hover = null;
+	break;
+
+    case "f":
+	element[0].focus();
+	break;
+
+    case "c":
+	// dispatch_mouse_events(element, ['mouseover', 'mousedown']);
+	// element[0].focus();
+	// dispatch_mouse_events(element, ['mouseup', 'click']);
+	// dispatch_mouse_events(element, ['mouseover', 'mousedown']);
+	// element[0].focus();
+	// dispatch_mouse_events(element, ['mouseup', 'click', 'mouseout']);
+	dispatch_mouse_events(element, ['mousedown']);
+	element[0].focus();
+	dispatch_mouse_events(element, ['mouseup', 'click']);
+	break;
+    case "t":
+	if (element.attr("href"))
+	    act("create_tab", {URL: element[0].href, active: true});
+	break;
+    case "b":
+	if (element.attr("href"))
+	    act("create_tab", {URL: element[0].href, active: false});
+	break;
+    case "w":
+	if (element.attr("href"))
+	    act("create_window", {URL: element[0].href});
+	break;
+
+	// old versions for comparison purposes; depreciated
+    case "C":
+	element[0].click();
+	break;
+    case "CC":
+	dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseup', 
+					'click']);
+	break;
+    case "DC":
+	if (element.children().length>0)
+	    element = element.children().first();
+	element[0].click();
+	break;
+
+    case "TT":
+	element.attr("tabindex", "0");
+	element.siblings().attr("tabindex", "-1");
+	break;
+
+
+    case "F":
+	element[0].focus();
+	break;
+    case "FF":
+	element[0].focusin();
+	element[0].focus();
+	break;
+
+	// experimental:
+    case "R":
+	dispatch_mouse_events(element, ['mouseover', 'contextmenu']);
+	break;
+
+    default:
+	console.log("unknown activate operation: " + operation);
+    }
+}
+
 function activate(element, operation) {
     element.addClass("CBV_highlight_class");
 
@@ -297,83 +377,7 @@ function activate(element, operation) {
 	    $(".CBV_highlight_class").removeClass("CBV_highlight_class");
 	}, 500);
 
-	switch (operation) {
-	case "h":
-	    if (last_hover) {
-		dispatch_mouse_events(last_hover, ['mouseout', 'mouseleave']);	    
-	    }
-	    // hover same element means unhover
-	    if (last_hover==null || last_hover[0] !== element[0]) {
-		dispatch_mouse_events(element, ['mouseover', 'mouseenter']);	    
-		last_hover = element;
-	    } else
-		last_hover = null;
-	    break;
-
-	case "f":
-	    element[0].focus();
-	    break;
-
-	case "c":
-	    // dispatch_mouse_events(element, ['mouseover', 'mousedown']);
-	    // element[0].focus();
-	    // dispatch_mouse_events(element, ['mouseup', 'click']);
-	    // dispatch_mouse_events(element, ['mouseover', 'mousedown']);
-	    // element[0].focus();
-	    // dispatch_mouse_events(element, ['mouseup', 'click', 'mouseout']);
-	    dispatch_mouse_events(element, ['mousedown']);
-	    element[0].focus();
-	    dispatch_mouse_events(element, ['mouseup', 'click']);
-	    break;
-	case "t":
-	    if (element.attr("href"))
-		act("create_tab", {URL: element[0].href, active: true});
-	    break;
-	case "b":
-	    if (element.attr("href"))
-		act("create_tab", {URL: element[0].href, active: false});
-	    break;
-	case "w":
-	    if (element.attr("href"))
-		act("create_window", {URL: element[0].href});
-	    break;
-
-	    // old versions for comparison purposes; depreciated
-	case "C":
-	    element[0].click();
-	    break;
-	case "CC":
-	    dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseup', 
-					    'click']);
-	    break;
-	case "DC":
-	    if (element.children().length>0)
-		 element = element.children().first();
-	    element[0].click();
-	    break;
-
-	case "TT":
-	    element.attr("tabindex", "0");
-	    element.siblings().attr("tabindex", "-1");
-	    break;
-
-
-	case "F":
-	    element[0].focus();
-	    break;
-	case "FF":
-	    element[0].focusin();
-	    element[0].focus();
-	    break;
-
-	    // experimental:
-	case "R":
-	    dispatch_mouse_events(element, ['mouseover', 'contextmenu']);
-	    break;
-
-	default:
-	    console.log("unknown activate operation: " + operation);
-	}
+	silently_activate(element, operation);
     }, 250);
 }
 
