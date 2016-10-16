@@ -195,43 +195,44 @@ function add_hints() {
 	next_CBV_hint = 0;
 
     each_hintable(function(element) {
-	if (!element.is("[CBV_hint_number]")) {
-	    element.attr("CBV_hint_number", next_CBV_hint);
+	if (element.is("[CBV_hint_number]"))
+	    return;
 
-	    var span = "<span CBV_hint_tag='" + next_CBV_hint + "'></span>";
-	    if (hinting_parameters.indexOf("c") != -1)
-		span = "<span CBV_hint_tag='" + next_CBV_hint + "' CBV_high_contrast='true'></span>";
+	element.attr("CBV_hint_number", next_CBV_hint);
 
-	    var put_inside = false;
-	    if (element.is("a") || element.is("button"))
-		put_inside = true;
-	    if (hinting_parameters.indexOf("i") != -1 
-		&& (element.children().length>0
-	            || element.text != ""))
-		put_inside = true;
+	var span = "<span CBV_hint_tag='" + next_CBV_hint + "'></span>";
+	if (hinting_parameters.indexOf("c") != -1)
+	    span = "<span CBV_hint_tag='" + next_CBV_hint + "' CBV_high_contrast='true'></span>";
 
-	    if (put_inside && hinting_parameters.indexOf("ii") != -1) {
-		// first check is to ensure no text or comment direct subnodes
-		if (element.contents().length == 1
-		    && element.contents().first().is("div, span")) {
-		    console.log(">> " + element.text());
-		    element = element.children().first();
-	    	}
+	var put_inside = false;
+	if (element.is("a") || element.is("button"))
+	    put_inside = true;
+	if (hinting_parameters.indexOf("i") != -1 
+	    && (element.children().length>0
+	        || element.text != ""))
+	    put_inside = true;
+
+	if (put_inside && hinting_parameters.indexOf("ii") != -1) {
+	    // first check is to ensure no text or comment direct subnodes
+	    if (element.contents().length == 1
+		&& element.contents().first().is("div, span")) {
+		console.log(">> " + element.text());
+		element = element.children().first();
 	    }
-
-	    if (put_inside) {
-		if (hinting_parameters.indexOf("b") != -1)
-		    element.prepend(span);
-		else
-		    element.append(span);
-	    } else {
-		if (hinting_parameters.indexOf("b") != -1)
-		    element.before(span);
-		else
-		    element.after(span);
-	    }
-	    next_CBV_hint = next_CBV_hint + 1;
 	}
+
+	if (put_inside) {
+	    if (hinting_parameters.indexOf("b") != -1)
+		element.prepend(span);
+	    else
+		element.append(span);
+	} else {
+	    if (hinting_parameters.indexOf("b") != -1)
+		element.before(span);
+	    else
+		element.after(span);
+	}
+	next_CBV_hint = next_CBV_hint + 1;
     });
 
     //console.log("total hints assigned: " + next_CBV_hint);
