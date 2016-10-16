@@ -289,22 +289,32 @@ function activate(element, operation) {
 	}, 500);
 
 	switch (operation) {
-	case "f":
+	case "h":
 	    if (last_hover) {
 		dispatch_mouse_events(last_hover, ['mouseout', 'mouseleave']);	    
 	    }
-	    // focus same element twice => do nothing (except unhover above):
+	    // hover same element means unhover
 	    if (last_hover==null || last_hover[0] !== element[0]) {
-		element[0].focus();
 		dispatch_mouse_events(element, ['mouseover', 'mouseenter']);	    
 		last_hover = element;
 	    } else
 		last_hover = null;
 	    break;
 
+	case "f":
+	    element[0].focus();
+	    break;
+
 	case "c":
-	    dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseup', 
-					    'click']);
+	    // dispatch_mouse_events(element, ['mouseover', 'mousedown']);
+	    // element[0].focus();
+	    // dispatch_mouse_events(element, ['mouseup', 'click']);
+	    // dispatch_mouse_events(element, ['mouseover', 'mousedown']);
+	    // element[0].focus();
+	    // dispatch_mouse_events(element, ['mouseup', 'click', 'mouseout']);
+	    dispatch_mouse_events(element, ['mousedown']);
+	    element[0].focus();
+	    dispatch_mouse_events(element, ['mouseup', 'click']);
 	    break;
 	case "t":
 	    if (element.attr("href"))
@@ -324,9 +334,8 @@ function activate(element, operation) {
 	    element[0].click();
 	    break;
 	case "CC":
-	    dispatch_mouse_events(element, ['mouseover', 'mousedown']);
-	    element[0].focus();
-	    dispatch_mouse_events(element, ['mouseup', 'click']);
+	    dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseup', 
+					    'click']);
 	    break;
 	case "DC":
 	    if (element.children().length>0)
