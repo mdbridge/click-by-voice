@@ -154,6 +154,15 @@ function each_hintable(callback) {
     $("li").each(function(index) {
 	inner_callback($(this));
     });
+
+    // innermost div/span/img's are tempting click targets
+    $("div, span, img").each(function(index) {
+	if ($(this).outerHeight(true)>8 
+	   && $(this).outerWidth(true)>8
+	   && $(this).children().length==0
+	   && $(this).attr("CBV_hint_tag") == "")
+	    inner_callback($(this));
+    });
 }
 
 
