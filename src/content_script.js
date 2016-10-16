@@ -16,19 +16,22 @@ function act(action, arguments) {
 var next_CBV_hint      = 0;  // -1 means hints are off
 var hinting_parameters = ""; // extra argument to :+ if any
 
+function disabled_or_hidden(element) {
+    try {
+	// Jquery gives an error error for this if no CSS (e.g., XML files):
+	if (element.css("display") == "none")
+	    return true;
+    } catch (e) {}
+    if (element.attr("aria-hidden") == "true")
+	return true;
+
+    return false;
+}
+
 // Enumerate each element that we should hint, possibly more than once:
 function each_hintable(callback) {
     inner_callback = function(element) {
-	var usable = true;
-	try {
-	    // Jquery gives an error error for this if no CSS (e.g., XML files):
-	    if (element.css("display") == "none")
-		usable = false;
-	} catch (e) {}
-	if (element.attr("aria-hidden") == "true")
-	    usable = false;
-
-	if (usable)
+	if (!disabled_or_hidden(element))
 	    callback(element);
     };
 
@@ -288,6 +291,14 @@ function dispatch_mouse_events(element, event_names) {
 
 var last_hover = null;
 
+function area(element) {
+    try {
+	return element.height() * element.width();
+    } catch (e) {
+	return -1;
+    }
+}
+
 function silently_activate(element, operation) {
     switch (operation) {
     case "h":
@@ -369,6 +380,20 @@ function silently_activate(element, operation) {
 }
 
 function activate(element, operation) {
+    if (operation=="c" && element.is("div, span")) {
+	var parent = element;
+	var max_area = 0;
+	parent.children().each(function(index) {
+	    if (!disabled_or_hidden($(this)) &&
+	       area($(this))>max_area) {
+		max_area = area($(this));
+		element = $(this);
+	    }
+	});
+	console.log(parent[0] + " -> " + element[0]);
+    }
+
+
     element.addClass("CBV_highlight_class");
 
     setTimeout(function() {
