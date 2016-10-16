@@ -136,6 +136,24 @@ function each_hintable(callback) {
 	    break;
 	}
     });
+
+
+
+    if (hinting_parameters.indexOf("+") == -1)
+	return;
+
+    //
+    // anything we think likely to be clickable or focusable
+    //
+
+    // this is *everything* focusable:
+    $("[tabindex]").each(function(index) {
+	inner_callback($(this));
+    });
+
+    $("li").each(function(index) {
+	inner_callback($(this));
+    });
 }
 
 
@@ -254,12 +272,13 @@ var last_hover = null;
 
 function activate(element, operation) {
     element.addClass("CBV_highlight_class");
-    setTimeout(function() {
-	// sometimes elements get cloned so do this globally...
-	$(".CBV_highlight_class").removeClass("CBV_highlight_class");
-    }, 500);
 
     setTimeout(function() {
+	setTimeout(function() {
+	    // sometimes elements get cloned so do this globally...
+	    $(".CBV_highlight_class").removeClass("CBV_highlight_class");
+	}, 500);
+
 	switch (operation) {
 	case "f":
 	    if (last_hover) {
@@ -304,6 +323,11 @@ function activate(element, operation) {
 	    if (element.children().length>0)
 		 element = element.children().first();
 	    element[0].click();
+	    break;
+
+	case "TT":
+	    element.attr("tabindex", "0");
+	    element.siblings().attr("tabindex", "-1");
 	    break;
 
 

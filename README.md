@@ -45,7 +45,9 @@ dialog box by typing `{escape}`.
 Hint numbers are automatically displayed when a page is loaded; enter
 ":-" as the hint number to turn them off until a new page is loaded
 (this includes reloading the current page).  Passing ":+" turns the
-hints back on-again and/or refreshes them.  Hint numbers are not shown
+hints back on-again and/or refreshes them.  ":++" displays more hints
+than ":+", attempting to hint every element that might be clickable or
+focusable, however unlikely that might be.  Hint numbers are not shown
 when printing.
 
 
