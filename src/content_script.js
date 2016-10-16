@@ -188,6 +188,14 @@ function remove_hints() {
 }
 
 
+function build_hint(hint_number) {
+    var span = "<span CBV_hint_tag='" + hint_number + "'></span>";
+    if (hinting_parameters.indexOf("c") != -1)
+	span = "<span CBV_hint_tag='" + hint_number + "' CBV_high_contrast='true'></span>";
+
+    return span;
+}
+
 function add_hints() {
     console.log("adding hints: " + hinting_parameters);
 
@@ -200,9 +208,7 @@ function add_hints() {
 
 	element.attr("CBV_hint_number", next_CBV_hint);
 
-	var span = "<span CBV_hint_tag='" + next_CBV_hint + "'></span>";
-	if (hinting_parameters.indexOf("c") != -1)
-	    span = "<span CBV_hint_tag='" + next_CBV_hint + "' CBV_high_contrast='true'></span>";
+	var span = build_hint(next_CBV_hint);
 
 	var put_inside = false;
 	if (element.is("a") || element.is("button"))
