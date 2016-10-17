@@ -390,6 +390,10 @@ function silently_activate(element, operation) {
 	element[0].focus();
 	break;
 
+    case "D":
+	console.log(element[0]);
+	break;
+
 	// experimental:
     case "R":
 	dispatch_mouse_events(element, ['mouseover', 'contextmenu']);

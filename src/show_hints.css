@@ -85,6 +85,7 @@
 	background-color: yellow !important;
 	outline-style:    dashed  !important;
 	outline-color:    red !important;
+	outline-width:    3px !important;
     }
 
     /* a:focus { */
