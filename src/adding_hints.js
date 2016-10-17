@@ -33,6 +33,20 @@ function build_hint(hint_number) {
     return span + ">" + contents + "</span>";
 }
 
+function insert_hint_tag(element, hint_tag, put_before, put_inside) {
+    if (put_inside) {
+	if (put_before)
+	    element.prepend(hint_tag);
+	else
+	    element.append(hint_tag);
+    } else {
+	if (put_before)
+	    element.before(hint_tag);
+	else
+	    element.after(hint_tag);
+    }    
+}
+
 function add_hints() {
     console.log("adding hints: " + hinting_parameters);
 
@@ -68,17 +82,7 @@ function add_hints() {
 	    }
 	}
 
-	if (put_inside) {
-	    if (option("b"))
-		element.prepend(span);
-	    else
-		element.append(span);
-	} else {
-	    if (option("b"))
-		element.before(span);
-	    else
-		element.after(span);
-	}
+	insert_hint_tag(element, span, option("b"), put_inside);
 	next_CBV_hint = next_CBV_hint + 1;
     });
 

@@ -16,6 +16,7 @@ chrome.runtime.onMessage.addListener(
 	}
     });
 
+
 $(document).ready(function() {
     add_hints();
     //setTimeout(function() { add_hints(); }, 5000);
