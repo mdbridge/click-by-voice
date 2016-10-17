@@ -30,7 +30,7 @@ function build_hint(hint_number) {
     } else
 	span += " CBV_hint_inline='true'";
 
-    return span + ">" + contents + "</span>";
+    return $(span + ">" + contents + "</span>");
 }
 
 
@@ -75,6 +75,18 @@ function add_hints() {
 	var put_inside = false;
 	if (option("v")) {
 	    put_inside = has_inside(element);
+	    if (put_inside) {
+		//try {
+		    var v;
+		    if ((v = element.css("padding-top")) && !/^-/.test(v))
+			hint_tag.css("top", "-" + v);
+		    if ((v = element.css("padding-left")) && !/^-/.test(v))
+			hint_tag.css("left", "-" + v);
+		//console.log(v);
+		//console.log(hint_tag[0]);
+		//} catch (e) {}
+	    }
+
 	} else {
 	    if (element.is("a") || element.is("button"))
 		put_inside = true;

@@ -14,7 +14,6 @@
 	 */
 	display: inline !important;
 
-    	font-family:arial, sans-serif; 
 	overflow:visible;
 	float:none;
     }
@@ -23,6 +22,7 @@
     [CBV_hint_inline] {
 	/* font-size:xx-small;  */
 	font-size:x-small; 
+    	font-family:arial, sans-serif; 
 	line-height:130%;
 
 	border-width:1px; border-style:solid; -moz-border-radius:2px;
@@ -35,7 +35,7 @@
 
     [CBV_hint_overlay] {
 	position: relative !important;
-	vertical-align:top !important;
+	/* avoid any properties here that would give this a nonzero height */
     }
 
     [CBV_hint_overlay] span {
@@ -43,7 +43,12 @@
 
 	/* font-size:xx-small;  */
 	font-size:x-small; 
+    	font-family:arial, sans-serif; 
 	line-height:130%;
+
+	text-align: left;
+	text-indent: 0px !important;
+	vertical-align:top !important;
 
 	border-width:0px; border-style:solid; -moz-border-radius:2px;
 	/* padding:0px 2px 2px 2px; */
