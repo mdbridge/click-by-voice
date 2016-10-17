@@ -55,7 +55,8 @@
             "matches": ["http://*/*", "https://*/*", "file://*/*"],
             "css": ["show_hints.css"],
             "js": ["jquery-3.0.0.min.js", "utilities.js", 
-		   "finding_hints.js", "adding_hints.js", "content_script.js"]
+		   "finding_hints.js", "adding_hints.js", "activating_hints.js",
+		   "content_script.js"]
         }
     ],
 
