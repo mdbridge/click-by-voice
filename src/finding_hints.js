@@ -27,7 +27,7 @@ function each_hintable(callback) {
     //
     // Experiments:
     //
-    if (hinting_parameters.indexOf("II") != -1) {
+    if (option("II")) {
 	$("div").each(function(index) {
 	    if ($(this).css("background-image") != "none" &&
 		$(this).parent().css("background-image") == "none")
@@ -36,15 +36,15 @@ function each_hintable(callback) {
     }
     // just a particular element kind:
     var kind = "";
-    if (hinting_parameters.indexOf("I") != -1)
+    if (option("I"))
 	kind = "img";
-    else if (hinting_parameters.indexOf("S") != -1)
+    else if (option("S"))
 	kind = "span";
-    else if (hinting_parameters.indexOf("D") != -1)
+    else if (option("D"))
 	kind = "div";
-    else if (hinting_parameters.indexOf("L") != -1)
+    else if (option("L"))
 	kind = "li";
-    else if (hinting_parameters.indexOf("R") != -1)
+    else if (option("R"))
 	kind = "[role]";
     if (kind != "") {
 	console.log("hinting: " + kind);
@@ -133,7 +133,7 @@ function each_hintable(callback) {
 
 
 
-    if (hinting_parameters.indexOf("+") == -1)
+    if (option("+") == -1)
 	return;
 
     //

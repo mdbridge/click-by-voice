@@ -12,12 +12,12 @@ function build_hint(hint_number) {
     var span = "<span CBV_hint_tag='" + hint_number + "'";
     var contents = "" + hint_number;
 
-    if (hinting_parameters.indexOf("c") != -1)
+    if (option("c"))
 	span += " CBV_high_contrast='true'";
     else
 	span += " CBV_low_contrast='true'";
 
-    if (hinting_parameters.indexOf("v") != -1) {
+    if (option("v")) {
 	span += " CBV_hint_overlay='true'";
 	contents = "<span>" + contents + "</span>";
     } else
@@ -44,15 +44,15 @@ function add_hints() {
 	if (element.is("a") || element.is("button"))
 	    put_inside = true;
 	// <<<>>>
-	if (hinting_parameters.indexOf("v") != -1)
+	if (option("v"))
 	    put_inside = false;
 
-	if (hinting_parameters.indexOf("i") != -1 
+	if (option("i") 
 	    && (element.children().length>0
 	        || element.text != ""))
 	    put_inside = true;
 
-	if (put_inside && hinting_parameters.indexOf("ii") != -1) {
+	if (put_inside && option("ii")) {
 	    // first check is to ensure no text or comment direct subnodes
 	    if (element.contents().length == 1
 		&& element.contents().first().is("div, span")) {
@@ -62,12 +62,12 @@ function add_hints() {
 	}
 
 	if (put_inside) {
-	    if (hinting_parameters.indexOf("b") != -1)
+	    if (option("b"))
 		element.prepend(span);
 	    else
 		element.append(span);
 	} else {
-	    if (hinting_parameters.indexOf("b") != -1)
+	    if (option("b"))
 		element.before(span);
 	    else
 		element.after(span);
