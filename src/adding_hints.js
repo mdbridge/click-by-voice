@@ -75,17 +75,17 @@ function add_hints() {
 	var put_inside = false;
 	if (option("v")) {
 	    put_inside = has_inside(element);
-	    if (put_inside) {
-		//try {
-		    var v;
-		    if ((v = element.css("padding-top")) && !/^-/.test(v))
-			hint_tag.css("top", "-" + v);
-		    if ((v = element.css("padding-left")) && !/^-/.test(v))
-			hint_tag.css("left", "-" + v);
-		//console.log(v);
-		//console.log(hint_tag[0]);
-		//} catch (e) {}
-	    }
+	    // if (put_inside) {
+	    // 	//try {
+	    // 	    var v;
+	    // 	    if ((v = element.css("padding-top")) && !/^-/.test(v))
+	    // 		hint_tag.css("top", "-" + v);
+	    // 	    if ((v = element.css("padding-left")) && !/^-/.test(v))
+	    // 		hint_tag.css("left", "-" + v);
+	    // 	//console.log(v);
+	    // 	//console.log(hint_tag[0]);
+	    // 	//} catch (e) {}
+	    // }
 
 	} else {
 	    if (element.is("a") || element.is("button"))
@@ -108,6 +108,22 @@ function add_hints() {
 
 
 	insert_hint_tag(element, hint_tag, option("b"), put_inside);
+	if (option("v")) {
+	    if (put_inside) {
+		//try {
+
+		// var p = element.position();
+		// var h = hint_tag.position();
+		// hint_tag.css("top", p.top - h.top);
+		// hint_tag.css("left", p.left - h.left);
+
+		hint_tag.offset(element.offset());
+		//console.log(v);
+		//console.log(hint_tag[0]);
+		//} catch (e) {}
+	    }
+	}
+
 	next_CBV_hint += 1;
     });
 
