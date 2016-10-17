@@ -189,13 +189,19 @@ function remove_hints() {
 
 
 function build_hint(hint_number) {
-    var span = "<span CBV_hint_tag='" + hint_number + "'></span>";
-    if (hinting_parameters.indexOf("c") != -1)
-	span = "<span CBV_hint_tag='" + hint_number + "' CBV_high_contrast='true'></span>";
-    if (hinting_parameters.indexOf("v") != -1)
-	span = "<span CBV_hint_tag='" + hint_number + "' CBV_hint_overlay='true'></span>";
+    var span = "<span CBV_hint_tag='" + hint_number + "'";
 
-    return span;
+    if (hinting_parameters.indexOf("c") != -1)
+	span += " CBV_high_contrast='true'";
+    else
+	span += " CBV_low_contrast='true'";
+
+    if (hinting_parameters.indexOf("v") != -1)
+	span += " CBV_hint_overlay='true'";
+    else
+	span += " CBV_hint_inline='true'";
+
+    return span + "></span>";
 }
 
 function add_hints() {
