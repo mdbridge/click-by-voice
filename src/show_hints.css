@@ -58,6 +58,9 @@
 	/* max-width:20px; max-height:10px; */
 
 	color: red !important;
+	font-weight: bold !important;
+	/* color: #107896 !important; */
+
 	background-color: white !important;
 	/* opacity: .75; */
 	left: -1px;
