@@ -33,6 +33,18 @@ function build_hint(hint_number) {
     return span + ">" + contents + "</span>";
 }
 
+
+function has_inside(element) {
+    // quick hack for now
+
+    if (element.contents().length > 0)
+	return true;
+    if (element.is("div, span, a")) 
+	return true;
+    return false;
+}
+
+
 function insert_hint_tag(element, hint_tag, put_before, put_inside) {
     if (put_inside) {
 	if (put_before)
@@ -56,34 +68,35 @@ function add_hints() {
     each_hintable(function(element) {
 	if (element.is("[CBV_hint_number]"))
 	    return;
-
 	element.attr("CBV_hint_number", next_CBV_hint);
 
-	var span = build_hint(next_CBV_hint);
+	var hint_tag = build_hint(next_CBV_hint);
 
 	var put_inside = false;
-	if (element.is("a") || element.is("button"))
-	    put_inside = true;
-	// <<<>>>
-	if (option("v"))
-	    put_inside = false;
+	if (option("v")) {
+	    put_inside = has_inside(element);
+	} else {
+	    if (element.is("a") || element.is("button"))
+		put_inside = true;
 
-	if (option("i") 
-	    && (element.children().length>0
-	        || element.text != ""))
-	    put_inside = true;
+	    if (option("i") 
+		&& (element.children().length>0
+	            || element.text != ""))
+		put_inside = true;
 
-	if (put_inside && option("ii")) {
-	    // first check is to ensure no text or comment direct subnodes
-	    if (element.contents().length == 1
-		&& element.contents().first().is("div, span")) {
-		console.log(">> " + element.text());
-		element = element.children().first();
+	    if (put_inside && option("ii")) {
+		// first check is to ensure no text or comment direct subnodes
+		if (element.contents().length == 1
+		    && element.contents().first().is("div, span")) {
+		    console.log(">> " + element.text());
+		    element = element.children().first();
+		}
 	    }
 	}
 
-	insert_hint_tag(element, span, option("b"), put_inside);
-	next_CBV_hint = next_CBV_hint + 1;
+
+	insert_hint_tag(element, hint_tag, option("b"), put_inside);
+	next_CBV_hint += 1;
     });
 
     //console.log("total hints assigned: " + next_CBV_hint);
