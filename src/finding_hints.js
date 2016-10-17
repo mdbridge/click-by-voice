@@ -1,8 +1,7 @@
-//
-// Labeling elements with hint tags
-//
+///
+/// Code for figuring out which elements of the webpage should be hinted
+///
 
-var next_CBV_hint      = 0;  // -1 means hints are off
 
 function disabled_or_hidden(element) {
     try {
@@ -15,6 +14,13 @@ function disabled_or_hidden(element) {
 
     return false;
 }
+
+
+function CBV_inserted_element(element) {
+    return element.attr("CBV_hint_tag")
+	|| element.attr("CBV_inter_hint_tag");
+}
+
 
 // Enumerate each element that we should hint, possibly more than once:
 function each_hintable(callback) {
@@ -151,16 +157,17 @@ function each_hintable(callback) {
 
     // innermost div/span/img's are tempting click targets
     $("div, span, img").each(function(index) {
+	var element = $(this);
 	try {
-	    // Jquery gives errors for these if they are auto due to no CSS (e.g., XML files):
-	    if ($(this).outerHeight(true)<8 
-		|| $(this).outerWidth(true)<8)
+	    // Jquery gives errors for these if they are auto due to
+	    // no CSS (e.g., XML files):
+	    if (element.outerHeight(true)<8 
+		|| element.outerWidth(true)<8)
 		return;
 	} catch (e) {}
-	if ($(this).children().length > 0
-	    || $(this).attr("CBV_hint_tag"))
+	if (element.children().length > 0 || CBV_inserted_element(element))
 	    return;
 	
-	inner_callback($(this));
+	inner_callback(element);
     });
 }

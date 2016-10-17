@@ -1,3 +1,9 @@
+//
+// Labeling elements with hint tags
+//
+
+var next_CBV_hint      = 0;  // -1 means hints are off
+
 function remove_hints() {
     //console.log("removing hints");
 
@@ -19,7 +25,7 @@ function build_hint(hint_number) {
 
     if (option("v")) {
 	span += " CBV_hint_overlay='true'";
-	contents = "<span>" + contents + "</span>";
+	contents = "<span CBV_inter_hint_tag='true'>" + contents + "</span>";
     } else
 	span += " CBV_hint_inline='true'";
 
