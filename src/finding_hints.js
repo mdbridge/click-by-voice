@@ -138,8 +138,7 @@ function each_hintable(callback) {
     });
 
 
-
-    if (option("+") == -1)
+    if (!option("+"))
 	return;
 
     //
