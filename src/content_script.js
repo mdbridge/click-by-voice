@@ -190,18 +190,20 @@ function remove_hints() {
 
 function build_hint(hint_number) {
     var span = "<span CBV_hint_tag='" + hint_number + "'";
+    var contents = "" + hint_number;
 
     if (hinting_parameters.indexOf("c") != -1)
 	span += " CBV_high_contrast='true'";
     else
 	span += " CBV_low_contrast='true'";
 
-    if (hinting_parameters.indexOf("v") != -1)
+    if (hinting_parameters.indexOf("v") != -1) {
 	span += " CBV_hint_overlay='true'";
-    else
+	contents = "<span>" + contents + "</span>";
+    } else
 	span += " CBV_hint_inline='true'";
 
-    return span + "></span>";
+    return span + ">" + contents + "</span>";
 }
 
 function add_hints() {
@@ -221,6 +223,10 @@ function add_hints() {
 	var put_inside = false;
 	if (element.is("a") || element.is("button"))
 	    put_inside = true;
+	// <<<>>>
+	if (hinting_parameters.indexOf("v") != -1)
+	    put_inside = false;
+
 	if (hinting_parameters.indexOf("i") != -1 
 	    && (element.children().length>0
 	        || element.text != ""))
