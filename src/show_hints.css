@@ -68,7 +68,7 @@
 	margin-left:0px; 
 	/* max-width:20px; max-height:10px; */
 
-	color: red !important;
+	color: purple !important;
 	font-weight: bold !important;
 	/* color: #107896 !important; */
 
@@ -78,6 +78,10 @@
 	top: -1px;
 	z-index: 10;
 	/* margin-left: -16px; */
+    }
+
+    [CBV_hint_overlay][CBV_high_contrast] span {
+	color: red !important;
     }
 
 
@@ -117,3 +121,4 @@
     /* 	outline-color: red; */
     /* } */
 }
+

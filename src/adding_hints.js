@@ -15,12 +15,12 @@ function remove_hints() {
 }
 
 
+// var i = 0;
 function build_base_element() {
     var element = $("<span></span>");
 
     // display: inline !important *except* for print where its display: none !important
     element.attr("CBV_hint_element", "true");
-
 
     return element;
 }
@@ -126,7 +126,7 @@ function add_hints() {
 	var put_before = option("b");
 
 	// always put hints after tr elements (else messes up table
-	// formatting as treats hint tag as first column:
+	// formatting as treats hint tag as first column):
 	if (element.is("tr")) 
 	     put_before = false;
 
@@ -147,6 +147,29 @@ function add_hints() {
 		//} catch (e) {}
 //	    }
 	}
+
+// 	i += 1;
+// 	var c;
+// 	switch (Math.floor(i/27)%7) {
+// 	case 0: c = "red"; break;
+// 	case 3: c = "#50a033"; break;
+// 	case 5: c = "green"; break;
+// 	case 6: c = "purple"; break;
+// 	default:
+// 	    c = "purple";
+// 	}
+// 	// console.log(hint_tag[0]);
+// //	hint_tag.children().first().css("color", c + " ! important");
+// try {
+// 	hint_tag.children().first()[0].style.setProperty("color",c,"important");
+// } catch ( e) {
+    
+// }
+	// console.log(hint_tag[0]);
+	// hint_tag.children().first().css("color", c);
+	// console.log(hint_tag[0]);
+
+
 
 	next_CBV_hint += 1;
     });
