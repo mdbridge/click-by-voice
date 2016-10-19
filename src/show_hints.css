@@ -14,12 +14,14 @@
 	 */
 	display: inline !important;
 
-	overflow:visible;
+	overflow:visible !important;
 	float:none;
     }
 
 
     [CBV_hint_inline] {
+	position: static !important;
+
 	/* font-size:xx-small;  */
 	font-size:x-small; 
     	font-family:arial, sans-serif; 
@@ -39,6 +41,7 @@
     }
 
     [CBV_hint_overlay] span {
+	display: inline !important;
 	position: absolute !important;
 
 	/* font-size:xx-small;  */
@@ -106,5 +109,3 @@
     /* 	outline-color: red; */
     /* } */
 }
-mment-region
-region
