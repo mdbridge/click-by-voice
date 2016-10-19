@@ -1,4 +1,28 @@
 @media print {
+    [CBV_hint_element] {
+	display: none !important;
+    }
+}
+
+@media not print {
+    [CBV_hint_element] {
+	/*
+	 * deal with cases where website style rules make spans display: none
+         * example: Office365 login page
+	 */
+	display: inline !important;
+    }
+}
+
+
+
+
+
+
+
+
+
+@media print {
     [CBV_hint_tag] {
 	display: none !important;
     }

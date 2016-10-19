@@ -15,22 +15,33 @@ function remove_hints() {
 }
 
 
+function build_base_element() {
+    var element = $("<span></span>");
+
+    element.attr("CBV_hint_element", "true");
+
+    return element;
+}
+
 function build_hint(hint_number) {
-    var span = "<span CBV_hint_tag='" + hint_number + "'";
-    var contents = "" + hint_number;
+    var element = build_base_element();
+
+    element.attr("CBV_hint_tag", hint_number);
 
     if (option("c"))
-	span += " CBV_high_contrast='true'";
+	element.attr("CBV_high_contrast", "true");
     else
-	span += " CBV_low_contrast='true'";
+	element.attr("CBV_low_contrast", "true");
 
     if (option("v")) {
-	span += " CBV_hint_overlay='true'";
-	contents = "<span CBV_inter_hint_tag='true'>" + contents + "</span>";
-    } else
-	span += " CBV_hint_inline='true'";
+	element.attr("CBV_hint_overlay", "true");
+	element.append("<span CBV_inter_hint_tag='true'>" + hint_number + "</span>");
+    } else {
+	element.attr("CBV_hint_inline", "true");
+	element.append(hint_number);
+    }
 
-    return $(span + ">" + contents + "</span>");
+    return element;
 }
 
 
