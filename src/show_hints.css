@@ -19,25 +19,9 @@
 
 
 
-
-
-
-@media print {
-    [CBV_hint_tag] {
-	display: none !important;
-    }
-}
-
-
 @media not print {
 
     [CBV_hint_tag] {
-	/*
-	 * deal with cases where website style rules make spans display: none
-         * example: Office365 login page
-	 */
-	display: inline !important;
-
 	overflow:visible !important;
 	float:none;
     }

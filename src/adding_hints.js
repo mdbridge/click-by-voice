@@ -18,7 +18,9 @@ function remove_hints() {
 function build_base_element() {
     var element = $("<span></span>");
 
+    // display: inline !important *except* for print where its display: none !important
     element.attr("CBV_hint_element", "true");
+
 
     return element;
 }
@@ -35,7 +37,10 @@ function build_hint(hint_number) {
 
     if (option("v")) {
 	element.attr("CBV_hint_overlay", "true");
-	element.append("<span CBV_inter_hint_tag='true'>" + hint_number + "</span>");
+	var inner = build_base_element();
+	inner.attr("CBV_inter_hint_tag", "true");
+	inner.append(hint_number);
+	element.append(inner);
     } else {
 	element.attr("CBV_hint_inline", "true");
 	element.append(hint_number);
@@ -118,9 +123,17 @@ function add_hints() {
 	}
 
 
-	insert_hint_tag(element, hint_tag, option("b"), put_inside);
+	var put_before = option("b");
+
+	// always put hints after tr elements (else messes up table
+	// formatting as treats hint tag as first column:
+	if (element.is("tr")) 
+	     put_before = false;
+
+
+	insert_hint_tag(element, hint_tag, put_before, put_inside);
 	if (option("v")) {
-	    if (put_inside) {
+//	    if (put_inside) {
 		//try {
 
 		// var p = element.position();
@@ -132,7 +145,7 @@ function add_hints() {
 		//console.log(v);
 		//console.log(hint_tag[0]);
 		//} catch (e) {}
-	    }
+//	    }
 	}
 
 	next_CBV_hint += 1;
