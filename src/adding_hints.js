@@ -22,6 +22,8 @@ function build_base_element() {
     // display: inline !important *except* for print where its display: none !important
     element.attr("CBV_hint_element", "true");
 
+    element.css("word-break", "normal");  // prevent breaking of hint numbers
+
     return element;
 }
 
