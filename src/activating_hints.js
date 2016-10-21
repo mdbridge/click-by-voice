@@ -132,6 +132,15 @@ function silently_activate(element, operation) {
 	dispatch_mouse_events(element, ['mouseover', 'contextmenu']);
 	break;
 
+    case ">":
+	dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseout']);
+	break;
+    case "<":
+	dispatch_mouse_events(element, ['mouseover', 'mouseup', 'click', 'mouseout']);
+	break;
+
+
+
     default:
 	console.log("unknown activate operation: " + operation);
     }

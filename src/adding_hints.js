@@ -45,7 +45,7 @@ function add_text(element, text) {
     return element;
 }
 
-function build_hint(hint_number) {
+function build_hint(hint_number, use_overlay) {
     var element = build_base_element();
 
     element.attr("CBV_hint_tag", hint_number);
@@ -55,7 +55,7 @@ function build_hint(hint_number) {
     else
 	element.attr("CBV_low_contrast", "true");
 
-    if (option("v")) {
+    if (use_overlay) {
 	element.attr("CBV_hint_overlay", "true");
 	var inner = build_base_element();
 	inner.attr("CBV_inter_hint_tag", "true");
@@ -126,12 +126,24 @@ function add_hints() {
 	    return;
 	element.attr("CBV_hint_number", next_CBV_hint);
 
-	var hint_tag = build_hint(next_CBV_hint);
+	var put_inside	= false;
+	var put_before	= option("b");
+	var use_overlay = option("v");
 
-	var put_inside = false;
-	var put_before = option("b");
+	if (option("h")) {
+	    if (element.is("a") && element.text().length > 30) {
+		console.log(element[0]);
+		use_overlay = false;
+		put_before  = false;
+	    } else {
+		use_overlay = true;
+	    }
+	}
 
-	if (option("v")) {
+
+	var hint_tag = build_hint(next_CBV_hint, use_overlay);
+
+	if (use_overlay) {
 	    put_inside = can_put_span_inside(element);
 	} else {
 	    if (element.is("a") || element.is("button"))
@@ -161,7 +173,7 @@ function add_hints() {
 	insert_hint_tag(element, hint_tag, put_before, put_inside);
 	//$("body").append(hint_tag);
 
-	if (option("v")) {
+	if (use_overlay) {
 	    hint_tag.offset(element.offset());
 	    // hint_tag's child may be offset from it due to aligment from hint_tag's parent:
 	    hint_tag.children().first().offset(hint_tag.offset());
