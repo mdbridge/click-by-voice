@@ -62,6 +62,20 @@ function has_inside(element) {
     return false;
 }
 
+function can_put_span_inside(element) {
+    // quick hack for now
+
+    // verified these don't work:
+    if (element.is("select, option")) 
+	return false;
+
+    if (element.contents().length > 0)
+	return true;
+    if (element.is("div, span, a")) 
+	return true;
+    return false;
+}
+
 
 function insert_hint_tag(element, hint_tag, put_before, put_inside) {
     if (put_inside) {
@@ -94,7 +108,7 @@ function add_hints() {
 	var put_before = option("b");
 
 	if (option("v")) {
-	    put_inside = has_inside(element);
+	    put_inside = can_put_span_inside(element);
 	} else {
 	    if (element.is("a") || element.is("button"))
 		put_inside = true;
