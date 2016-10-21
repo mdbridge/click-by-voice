@@ -123,7 +123,8 @@ function add_hints() {
 	insert_hint_tag(element, hint_tag, put_before, put_inside);
 	if (option("v")) {
 	    hint_tag.offset(element.offset());
-	    //hint_tag.children().first().offset(hint_tag.offset());
+	    // hint_tag's child may be offset from it due to aligment from hint_tag's parent:
+	    hint_tag.children().first().offset(hint_tag.offset());
 	}
 
 	next_CBV_hint += 1;
