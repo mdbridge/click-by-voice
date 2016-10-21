@@ -59,6 +59,15 @@ function each_hintable(callback) {
 	});
 	return;
     }
+    if (option("FB")) {
+	$("th").each(function(index) {
+	    var element = $(this);
+	    if (/^C\d+[ON]L\d+$/.test(element.attr("id")))
+		inner_callback($(this));
+	});
+	//return;
+    }
+
 
 
     //

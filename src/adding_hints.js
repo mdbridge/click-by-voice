@@ -27,6 +27,24 @@ function build_base_element() {
     return element;
 }
 
+
+function set_important(element, item, value) {
+    // jquery .css(-,-)  does not handle !important correctly:
+    element[0].style.setProperty(item, value, "important");
+//    element[0].style.setProperty(item, value);
+}
+
+function add_text(element, text) {
+    //set_important(element, "font-size", "xx-small");
+    set_important(element, "font-size", "x-small");
+    set_important(element, "font-family", "arial, sans-serif");
+    set_important(element, "line-height", "130%");
+
+    element.append(text);
+
+    return element;
+}
+
 function build_hint(hint_number) {
     var element = build_base_element();
 
@@ -41,11 +59,11 @@ function build_hint(hint_number) {
 	element.attr("CBV_hint_overlay", "true");
 	var inner = build_base_element();
 	inner.attr("CBV_inter_hint_tag", "true");
-	inner.append(hint_number);
+	add_text(inner, hint_number);
 	element.append(inner);
     } else {
 	element.attr("CBV_hint_inline", "true");
-	element.append(hint_number);
+	add_text(element, hint_number);
     }
 
     return element;
@@ -141,6 +159,8 @@ function add_hints() {
 
 
 	insert_hint_tag(element, hint_tag, put_before, put_inside);
+	//$("body").append(hint_tag);
+
 	if (option("v")) {
 	    hint_tag.offset(element.offset());
 	    // hint_tag's child may be offset from it due to aligment from hint_tag's parent:
