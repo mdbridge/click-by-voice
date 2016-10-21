@@ -14,7 +14,7 @@ function act(action, arguments) {
 //
 
 var hinting_parameters = ""; // extra argument to :+ if any
-//var hinting_parameters = "vb";
+//hinting_parameters = "vb";
 
 function option(option_name) {
     return (hinting_parameters.indexOf(option_name) != -1);
