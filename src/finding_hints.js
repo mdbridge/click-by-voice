@@ -89,7 +89,7 @@ function each_hintable(callback) {
 	    inner_callback($(this));
     });
 
-    $("select").each(function(index) {
+    $("select, textarea").each(function(index) {
 	inner_callback($(this));
     });
 

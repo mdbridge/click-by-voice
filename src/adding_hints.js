@@ -63,15 +63,21 @@ function has_inside(element) {
 }
 
 function can_put_span_inside(element) {
-    // quick hack for now
-
-    // verified these don't work:
-    if (element.is("select, option")) 
+    // unconditionally _empty elements_ that cannot have any child
+    // nodes (text or nested elements):
+    if (element.is("area, base, br, col, command, embed, hr, img, input, keygen, link, meta, param, source, track, wbr")) 
 	return false;
 
-    if (element.contents().length > 0)
+    if (element.is("select, option, textarea")) 
+	return false;
+
+    if (element.is("div, span, a, button, li")) 
 	return true;
-    if (element.is("div, span, a")) 
+
+
+    // above absolutely correct; below is heuristic:
+
+    if (element.contents().length > 0)
 	return true;
     return false;
 }
