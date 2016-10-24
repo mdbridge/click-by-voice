@@ -93,10 +93,17 @@ functionality:
   * to cover elements added dynamically over time, Click by Voice
     automatically refreshes hints every 3 seconds
     * this can require waiting several seconds after a click or page load
+  * standard hints does not find many elements that are only clickable
+    because of event listeners
+    * hopefully, the extended hints (:++) should find most of these.
 * The placement of hints is suboptimal and disrupts the flow of some webpages
+  * Experimental: :+vb uses overlays for hints; this can make text hard
+    to read, but disturbs the flow less
 * Sometimes hints are unreadable due to clipping
+  * Experimental: :+a puts hints before elements; this may reduce clipping
 * Sometime hints are too hard to read due to inadequate contrast between
   foreground and background colors
+  * Experimental: :+c increases the contrast of hints
 * Executing a command (especially the popping up part) is slower than I'd like
 * Still some invisible elements that are hinted
 * Does not work on chrome:// URLs like settings and extensions pages;
