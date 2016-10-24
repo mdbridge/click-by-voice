@@ -139,6 +139,12 @@ function add_hints() {
 		use_overlay = true;
 	    }
 	}
+	if (option("y")) {
+	    if (element.parents().is("p")) {
+		use_overlay = false;
+		 put_before = false;
+	    }
+	}
 
 
 	var hint_tag = build_hint(next_CBV_hint, use_overlay);
