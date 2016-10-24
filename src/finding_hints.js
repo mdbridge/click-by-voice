@@ -147,6 +147,15 @@ function each_hintable(callback) {
     });
 
 
+    // <<<>>>
+    if (option("C")) {
+	$("li").each(function(index) {
+	    if ($(this).css("cursor")=="pointer")
+		inner_callback($(this));
+	});
+    }
+
+
     if (!option("+"))
 	return;
 
