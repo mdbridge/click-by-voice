@@ -20,7 +20,7 @@ chrome.commands.onCommand.addListener(function(command) {
 // Performing actions on behalf of the content script
 //
 
-var initial_operation = "+L";
+var initial_operation = "+";
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {

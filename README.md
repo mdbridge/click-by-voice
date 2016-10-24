@@ -8,7 +8,7 @@ for activating links and other HTML elements using voice commands.
 
 Click by Voice provides two keyboard shortcuts, which are bound by
 default to `{ctrl+shift+space}` (pop up command dialog box) and
-'{ctrl+shift+,}' (blur).  You can rebind these as desired using the
+`{ctrl+shift+,}` (blur).  You can rebind these as desired using the
 keyboard shortcuts link at the bottom of the <a
 href="chrome://extensions/">extensions page</a>.
 

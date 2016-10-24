@@ -174,7 +174,21 @@ function add_hints() {
 	//$("body").append(hint_tag);
 
 	if (use_overlay) {
-	    hint_tag.offset(element.offset());
+	    if (put_before) {
+		hint_tag.offset(element.offset());
+	    } else {
+		var offset = element.offset();
+		try {
+		    // console.log(element[0]);
+		    // console.log(offset);
+		    // console.log(element.width());
+		    offset.left +=  element.width();
+		    // console.log(offset);
+		    hint_tag.offset(offset);
+		} catch (e) {
+		    console.log(e);
+		}
+	    }
 	    // hint_tag's child may be offset from it due to aligment from hint_tag's parent:
 	    hint_tag.children().first().offset(hint_tag.offset());
 	}
