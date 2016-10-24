@@ -7,6 +7,11 @@ function act(action, arguments) {
     chrome.runtime.sendMessage(arguments);
 }
 
+function request(action, arguments, callback) {
+    arguments.action = action;
+    chrome.runtime.sendMessage(arguments, callback);
+}
+
 
 
 //
@@ -14,7 +19,6 @@ function act(action, arguments) {
 //
 
 var hinting_parameters = ""; // extra argument to :+ if any
-//hinting_parameters = "vb";
 
 function option(option_name) {
     return (hinting_parameters.indexOf(option_name) != -1);

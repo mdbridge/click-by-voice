@@ -42,13 +42,18 @@ operation.
 More command types will be added later.  You can dismiss the command
 dialog box by typing `{escape}`.
 
-Hint numbers are automatically displayed when a page is loaded; enter
-":-" as the hint number to turn them off until a new page is loaded
-(this includes reloading the current page).  Passing ":+" turns the
-hints back on-again and/or refreshes them.  ":++" displays more hints
-than ":+", attempting to hint every element that might be clickable or
-focusable, however unlikely that might be.  Hint numbers are not shown
-when printing.
+When a page is loaded (this includes reloading the current page), Click
+by Voice displays hints according to the last show [no] hints command it
+received.  The current such commands are:
+
+* ':+' show standard hints and/or refresh them
+* ':++' similar but displays more hints, attempting to hint every
+  element that might be clickable or focusable, however unlikely that
+  might be.
+* ':-' stop displaying hints, removing any existing hints
+
+On Chrome startup, Click by Voice defaults to standard hints (`:+`).
+Hint numbers are not shown when printing.
 
 
 ## Using with voice commands
