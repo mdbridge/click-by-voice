@@ -43,8 +43,8 @@ More command types will be added later.  You can dismiss the command
 dialog box by typing `{escape}`.
 
 When a page is loaded (this includes reloading the current page), Click
-by Voice displays hints according to the last show [no] hints command it
-received.  The current such commands are:
+by Voice displays hints according to the last _show [no] hints command_
+it received.  The current such commands are:
 
 * ':+' show standard hints and/or refresh them
 * ':++' similar but displays more hints, attempting to hint every
@@ -52,8 +52,9 @@ received.  The current such commands are:
   might be.
 * ':-' stop displaying hints, removing any existing hints
 
-On Chrome startup, Click by Voice defaults to standard hints (`:+`).
-Hint numbers are not shown when printing.
+To use these commands, just enter them into th helloe hint number popup
+instead of a hint number.  On Chrome startup, Click by Voice defaults to
+standard hints `:+`.  Hint numbers are not shown when printing.
 
 
 ## Using with voice commands
