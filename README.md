@@ -72,9 +72,9 @@ Vocola 2 commands that provide access to the Click by Voice
 functionality:
 
     blur me = "{ctrl+shift+,}";
-    show      numbers = {ctrl+shift+space} Wait(500) :+{enter};
-    show more numbers = {ctrl+shift+space} Wait(500) :++{enter};
-    hide      numbers = {ctrl+shift+space} Wait(500) :-{enter};
+    show      numbers = {ctrl+shift+space} Wait(500) :+  {enter};
+    show more numbers = {ctrl+shift+space} Wait(500) :++ {enter};
+    hide      numbers = {ctrl+shift+space} Wait(500) :-  {enter};
     
     <pick> 0..9 [0..9 [0..9 [0..9]]] = {ctrl+shift+space} Wait(500) $2$3$4$5 ":$1"{enter};
     
