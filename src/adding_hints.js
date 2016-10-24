@@ -95,8 +95,10 @@ function can_put_span_inside(element) {
 
     // above absolutely correct; below is heuristic:
 
-    if (element.contents().length > 0)
-	return true;
+    try {
+	if (element.contents().length > 0)
+	    return true;
+    } catch (e) {}
     return false;
 }
 

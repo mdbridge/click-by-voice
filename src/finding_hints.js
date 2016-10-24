@@ -9,8 +9,10 @@ function disabled_or_hidden(element) {
 	if (element.css("display") == "none")
 	    return true;
     } catch (e) {}
-    if (element.attr("aria-hidden") == "true")
-	return true;
+
+    // ignore aria-hidden as it is used to hide relevant elements like search icons...
+    // if (element.attr("aria-hidden") == "true")
+    // 	return true;
 
     return false;
 }
@@ -108,7 +110,7 @@ function each_hintable(callback) {
 
 
     //
-    // non-Standard HTML elements directly made clickable or focusable
+    // HTML elements directly made clickable or focusable
     //
 
     $("[onclick]").each(function(index) {
@@ -122,8 +124,8 @@ function each_hintable(callback) {
 
 
     //
-    // non-Standard HTML elements that might be clickable due to event
-    // listeners or focusable via tabindex=-1
+    // HTML elements that might be clickable due to event listeners or
+    // focusable via tabindex=-1
     //
 
     $("[role]").each(function(index) {
@@ -146,14 +148,13 @@ function each_hintable(callback) {
 	}
     });
 
-
-    // <<<>>>
-    if (option("C")) {
-	$("li").each(function(index) {
+    $("li").each(function(index) {
+	try {
 	    if ($(this).css("cursor")=="pointer")
 		inner_callback($(this));
-	});
-    }
+	} catch ( e) {}
+    });
+
 
 
     if (!option("+"))
