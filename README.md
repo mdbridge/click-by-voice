@@ -93,7 +93,7 @@ functionality:
   * to cover elements added dynamically over time, Click by Voice
     automatically refreshes hints every 3 seconds
     * this can require waiting several seconds after a click or page load
-  * standard hints does not find many elements that are only clickable
+  * standard hints does not find elements that are only clickable
     because of event listeners
     * hopefully, the extended hints `:++` should find most of these.
 * The placement of hints is suboptimal and disrupts the flow of some webpages
@@ -109,6 +109,10 @@ functionality:
 * Does not work on chrome:// URLs like settings and extensions pages;
   ditto https://chrome.google.com URLS (e.g., developer dashboard)
 * Does not work in some pop-ups, for example, the add bookmarks pop up
+
+Experimental modifiers to show hint commands are just that,
+experimental.  I reserve the right to change or remove them without
+notice.
 
 
 ## Other
