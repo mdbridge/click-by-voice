@@ -117,6 +117,7 @@ function insert_hint_tag(element, hint_tag, put_before, put_inside) {
 
 function add_hints() {
     console.log("adding hints: " + hinting_parameters);
+    var start = performance.now();
 
     if (next_CBV_hint < 0)
 	next_CBV_hint = 0;
@@ -203,7 +204,8 @@ function add_hints() {
 	next_CBV_hint += 1;
     });
 
-    //console.log("total hints assigned: " + next_CBV_hint);
+    console.log("total hints assigned: " + next_CBV_hint);
+    console.log("  " + (performance.now()-start) + " ms");
 }
 
 function refresh_hints() {
