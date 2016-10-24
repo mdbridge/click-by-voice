@@ -174,7 +174,7 @@ function add_hints() {
 	//$("body").append(hint_tag);
 
 	if (use_overlay) {
-	    if (put_before) {
+	    if (!option('e')) {
 		hint_tag.offset(element.offset());
 	    } else {
 		var offset = element.offset();
@@ -182,7 +182,8 @@ function add_hints() {
 		    // console.log(element[0]);
 		    // console.log(offset);
 		    // console.log(element.width());
-		    offset.left +=  element.width();
+//		    offset.left +=  element.width() - hint_tag.children().first().width();
+		    offset.left +=  element.outerWidth() - hint_tag.children().first().outerWidth();
 		    // console.log(offset);
 		    hint_tag.offset(offset);
 		} catch (e) {
