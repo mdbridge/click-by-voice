@@ -54,7 +54,9 @@ it received.  The current such commands are:
 
 To use these commands, just enter them into the hint number popup
 instead of a hint number.  On Chrome startup, Click by Voice defaults to
-standard hints.  Hint numbers are not shown when printing.
+standard hints.  Note that show hints commands given when using one tab
+will affect refreshes of other tabs.  Hint numbers are not shown when
+printing.
 
 
 ## Using with voice commands
