@@ -51,6 +51,7 @@
     [CBV_hint_overlay] span {
 	display: inline !important;
 	position: absolute !important;
+	width: auto !important;
 
 	/* font-size:xx-small;  */
 	font-size:x-small; 
