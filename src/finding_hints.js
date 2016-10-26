@@ -123,6 +123,10 @@ function hintable(element) {
 		return true;
 	} catch (e) {}
     }
+    // hard coding XML file buttons: <<<>>>
+    if (element.is("span.button.collapse-button") ||
+        element.is("span.button.expand-button"))
+	return true;
 
 
 
