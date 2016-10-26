@@ -2,6 +2,34 @@
 /// Code for figuring out which elements of the webpage should be hinted
 ///
 
+function CBV_inserted_element(element) {
+    return element.attr("CBV_hint_element") == "true";
+}
+
+
+function each_displaying_helper(element, callback) {
+    if (CBV_inserted_element(element))
+    	return;
+
+    try {
+	// Jquery gives an error error for this if no CSS (e.g., XML files):
+	if (element.css("display") == "none")
+	    return true;
+    } catch (e) {}
+
+    callback(element);
+
+    element.children().each(function(index) {
+	each_displaying_helper($(this), callback);
+    });
+}
+
+function each_displaying(callback) {
+    var root = $("body");
+    each_displaying_helper(root, callback);
+}
+
+
 
 function disabled_or_hidden(element) {
     try {
@@ -15,12 +43,6 @@ function disabled_or_hidden(element) {
     // 	return true;
 
     return false;
-}
-
-
-function CBV_inserted_element(element) {
-    return element.attr("CBV_hint_tag")
-	|| element.attr("CBV_inter_hint_tag");
 }
 
 
