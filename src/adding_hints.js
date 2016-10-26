@@ -18,11 +18,11 @@ function remove_hints() {
 function build_base_element() {
     var element = $("<span></span>");
 
-    // display: inline !important *except* for print where its display: none !important
     element.attr("CBV_hint_element", "true");
+    // => display: inline !important *except* for print where its display: none !important
 
-    element.css("word-break", "normal");  // prevent breaking of hint numbers
-//    element.css("text-align", "left");    // put overlay sub-elements at left
+    set_important(element, "overflow", "visible");
+    set_important(element, "float", "none");
 
     return element;
 }
@@ -40,33 +40,72 @@ function add_text(element, text) {
     set_important(element, "font-family", "arial, sans-serif");
     set_important(element, "line-height", "130%");
 
+    set_important(element, "text-align", "left");
+    set_important(element, "word-break", "normal");  // prevent breaking of hint numbers
+    
     element.append(text);
 
     return element;
 }
 
+
 function build_hint(hint_number, use_overlay) {
-    var element = build_base_element();
-
-    element.attr("CBV_hint_tag", hint_number);
-
-    if (option("c"))
-	element.attr("CBV_high_contrast", "true");
-    else
-	element.attr("CBV_low_contrast", "true");
+    var outer = build_base_element();
+    outer.attr("CBV_hint_tag", hint_number);
 
     if (use_overlay) {
-	element.attr("CBV_hint_overlay", "true");
+	set_important(outer, "position", "relative");
+	set_important(outer, "text-align", "left");
+	/* avoid any properties here that would give outer a nonzero height? */
+
 	var inner = build_base_element();
-	inner.attr("CBV_inter_hint_tag", "true");
+	set_important(inner, "position", "absolute");
+	// IMPORTANT: need to have top, left set so offset(-[,-])
+	//            works correctly on this element:
+	set_important(inner, "top", "0");
+	set_important(inner, "left", "0");
+
+	set_important(inner, "width", "auto");
+	set_important(inner, "text-indent", " 0px");
+	set_important(inner, "vertical-align", " top");
+	set_important(inner, "z-index", " 10");
+
 	add_text(inner, hint_number);
-	element.append(inner);
+	/* opacity: .75; */
+	set_important(inner, "padding", "0px 2px 0px 2px");
+	/* max-width:20px; max-height:10px; */
+	set_important(inner, "border-style", "none");
+	set_important(inner, "margin", "0px");
+
+	if (option("c")) {
+	    set_important(inner, "color", "red");
+	} else {
+	    set_important(inner, "color", "purple");
+	}
+	set_important(inner, "background-color", "white");
+	set_important(inner, "font-weight", "bold");
+	
+	outer.append(inner);
+
     } else {
-	element.attr("CBV_hint_inline", "true");
-	add_text(element, hint_number);
+	set_important(outer, "position", " static");
+
+	add_text(outer, hint_number);
+	set_important(outer, "vertical-align", "center");
+	/* max-width:20px; max-height:10px; */
+	set_important(outer, "padding", "0px 2px 0px 2px");
+	set_important(outer, "border-style", "solid");
+	set_important(outer, "border-width", "1px");
+	//set_important(outer, "border-radius", "2px");
+	set_important(outer, "margin-left", "2px"); 
+
+	if (option("c")) {
+	    set_important(outer, "color", "black");
+	    set_important(outer, "background-color", "yellow");
+	}
     }
 
-    return element;
+    return outer;
 }
 
 
@@ -183,24 +222,11 @@ function add_hints() {
 	//$("body").append(hint_tag);
 
 	if (use_overlay) {
-	    if (!option('e')) {
-		hint_tag.offset(element.offset());
-	    } else {
-		var offset = element.offset();
-		try {
-		    // console.log(element[0]);
-		    // console.log(offset);
-		    // console.log(element.width());
-//		    offset.left +=  element.width() - hint_tag.children().first().width();
-		    offset.left +=  element.outerWidth() - hint_tag.children().first().outerWidth();
-		    // console.log(offset);
-		    hint_tag.offset(offset);
-		} catch (e) {
-		    console.log(e);
-		}
-	    }
-	    // hint_tag's child may be offset from it due to aligment from hint_tag's parent:
-	    hint_tag.children().first().offset(hint_tag.offset());
+	    var offset = element.offset();
+	    if (option('e'))
+		offset.left +=  element.outerWidth() - hint_tag.children().first().outerWidth();
+
+	    hint_tag.children().first().offset(offset);
 	}
 
 	next_CBV_hint += 1;
