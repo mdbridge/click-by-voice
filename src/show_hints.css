@@ -11,8 +11,68 @@
          * example: Office365 login page
 	 */
 	display: inline !important;
+
+	/* fallback for XML files, which do not interpret style attributes */
+	overflow: visible;
+	float: none;
     }
 
+
+    [CBV_add_text] {
+	/* fallback for XML files, which do not interpret style attributes */
+	font-size: x-small;
+	font-family: arial, sans-serif;
+	line-height: 130%;
+	text-align: left;
+	word-break: normal;
+    }
+
+    [CBV_outer_inline] {
+	/* fallback for XML files, which do not interpret style attributes */
+	position: static;
+	vertical-align: center;
+	padding: 0px 2px 0px 2px;
+	border-style: solid;
+	border-width: 1px;
+	margin-left: 2px;
+    }
+
+    [CBV_outer_inline][CBV_high_contrast] {
+	/* fallback for XML files, which do not interpret style attributes */
+	color: black;
+	background-color: yellow;
+    }
+
+
+    [CBV_outer_overlay] {
+	/* fallback for XML files, which do not interpret style attributes */
+	position: relative;
+	text-align: left;
+    }
+
+    [CBV_inner_overlay] {
+	/* fallback for XML files, which do not interpret style attributes */
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: auto;
+	text-indent: 0px;
+	vertical-align: top;
+	z-index: 10;
+	padding: 0px 2px 0px 2px;
+	border-style: none;
+	margin: 0px;
+
+	color: purple;
+
+	background-color: white;
+	font-weight: bold;
+    }
+
+    [CBV_inner_overlay][CBV_high_contrast] {
+	/* fallback for XML files, which do not interpret style attributes */
+	color: red;
+    }
 
 
     .CBV_highlight_class {

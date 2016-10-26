@@ -15,19 +15,6 @@ function remove_hints() {
 }
 
 
-function build_base_element() {
-    var element = $("<span></span>");
-
-    element.attr("CBV_hint_element", "true");
-    // => display: inline !important *except* for print where its display: none !important
-
-    set_important(element, "overflow", "visible");
-    set_important(element, "float", "none");
-
-    return element;
-}
-
-
 function set_important(element, item, value) {
     try {
 	// jquery .css(-,-)  does not handle !important correctly:
@@ -44,7 +31,25 @@ function set_important(element, item, value) {
     }
 }
 
+
+function build_base_element() {
+    var element = $("<span></span>");
+
+    element.attr("CBV_hint_element", "true");
+    // => display: inline !important *except* for print where its display: none !important
+
+    // fallback versions of these in the style file for XML files:
+    set_important(element, "overflow", "visible");
+    set_important(element, "float", "none");
+
+    return element;
+}
+
+
 function add_text(element, text) {
+    // add fallback versions of these in the style file for XML files
+    element.attr("CBV_add_text", "true");
+
     //set_important(element, "font-size", "xx-small");
     set_important(element, "font-size", "x-small");
     set_important(element, "font-family", "arial, sans-serif");
@@ -64,11 +69,17 @@ function build_hint(hint_number, use_overlay) {
     outer.attr("CBV_hint_tag", hint_number);
 
     if (use_overlay) {
+	// add fallback versions of these in the style file for XML files
+	outer.attr("CBV_outer_overlay", "true");
+
 	set_important(outer, "position", "relative");
 	set_important(outer, "text-align", "left");
 	/* avoid any properties here that would give outer a nonzero height? */
 
 	var inner = build_base_element();
+	// add fallback versions of these in the style file for XML files
+	inner.attr("CBV_inner_overlay", "true");
+
 	set_important(inner, "position", "absolute");
 	// IMPORTANT: need to have top, left set so offset(-[,-])
 	//            works correctly on this element:
@@ -88,6 +99,7 @@ function build_hint(hint_number, use_overlay) {
 	set_important(inner, "margin", "0px");
 
 	if (option("c")) {
+	    inner.attr("CBV_high_contrast", "true");
 	    set_important(inner, "color", "red");
 	} else {
 	    set_important(inner, "color", "purple");
@@ -98,6 +110,9 @@ function build_hint(hint_number, use_overlay) {
 	outer.append(inner);
 
     } else {
+	// add fallback versions of these in the style file for XML files
+	outer.attr("CBV_outer_inline", "true");
+
 	set_important(outer, "position", "static");
 
 	add_text(outer, hint_number);
@@ -110,6 +125,9 @@ function build_hint(hint_number, use_overlay) {
 	set_important(outer, "margin-left", "2px"); 
 
 	if (option("c")) {
+	    // add fallback versions of these in the style file for XML files
+	    outer.attr("CBV_high_contrast", "true");
+
 	    set_important(outer, "color", "black");
 	    set_important(outer, "background-color", "yellow");
 	}
@@ -232,11 +250,13 @@ function add_hints() {
 	//$("body").append(hint_tag);
 
 	if (use_overlay) {
-	    var offset = element.offset();
-	    if (option('e'))
-		offset.left +=  element.outerWidth() - hint_tag.children().first().outerWidth();
+	    try { // this fails for XML files... <<<>>>
+		var offset = element.offset();
+		if (option('e'))
+		    offset.left +=  element.outerWidth() - hint_tag.children().first().outerWidth();
 
-	    hint_tag.children().first().offset(offset);
+		hint_tag.children().first().offset(offset);
+	    } catch (e) {}
 	}
 
 	next_CBV_hint += 1;
