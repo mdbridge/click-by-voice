@@ -29,9 +29,19 @@ function build_base_element() {
 
 
 function set_important(element, item, value) {
-    // jquery .css(-,-)  does not handle !important correctly:
-    element[0].style.setProperty(item, value, "important");
-//    element[0].style.setProperty(item, value);
+    try {
+	// jquery .css(-,-)  does not handle !important correctly:
+	element[0].style.setProperty(item, value, "important");
+	//    element[0].style.setProperty(item, value);
+    } catch (e) {
+	// fallback for XML files:
+	var style = element.attr("style");
+	if (style)
+	    style += " ";
+	else
+	    style = "";
+	element.attr("style",  style + item + ": "+value+" !important;");
+    }
 }
 
 function add_text(element, text) {
@@ -88,7 +98,7 @@ function build_hint(hint_number, use_overlay) {
 	outer.append(inner);
 
     } else {
-	set_important(outer, "position", " static");
+	set_important(outer, "position", "static");
 
 	add_text(outer, hint_number);
 	set_important(outer, "vertical-align", "center");
