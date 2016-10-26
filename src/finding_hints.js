@@ -80,7 +80,9 @@ function hintable(element) {
 	var input_type = element.attr("type");
 	if (input_type)
 	    input_type = input_type.toLowerCase();
-	if (input_type != "hidden" && element.attr("disabled") != "true")
+	if (input_type != "hidden" 
+	    // not sure false is actually kosher; spec says otherwise <<<>>>
+	    && (element.attr("disabled")=="false" || element.attr("disabled")===undefined))
 	    return true;
     }
 
