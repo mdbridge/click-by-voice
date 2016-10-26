@@ -60,6 +60,11 @@ function build_hint(hint_number, use_overlay) {
 
 	var inner = build_base_element();
 	set_important(inner, "position", "absolute");
+	// IMPORTANT: need to have top, left set so offset(-[,-])
+	//            works correctly on this element:
+	set_important(inner, "top", "0");
+	set_important(inner, "left", "0");
+
 	set_important(inner, "width", "auto");
 	set_important(inner, "text-indent", " 0px");
 	set_important(inner, "vertical-align", " top");
@@ -217,27 +222,11 @@ function add_hints() {
 	//$("body").append(hint_tag);
 
 	if (use_overlay) {
-	    if (!option('e')) {
-		hint_tag.offset(element.offset());
-	    } else {
-		var offset = element.offset();
-		try {
-		    // console.log(element[0]);
-		    // console.log(offset);
-		    // console.log(element.width());
-//		    offset.left +=  element.width() - hint_tag.children().first().width();
-		    offset.left +=  element.outerWidth() - hint_tag.children().first().outerWidth();
-		    // console.log(offset);
-		    hint_tag.offset(offset);
-		} catch (e) {
-		    console.log(e);
-		}
-	    }
-	    // hint_tag's child may be offset from it due to aligment from hint_tag's parent:
-	    //hint_tag.children().first().offset(hint_tag.offset());
-	    var c = hint_tag.children().first();
-	    set_important(c, "left", -c.position().left + "px");
-	    set_important(c, "top", -c.position().top + "px");
+	    var offset = element.offset();
+	    if (option('e'))
+		offset.left +=  element.outerWidth() - hint_tag.children().first().outerWidth();
+
+	    hint_tag.children().first().offset(offset);
 	}
 
 	next_CBV_hint += 1;
