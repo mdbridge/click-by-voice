@@ -22,7 +22,7 @@ chrome.commands.onCommand.addListener(function(command) {
 
 // Copy provided text to the clipboard.
 function copyTextToClipboard(text) {
-    console.log("copying: " + text);
+    //console.log("copying: " + text);
     var copyFrom = $('<textarea/>');
     copyFrom.text(text);
     $('body').append(copyFrom);
