@@ -22,6 +22,16 @@ function each_displaying_helper(element, callback) {
     element.children().each(function(index) {
 	each_displaying_helper($(this), callback);
     });
+
+    // // <<<>>>
+    // if (element.is("iframe")) {
+    // 	try {
+    // 	    var sub_body = $('body', element.contents());
+    // 	    each_displaying_helper(sub_body, callback);
+    // 	} catch (e) {
+    // 	    console.log("iframe access failure: " + e);
+    // 	}
+    // }
 }
 
 // Enumerate each webpage element that is displayed (that is, has a
@@ -127,6 +137,11 @@ function hintable(element) {
     if (element.is("span.button.collapse-button") ||
         element.is("span.button.expand-button"))
 	return true;
+
+    // <<<>>>
+    if (element.is("iframe"))
+	return true;
+
 
 
 

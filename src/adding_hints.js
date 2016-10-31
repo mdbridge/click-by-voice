@@ -156,6 +156,10 @@ function can_put_span_inside(element) {
     if (element.is("select, option, textarea")) 
 	return false;
 
+    if (element.is("iframe")) 
+	// iframe elements are displayed only if browser doesn't support iframe's
+	return false;
+
     if (element.is("div, span, a, button, li")) 
 	return true;
 
