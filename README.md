@@ -80,10 +80,12 @@ functionality:
     
     <pick> 0..9 [0..9 [0..9 [0..9]]] = {ctrl+shift+space} Wait(500) $2$3$4$5 ":$1"{enter};
     
-    <pick> := (        pick = ""
+    <pick> := (        pick = ""    # guess whether to click or focus
+              | click  pick = c
               | push   pick = b     # stay but open new tab w/ link
               | tab    pick = t
               | window pick = w
+              | copy   pick = k
               | go     pick = f
               );
 
