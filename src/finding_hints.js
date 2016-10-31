@@ -83,7 +83,7 @@ function hintable(element) {
     //   Quora has placeholder links with click handlers so allow a's
     //   w/o hrefs...
     //
-    if (element.is("a, button, select, textarea, keygen"))
+    if (element.is("a, button, select, textarea, keygen, iframe"))
 	return true;
 
     if (element.is("input")) {
@@ -137,12 +137,6 @@ function hintable(element) {
     if (element.is("span.button.collapse-button") ||
         element.is("span.button.expand-button"))
 	return true;
-
-    // <<<>>>
-    if (element.is("iframe"))
-	return true;
-
-
 
 
     if (!option("+"))

@@ -68,6 +68,7 @@ function silently_activate(element, operation) {
 	break;
 
     case "f":
+	// this also works for iframes
 	element[0].focus();
 	break;
 
@@ -121,6 +122,9 @@ function silently_activate(element, operation) {
     case "FF":
 	element[0].focusin();
 	element[0].focus();
+	break;
+    case "FFF":
+	element[0].contentWindow.focus();
 	break;
 
     case "D":
