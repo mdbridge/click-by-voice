@@ -116,6 +116,9 @@ function silently_activate(element, operation) {
 	break;
 
 
+    case "K":
+	act("copy_to_clipboard", {text: element[0].href});
+	break;
     case "F":
 	element[0].focus();
 	break;

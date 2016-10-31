@@ -20,6 +20,18 @@ chrome.commands.onCommand.addListener(function(command) {
 // Performing actions on behalf of the content script
 //
 
+// Copy provided text to the clipboard.
+function copyTextToClipboard(text) {
+    console.log("copying: " + text);
+    var copyFrom = $('<textarea/>');
+    copyFrom.text(text);
+    $('body').append(copyFrom);
+    copyFrom.select();
+    document.execCommand('copy');
+    copyFrom.remove();
+}
+
+
 var initial_operation = "+";
 
 chrome.runtime.onMessage.addListener(
@@ -49,6 +61,14 @@ chrome.runtime.onMessage.addListener(
 	    break;
 	case "create_window":
 	    chrome.windows.create({url: request.URL});
+	    break;
+
+
+	    /*
+	     * Copying text to the clipboard
+	     */
+	case "copy_to_clipboard":
+	    copyTextToClipboard(request.text);
 	    break;
 
 
