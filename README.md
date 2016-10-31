@@ -34,10 +34,12 @@ colon and one of the following operation codes:
 * 't' opens links in a new tab, changing focus to that tab
 * 'b' opens links in a new tab, but does not change focus to that tab
 * 'w' opens links in a new window, changing focus to that window
+* 'k' copies link locations to the clipboard
 
 For example, `153:t` opens the link with hint number 153 in a new tab.
 An empty operation (e.g., `153:`) is equivalent to specifying no
-operation.
+operation.  Note that t, b, w, and k work only on links that explicitly
+give a target address (currently `<a href=`...`>`).
 
 More command types will be added later.  You can dismiss the command
 dialog box by typing `{escape}`.

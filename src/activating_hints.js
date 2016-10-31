@@ -43,8 +43,6 @@ function dispatch_mouse_events(element, event_names) {
     });
 }
 
-var last_hover = null;
-
 function area(element) {
     try {
 	return element.height() * element.width();
@@ -53,8 +51,16 @@ function area(element) {
     }
 }
 
+function href(element) {
+    return element[0].href;
+}
+
+
+var last_hover = null;
+
 function silently_activate(element, operation) {
     switch (operation) {
+	// Hovering:
     case "h":
 	if (last_hover) {
 	    dispatch_mouse_events(last_hover, ['mouseout', 'mouseleave']);	    
@@ -67,11 +73,13 @@ function silently_activate(element, operation) {
 	    last_hover = null;
 	break;
 
+	// Focusing:
     case "f":
 	// this also works for iframes
 	element[0].focus();
 	break;
 
+	// Clicking:
     case "c":
 	// dispatch_mouse_events(element, ['mouseover', 'mousedown']);
 	// element[0].focus();
@@ -83,18 +91,24 @@ function silently_activate(element, operation) {
 	element[0].focus();
 	dispatch_mouse_events(element, ['mouseup', 'click']);
 	break;
+
+	// Following or copying explicit links:
     case "t":
 	if (element.attr("href"))
-	    act("create_tab", {URL: element[0].href, active: true});
+	    act("create_tab", {URL: href(element), active: true});
 	break;
     case "b":
 	if (element.attr("href"))
-	    act("create_tab", {URL: element[0].href, active: false});
+	    act("create_tab", {URL: href(element), active: false});
 	break;
     case "w":
 	if (element.attr("href"))
-	    act("create_window", {URL: element[0].href});
+	    act("create_window", {URL: href(element)});
 	break;
+    case "k":
+	act("copy_to_clipboard", {text: href(element)});
+	break;
+
 
 	// old versions for comparison purposes; depreciated
     case "C":
@@ -116,9 +130,6 @@ function silently_activate(element, operation) {
 	break;
 
 
-    case "K":
-	act("copy_to_clipboard", {text: element[0].href});
-	break;
     case "F":
 	element[0].focus();
 	break;
