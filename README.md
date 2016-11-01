@@ -31,15 +31,17 @@ colon and one of the following operation codes:
 
 * 'c' clicks the element
 * 'f' focuses the element (doesn't work on all elements)
-* 't' opens links in a new tab, changing focus to that tab
-* 'b' opens links in a new tab, but does not change focus to that tab
-* 'w' opens links in a new window, changing focus to that window
-* 'k' copies link locations to the clipboard
+* 't' opens links and iframes in a new tab, changing focus to that tab
+* 'b' opens links and iframes in a new tab, but does not change focus to
+that tab
+* 'w' opens links and iframes in a new window, changing focus to that window
+* 'k' copies link and iframe locations to the clipboard
 
 For example, `153:t` opens the link with hint number 153 in a new tab.
 An empty operation (e.g., `153:`) is equivalent to specifying no
-operation.  Note that t, b, w, and k work only on links that explicitly
-give a target address (currently `<a href=`...`>`).
+operation.  Note that t, b, w, and k work only on links and iframes that
+explicitly give a target address (currently `<a href=`...`>` and
+`<iframe src=`...`>`).
 
 More command types will be added later.  You can dismiss the command
 dialog box by typing `{escape}`.
@@ -94,7 +96,7 @@ functionality:
 
 * The selection of elements that should be given hints needs work:
   * elements inside of iframes are missed
-    * iframes themselves are now hinted and can be focused
+    * iframes themselves are now hinted and can be focused or opened in a new tab or window
   * to cover elements added dynamically over time, Click by Voice
     automatically refreshes hints every 3 seconds
     * this can require waiting several seconds after a click or page load

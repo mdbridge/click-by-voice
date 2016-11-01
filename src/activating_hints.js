@@ -52,7 +52,11 @@ function area(element) {
 }
 
 function href(element) {
-    return element[0].href;
+    if (element.is("iframe"))
+	return element[0].src;
+    if (element.attr("href"))
+	return element[0].href;
+    return undefined;
 }
 
 
@@ -94,19 +98,20 @@ function silently_activate(element, operation) {
 
 	// Following or copying explicit links:
     case "t":
-	if (element.attr("href"))
+	if (href(element))
 	    act("create_tab", {URL: href(element), active: true});
 	break;
     case "b":
-	if (element.attr("href"))
+	if (href(element))
 	    act("create_tab", {URL: href(element), active: false});
 	break;
     case "w":
-	if (element.attr("href"))
+	if (href(element))
 	    act("create_window", {URL: href(element)});
 	break;
     case "k":
-	act("copy_to_clipboard", {text: href(element)});
+	if (href(element))
+	    act("copy_to_clipboard", {text: href(element)});
 	break;
 
 
