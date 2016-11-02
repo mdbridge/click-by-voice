@@ -7,7 +7,7 @@ function CBV_inserted_element(element) {
 }
 
 
-function each_displaying_helper(element, callback) {
+function each_displaying_helper(element, pre_callback, post_callback) {
     if (CBV_inserted_element(element))
     	return;
 
@@ -17,31 +17,51 @@ function each_displaying_helper(element, callback) {
 	    return true;
     } catch (e) {}
 
-    callback(element);
+    if (pre_callback)
+	pre_callback(element);
 
     element.children().each(function(index) {
-	each_displaying_helper($(this), callback);
+	each_displaying_helper($(this), pre_callback, post_callback);
     });
 
     // // <<<>>>
     // if (element.is("iframe")) {
     // 	try {
     // 	    var sub_body = $('body', element.contents());
-    // 	    each_displaying_helper(sub_body, callback);
+    // 	    each_displaying_helper(sub_body, pre_callback, post_callback);
     // 	} catch (e) {
     // 	    console.log("iframe access failure: " + e);
     // 	}
     // }
+
+    if (post_callback)
+	post_callback(element);
 }
 
 // Enumerate each webpage element that is displayed (that is, has a
 // display property other than none *and* all its parents have display
 // properties other than none).
-function each_displaying(callback) {
+//
+// pre_callback is the preorder traversal, post_callback the
+// post-order traversal
+function each_displaying(pre_callback, post_callback) {
     var root = $("body");
-    each_displaying_helper(root, callback);
+    each_displaying_helper(root, pre_callback, post_callback);
 }
 
+
+
+// does element occupy enough space to be easily clickable?
+function clickable_space(element) {
+    try {
+	// Jquery gives errors for these if they are auto due to
+	// no CSS (e.g., XML files):
+	if (element.outerHeight(true)<8 
+	    || element.outerWidth(true)<8)
+	    return false;
+    } catch (e) {}
+    return true;
+}
 
 
 function hintable(element) {
@@ -155,15 +175,7 @@ function hintable(element) {
 
     // innermost div/span/img's are tempting click targets
     if (element.is("div, span, img")) {
-	var too_small = false;
-	try {
-	    // Jquery gives errors for these if they are auto due to
-	    // no CSS (e.g., XML files):
-	    if (element.outerHeight(true)<8 
-		|| element.outerWidth(true)<8)
-		too_small = true;
-	} catch (e) {}
-	if (!too_small && element.children().length == 0)
+	if (clickable_space(element) && element.children().length == 0)
 	    return true;
     }
 
@@ -174,8 +186,25 @@ function hintable(element) {
 
 // Enumerate each element that we should hint:
 function each_hintable(callback) {
-    each_displaying(function (element) {
-	if (hintable(element))
-	    callback(element);
-    });
+    if (!option("C")) {
+	each_displaying(function (element) {
+	    if (hintable(element))
+		callback(element);
+	}, undefined);
+
+    } else {
+	each_displaying(function (element) {
+	    if (hintable(element))
+		callback(element);
+	}, function (element) {
+	    if (element.is("[CBV_hint_number]"))
+		return;
+
+	    if (element.has("[CBV_hint_number]").length == 0) {
+		// elements not themselves hinted or having descendents that are hinted
+		if (element.css("cursor")=="pointer")
+		    callback(element);
+	    }
+	});
+    }
 }
