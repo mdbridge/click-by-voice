@@ -59,6 +59,26 @@ function href(element) {
     return undefined;
 }
 
+// position relative to viewpoint to click
+function point_to_click(element) {
+    var rectangles = element[0].getClientRects();
+    var rectangle  = rectangles[0];
+
+    var x = (rectangle.left + rectangle.right) /2;
+    var y = (rectangle.top  + rectangle.bottom)/2;
+
+    console.log(">> point_to_click:");
+    console.log(rectangles);
+    console.log(rectangle);
+    console.log(element[0].getBoundingClientRect());
+    console.log(element.offset());
+    console.log(element.offset().top  - window.scrollY);
+    console.log(element.offset().left - window.scrollX);
+
+    return {x: x, y: y};
+}
+
+
 
 var last_hover = null;
 
@@ -151,26 +171,20 @@ function silently_activate(element, operation) {
 	break;
 
     case "X":
-	console.log(element[0].getClientRects());
-	try {
-	    var rectangles = element[0].getClientRects();
-	    console.log(rectangles[0]);
-	} catch (e) {}
-	console.log(element[0].getBoundingClientRect());
-	console.log(element.offset());
-	console.log(element.offset().top - window.scrollY);
+	var target = point_to_click(element);
+	console.log(target);
 
-	var target = element[0].getBoundingClientRect(); 
-//	var zoom = 1.0;
-	var zoom = 1.25;
-	var x = target.left*zoom + 0;
-	var y = target.top*zoom + 90;
-	console.log(window.screenY);
+	var zoom = 1.0;
+//	var zoom = 1.25;
+	var x = target.x*zoom + 0;
+	var y = target.y*zoom + 90;
 
 	x -= window.screenX - 8;
 	y -= window.screenY - 8;
+	console.log(window.screenY);
 	var answer = Math.floor(x) + "," + Math.floor(y);
 	console.log(answer);
+
 	act("copy_to_clipboard", {text: answer});
 	break;
 
