@@ -150,6 +150,55 @@ function silently_activate(element, operation) {
 	console.log(element[0]);
 	break;
 
+    case "X":
+	console.log(element[0].getClientRects());
+	try {
+	    var rectangles = element[0].getClientRects();
+	    console.log(rectangles[0]);
+	} catch (e) {}
+	console.log(element[0].getBoundingClientRect());
+	console.log(element.offset());
+	console.log(element.offset().top - window.scrollY);
+
+	var target = element[0].getBoundingClientRect(); 
+//	var zoom = 1.0;
+	var zoom = 1.25;
+	var x = target.left*zoom + 0;
+	var y = target.top*zoom + 90;
+	console.log(window.screenY);
+
+	x -= window.screenX - 8;
+	y -= window.screenY - 8;
+	var answer = Math.floor(x) + "," + Math.floor(y);
+	console.log(answer);
+	act("copy_to_clipboard", {text: answer});
+	break;
+
+    case "L":
+	console.log(element.offset());
+	break;
+    case "LL":
+	var delta = window.outerHeight - window.innerHeight;
+	console.log(delta);
+	act("copy_to_clipboard", {text: Math.floor(element.offset().top + delta) 
+				  + "," + Math.floor(element.offset().left)});
+
+	console.log(window.screenY);
+	console.log(window.screenX);
+	console.log(element.offset());
+	break;
+    case "INSPECT":
+	$('body').click(function (event) {
+	     console.log(event.originalEvent);
+	     console.log("Y: " + (event.screenY - event.clientY));
+	     console.log("X: " + (event.screenX - event.clientX));
+	     console.log("WY: " + (event.screenY - window.screenY - event.clientY));
+	     console.log("WX: " + (event.screenX - window.screenX - event.clientX));
+	     console.log("X ratio: " + ( event.clientX / event.screenX));
+
+	});
+	break;
+
 	// experimental:
     case "R":
 	dispatch_mouse_events(element, ['mouseover', 'contextmenu']);

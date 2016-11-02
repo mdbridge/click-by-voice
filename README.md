@@ -84,7 +84,7 @@ functionality:
     
     <pick> := (        pick = ""    # guess whether to click or focus
               | click  pick = c
-              | push   pick = b     # stay but open new tab w/ link
+              | push   pick = b     # stay but open new tab w/ link or iframe
               | tab    pick = t
               | window pick = w
               | copy   pick = k
