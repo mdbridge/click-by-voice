@@ -56,6 +56,7 @@ function add_text(element, text) {
     set_important(element, "line-height", "130%");
 
     set_important(element, "text-align", "left");
+    set_important(element, "text-shadow", "none");
     set_important(element, "word-break", "normal");  // prevent breaking of hint numbers
     
     element.append(text);
@@ -87,6 +88,8 @@ function build_hint(hint_number, use_overlay) {
 	set_important(inner, "left", "0");
 
 	set_important(inner, "width", "auto");
+	set_important(inner, "height", "auto");
+	set_important(inner, "clip", "auto");
 	set_important(inner, "text-indent", " 0px");
 	set_important(inner, "vertical-align", " top");
 	set_important(inner, "z-index", " 10");
@@ -117,6 +120,7 @@ function build_hint(hint_number, use_overlay) {
 
 	add_text(outer, hint_number);
 	set_important(outer, "vertical-align", "center");
+	set_important(outer, "align-self", "flex-start");
 	/* max-width:20px; max-height:10px; */
 	set_important(outer, "padding", "0px 2px 0px 2px");
 	set_important(outer, "border-style", "solid");
