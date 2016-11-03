@@ -31,6 +31,9 @@ function wants_click(element) {
 	break;
     }
 
+    if (element.css("cursor") == "pointer")
+	return true;
+
     return false;
 }
 
@@ -237,7 +240,7 @@ function activate(element, operation) {
 	var parent = element;
 	var max_area = 0;
 	parent.children().each(function(index) {
-	    if (!disabled_or_hidden($(this)) &&
+	    if (//!disabled_or_hidden($(this)) &&  // <<<>>>
 	       area($(this))>max_area) {
 		max_area = area($(this));
 		element = $(this);
@@ -271,6 +274,7 @@ function goto_hint(hint, operation) {
 	    operation = "c";
 	else
 	    operation = "f";
+	console.log(element[0]);
 	console.log("defaulting to: " + operation);
     }
 
