@@ -288,6 +288,7 @@ function add_hints() {
 	     put_before = false;
 
 
+	var old_children_number = element.children().length; // <<<>>>
 	insert_hint_tag(element, hint_tag, put_before, put_inside);
 	//$("body").append(hint_tag);
 
@@ -296,6 +297,13 @@ function add_hints() {
 		var offset = element.offset();
 		if (option('e'))
 		    offset.left +=  element.outerWidth() - hint_tag.children().first().outerWidth();
+
+		if (option('E')) {
+		    if (element.is("a") && old_children_number == 0) {
+			offset.left += 4;
+			offset.top  -= 4;
+		    }
+		}
 
 		hint_tag.children().first().offset(offset);
 	    } catch (e) {}
