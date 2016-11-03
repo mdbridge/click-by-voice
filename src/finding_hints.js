@@ -199,6 +199,8 @@ function each_hintable(callback) {
 	}, function (element) {
 	    if (element.css("cursor")!="pointer")
 		return;
+	    if (element.parent().css("cursor")=="pointer")
+		return;
 
 	    if (element.is("[CBV_hint_number]"))
 		return;
