@@ -170,6 +170,10 @@ function can_put_span_inside(element) {
 
     // above absolutely correct; below is heuristic:
 
+    if (element.is("th, td")) 
+	return true;
+
+
     try {
 	if (element.contents().length > 0)
 	    return true;
