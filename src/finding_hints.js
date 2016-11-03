@@ -147,12 +147,12 @@ function hintable(element) {
 	return true;
     }
 
-    if (element.is("li")) {
-	try {
-	    if (element.css("cursor")=="pointer")
-		return true;
-	} catch (e) {}
-    }
+    // if (element.is("li")) {
+    // 	try {
+    // 	    if (element.css("cursor")=="pointer")
+    // 		return true;
+    // 	} catch (e) {}
+    // }
     // hard coding XML file buttons: <<<>>>
     if (element.is("span.button.collapse-button") ||
         element.is("span.button.expand-button"))
