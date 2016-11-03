@@ -92,7 +92,7 @@ function build_hint(hint_number, use_overlay) {
 	set_important(inner, "clip", "auto");
 	set_important(inner, "text-indent", " 0px");
 	set_important(inner, "vertical-align", " top");
-	set_important(inner, "z-index", " 10");
+	set_important(inner, "z-index", " 1000");
 
 	add_text(inner, hint_number);
 	/* opacity: .75; */
