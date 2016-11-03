@@ -220,9 +220,43 @@ function add_hints() {
 	if (option("y")) {
 	    if (element.parents().is("p")) {
 		use_overlay = false;
-		 put_before = false;
+		put_before = false;
 	    }
 	}
+
+	if (option("Y")) {
+	    var constrained = false;
+	    element.parents().each(function(index) {
+		if (constrained) 
+		    return;
+
+		if ($(this).css("overflow-x"))
+		    if ($(this).css("overflow-x") != "visible"
+			&& $(this).css("overflow-x") != "auto"
+		       )
+			constrained = true;
+
+		if ($(this).css("overflow-y"))
+		    if ($(this).css("overflow-y") != "visible"
+			&& $(this).css("overflow") != "auto")
+			constrained = true;
+
+		// if ($(this).css("overflow"))
+		//     if ($(this).css("overflow") != "visible"
+		//        && $(this).css("overflow") != "auto") {
+
+		if (constrained) {
+		    console.log($(this)[0]);
+		    console.log($(this).css("overflow-x"));
+		    console.log($(this).css("overflow-y"));
+		}
+	    });
+	    if (!constrained) {
+		use_overlay = false;
+		put_before = false;
+	    }
+	}
+
 
 
 	var hint_tag = build_hint(next_CBV_hint, use_overlay);
