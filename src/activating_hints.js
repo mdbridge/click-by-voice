@@ -271,7 +271,7 @@ function goto_hint(hint, operation) {
 	    operation = "c";
 	else
 	    operation = "f";
-	//console.log("defaulting to: " + operation);
+	console.log("defaulting to: " + operation);
     }
 
     activate(element, operation);

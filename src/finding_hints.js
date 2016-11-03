@@ -197,14 +197,25 @@ function each_hintable(callback) {
 	    if (hintable(element))
 		callback(element);
 	}, function (element) {
+	    if (element.css("cursor")!="pointer")
+		return;
+
 	    if (element.is("[CBV_hint_number]"))
 		return;
 
-	    if (element.has("[CBV_hint_number]").length == 0) {
-		// elements not themselves hinted or having descendents that are hinted
-		if (element.css("cursor")=="pointer")
-		    callback(element);
-	    }
+	    if (!clickable_space(element))
+		return;
+
+	    if (element.has("[CBV_hint_number]").length != 0)
+		return;
+
+	    if (element.parent().is("[CBV_hint_number]"))
+		return;
+
+	    var saved = hinting_parameters;
+	    hinting_parameters += "c";
+	    callback(element);
+	    hinting_parameters = saved;
 	});
     }
 }
