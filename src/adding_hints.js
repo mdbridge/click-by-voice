@@ -136,8 +136,10 @@ function insert_hint_tag(element, hint_tag, put_before, put_inside) {
     }    
 }
 
+
 function add_hints() {
-    console.log("adding hints: " + hinting_parameters + " target: " + target_selector);
+    console.log("adding hints: " + hinting_parameters 
+		+ (target_selector ? "$" + target_selector : ""));
     //console.log("@" + window.location.href);
     var start = performance.now();
 
@@ -147,6 +149,8 @@ function add_hints() {
     
     if (next_CBV_hint < 0)
 	next_CBV_hint = 0;
+
+    var overlays = [];
 
     each_hintable(function(element) {
 	if (element.is("[CBV_hint_number]"))
@@ -228,32 +232,42 @@ function add_hints() {
 	     put_before = false;
 
 
-	var old_children_number = element.children().length; // <<<>>>
+	if (use_overlay)
+	    overlays.push({element:         element, 
+			   overlay_element: hint_tag.children().first(),
+			   children_number: element.children().length});
+
 	insert_hint_tag(element, hint_tag, put_before, put_inside);
 	//$("body").append(hint_tag);
-
-	if (use_overlay) {
-	    try { // this fails for XML files... <<<>>>
-		var offset = element.offset();
-		if (option('e'))
-		    offset.left +=  element.outerWidth() - hint_tag.children().first().outerWidth();
-
-		if (option('E')) {
-		    if (element.is("a") && old_children_number == 0) {
-			offset.left += 4;
-			offset.top  -= 4;
-		    }
-		}
-
-		hint_tag.children().first().offset(offset);
-	    } catch (e) {}
-	}
 
 	next_CBV_hint += 1;
     });
 
-    // console.log("total hints assigned: " + next_CBV_hint);
-    // console.log("  " + (performance.now()-start) + " ms");
+
+    overlays.map(function (overlay) {
+	var element	    = overlay.element;
+	var overlay_element = overlay.overlay_element;
+
+	try { // this fails for XML files... <<<>>>
+	    var offset = element.offset();
+	    if (option('e'))
+		offset.left +=  element.outerWidth() - overlay_element.outerWidth();
+
+	    if (option('E')) {
+		if (element.is("a") && overlay.children_number == 0) {
+		    offset.left += 4;
+		    offset.top  -= 4;
+		}
+	    }
+
+	    overlay_element.offset(offset);
+	} catch (e) {}
+    });
+
+
+    console.log("total hints assigned: " + next_CBV_hint 
+		+ "    (" + overlays.length + " overlays added)");
+    console.log("  " + (performance.now()-start) + " ms");
 }
 
 function refresh_hints() {
