@@ -34,17 +34,10 @@ function set_important(element, item, value) {
 
 function build_base_element() {
     var element = $("<span></span>");
-
-    element.attr("CBV_hint_element", "true");
-    // => display: inline !important *except* for print where its display: none !important
-
-    // fallback versions of these in the style file for XML files:
-    set_important(element, "overflow", "visible");
-    set_important(element, "float", "none");
-
+    // mark our inserted elements so we can distinguish them:
+    element.attr("CBV_hint_element", "true"); 
     return element;
 }
-
 
 function add_text(element, text) {
     element.attr("CBV_add_text", "true");  // activate style rules
@@ -59,36 +52,18 @@ function build_hint(hint_number, use_overlay) {
     outer.attr("CBV_hint_tag", hint_number);
 
     if (use_overlay) {
-	// add fallback versions of these in the style file for XML files
 	outer.attr("CBV_outer_overlay", "true");
 
-	set_important(outer, "position", "relative");
-	set_important(outer, "text-align", "left");
-	/* avoid any properties here that would give outer a nonzero height? */
-
 	var inner = build_base_element();
-	// add fallback versions of these in the style file for XML files
 	inner.attr("CBV_inner_overlay", "true");
 
-	set_important(inner, "position", "absolute");
 	// IMPORTANT: need to have top, left set so offset(-[,-])
 	//            works correctly on this element:
 	set_important(inner, "top", "0");
 	set_important(inner, "left", "0");
 
-	set_important(inner, "width", "auto");
-	set_important(inner, "height", "auto");
-	set_important(inner, "clip", "auto");
-	set_important(inner, "text-indent", " 0px");
-	set_important(inner, "vertical-align", " top");
-	set_important(inner, "z-index", " 1000");
-
 	add_text(inner, hint_number);
 	/* opacity: .75; */
-	set_important(inner, "padding", "0px 2px 0px 2px");
-	/* max-width:20px; max-height:10px; */
-	set_important(inner, "border-style", "none");
-	set_important(inner, "margin", "0px");
 
 	if (option("c")) {
 	    inner.attr("CBV_high_contrast", "true");
@@ -102,27 +77,11 @@ function build_hint(hint_number, use_overlay) {
 	outer.append(inner);
 
     } else {
-	// add fallback versions of these in the style file for XML files
 	outer.attr("CBV_outer_inline", "true");
-
-	set_important(outer, "position", "static");
-
 	add_text(outer, hint_number);
-	set_important(outer, "vertical-align", "center");
-	set_important(outer, "align-self", "flex-start");
-	/* max-width:20px; max-height:10px; */
-	set_important(outer, "padding", "0px 2px 0px 2px");
-	set_important(outer, "border-style", "solid");
-	set_important(outer, "border-width", "1px");
-	//set_important(outer, "border-radius", "2px");
-	set_important(outer, "margin-left", "2px"); 
 
 	if (option("c")) {
-	    // add fallback versions of these in the style file for XML files
 	    outer.attr("CBV_high_contrast", "true");
-
-	    set_important(outer, "color", "black");
-	    set_important(outer, "background-color", "yellow");
 	}
     }
 

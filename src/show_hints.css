@@ -6,62 +6,68 @@
 }
 
 @media not print {
+    /* all elements we insert have this attribute */
     [CBV_hint_element]:not(#CBV_override):not(#CBVISayOverride) {
-	/*
-	 * deal with cases where website style rules make spans display: none
-         * example: Office365 login page
-	 */
-	display: inline !important;
-
-	/* fallback for XML files, which do not interpret style attributes */
+	display:  inline  !important;
 	overflow: visible !important;
-	float: none !important;
+	float:    none	  !important;
     }
-
 
     [CBV_add_text]:not(#CBV_override):not(#CBVISayOverride) {
 	font-family: arial, sans-serif !important;
 	text-shadow: none	       !important;
-
 	font-size:   x-small	       !important;
 	line-height: 130%	       !important;
-
 	text-align:  left	       !important;
 	word-break:  normal	       !important;  /* prevent breaking of hint numbers */
     }
 
+
     [CBV_outer_inline]:not(#CBV_override):not(#CBVISayOverride) {
-	/* fallback for XML files, which do not interpret style attributes */
-	position: static !important;
-	vertical-align: center !important;
-	padding: 0px 2px 0px 2px !important;
-	border-style: solid !important;
-	border-width: 1px !important;
-	margin-left: 2px !important;
+	position: 	static	       !important;
+	vertical-align: center	       !important;
+	/* in case we are a child of a flex box: */
+	align-self:     flex-start     !important;
+
+	/* max-width:     20px	       !important; */
+	/* max-height:    10px	       !important; */
+	padding:       0px 2px 0px 2px !important;
+	border-style:  solid	       !important;
+	border-radius: 2px	       !important;
+	border-width:  1px	       !important;
+	margin-left:   2px	       !important;
     }
 
     [CBV_outer_inline][CBV_high_contrast]:not(#CBV_override):not(#CBVISayOverride) {
-	/* fallback for XML files, which do not interpret style attributes */
-	color: black !important;
+	color:            black  !important;
 	background-color: yellow !important;
     }
 
 
     [CBV_outer_overlay]:not(#CBV_override):not(#CBVISayOverride) {
-	/* fallback for XML files, which do not interpret style attributes */
-	position: relative !important;
-	text-align: left !important;
+	position:   relative !important;
+	text-align: left     !important;
+	/* avoid any properties here that would give outer a nonzero height? */
     }
 
     [CBV_inner_overlay]:not(#CBV_override):not(#CBVISayOverride) {
-	/* fallback for XML files, which do not interpret style attributes */
 	position: absolute !important;
-	top: 0 !important;
-	left: 0 !important;
+	/*
+	 * IMPORTANT: need to have top, left set so offset(-[,-])
+         * 	      works correctly on this element:
+	 */
+	top: 0;
+	left: 0;
+
 	width: auto !important;
+	height: auto !important;
+	max-width:     20px	       !important;
+	max-height:    10px	       !important;
+	clip: auto !important;
 	text-indent: 0px !important;
 	vertical-align: top !important;
-	z-index: 10 !important;
+	z-index: 1000 !important;
+
 	padding: 0px 2px 0px 2px !important;
 	border-style: none !important;
 	margin: 0px !important;
