@@ -114,21 +114,23 @@ function hintable(element) {
     // HTML elements that might be clickable due to event listeners or
     // focusable via tabindex=-1
     //
-    var role = element.attr("role");
-    switch (role) {
-    case "button":
-    case "checkbox":
-    case "link":
-    case "menuitem":
-    case "menuitemcheckbox":
-    case "menuitemradio":
-    case "option":
-    case "radio":
-    case "slider":
-    case "tab":
-    case "textbox":
-    case "treeitem":
-	return true;
+    if (!option("A")) {
+	var role = element.attr("role");
+	switch (role) {
+	case "button":
+	case "checkbox":
+	case "link":
+	case "menuitem":
+	case "menuitemcheckbox":
+	case "menuitemradio":
+	case "option":
+	case "radio":
+	case "slider":
+	case "tab":
+	case "textbox":
+	case "treeitem":
+	    return true;
+	}
     }
 
 

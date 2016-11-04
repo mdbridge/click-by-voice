@@ -94,6 +94,9 @@ function can_put_span_inside(element) {
 	// iframe elements are displayed only if browser doesn't support iframe's
 	return false;
 
+    if (CBV_inserted_element(element))
+	return false;
+
     if (element.is("div, span, a, button, li, th, td")) 
 	return true;
 
