@@ -81,16 +81,6 @@ function build_hint(element, hint_number, use_overlay) {
 }
 
 
-function has_inside(element) {
-    // quick hack for now
-
-    if (element.contents().length > 0)
-	return true;
-    if (element.is("div, span, a")) 
-	return true;
-    return false;
-}
-
 function can_put_span_inside(element) {
     // unconditionally _empty elements_ that cannot have any child
     // nodes (text or nested elements):
@@ -104,15 +94,10 @@ function can_put_span_inside(element) {
 	// iframe elements are displayed only if browser doesn't support iframe's
 	return false;
 
-    if (element.is("div, span, a, button, li")) 
+    if (element.is("div, span, a, button, li, th, td")) 
 	return true;
-
 
     // above absolutely correct; below is heuristic:
-
-    if (element.is("th, td")) 
-	return true;
-
 
     try {
 	if (element.contents().length > 0)
@@ -137,6 +122,87 @@ function insert_hint_tag(element, hint_tag, put_before, put_inside) {
 }
 
 
+function prepare_hint (element) {
+    var put_inside  = false;
+    var put_before  = option("b");
+    var use_overlay = option("v");
+
+    if (option("h")) {
+	if (element.is("a") && element.text().length > 30) {
+	    console.log(element[0]);
+	    use_overlay = false;
+	    put_before  = false;
+	} else {
+	    use_overlay = true;
+	}
+    }
+
+    if (option("y")) {
+	if (element.parents().is("p")) {
+	    use_overlay = false;
+	    put_before = false;
+	}
+    }
+
+    if (option("Z0")) {
+	try {
+	    if (element.contents().length == 1 && element.children().length == 0
+		&& element.text().length > 0
+		&& can_put_span_inside(element)) {
+		use_overlay = false;
+		put_before = false;
+		put_inside = true;
+	    } 
+
+	    // first check is to ensure no text or comment direct subnodes
+	    if (element.contents().length == 1
+		&& element.contents().first().is("div, span, strong, i, b, em")) {
+		var candidate = element.children().first();
+		if (candidate.contents().length == 1 && candidate.children().length == 0
+		    && candidate.text().length > 0
+		    && can_put_span_inside(candidate)) {
+		    element = candidate;
+		    use_overlay = false;
+		    put_before = false;
+		    put_inside = true;
+		} 
+	    }
+	} catch (e) {}
+    }
+
+    if (use_overlay) {
+	put_inside = can_put_span_inside(element);
+    } else {
+	if (element.is("a") || element.is("button"))
+	    put_inside = true;
+
+	if (option("i") 
+	    && (element.children().length>0
+	        || element.text != ""))
+	    put_inside = true;
+
+	if (put_inside && option("ii")) {
+	    // first check is to ensure no text or comment direct subnodes
+	    if (element.contents().length == 1
+		&& element.contents().first().is("div, span")) {
+		console.log(">> " + element.text());
+		element = element.children().first();
+	    }
+	}
+    }
+
+    // always put hints after tr elements (else messes up table
+    // formatting as treats hint tag as first column):
+    if (element.is("tr")) 
+	put_before = false;
+
+    return {use_overlay:    use_overlay,
+	    put_before:     put_before,
+	    put_inside:     put_inside,
+	    target_element: element};
+}
+
+
 function add_hints() {
     console.log("adding hints: " + hinting_parameters 
 		+ (target_selector ? "$" + target_selector : ""));
@@ -151,93 +217,21 @@ function add_hints() {
 	next_CBV_hint = 0;
 
     var overlays = [];
-
     each_hintable(function(element) {
 	if (element.is("[CBV_hint_number]"))
 	    return;
 	element.attr("CBV_hint_number", next_CBV_hint);
 
-	var put_inside	= false;
-	var put_before	= option("b");
-	var use_overlay = option("v");
+	var hint_info = prepare_hint(element);
+	element = hint_info.target_element;
+	var hint_tag  = build_hint(element, next_CBV_hint, hint_info.use_overlay);
 
-	if (option("h")) {
-	    if (element.is("a") && element.text().length > 30) {
-		console.log(element[0]);
-		use_overlay = false;
-		put_before  = false;
-	    } else {
-		use_overlay = true;
-	    }
-	}
-	if (option("y")) {
-	    if (element.parents().is("p")) {
-		use_overlay = false;
-		put_before = false;
-	    }
-	}
-	if (option("Z0")) {
-	    try {
-		if (element.contents().length == 1 && element.children().length == 0
-		    && element.text().length > 0
-		    && can_put_span_inside(element)) {
-		    use_overlay = false;
-		    put_before = false;
-		    put_inside = true;
-		} 
-
-		// first check is to ensure no text or comment direct subnodes
-		if (element.contents().length == 1
-		    && element.contents().first().is("div, span, strong, i, b, em")) {
-		    var candidate = element.children().first();
-		    if (candidate.contents().length == 1 && candidate.children().length == 0
-			&& candidate.text().length > 0
-			&& can_put_span_inside(candidate)) {
-			element = candidate;
-			use_overlay = false;
-			put_before = false;
-			put_inside = true;
-		    } 
-		}
-	    } catch (e) {}
-	}
-
-
-	var hint_tag = build_hint(element, next_CBV_hint, use_overlay);
-
-	if (use_overlay) {
-	    put_inside = can_put_span_inside(element);
-	} else {
-	    if (element.is("a") || element.is("button"))
-		put_inside = true;
-
-	    if (option("i") 
-		&& (element.children().length>0
-	            || element.text != ""))
-		put_inside = true;
-
-	    if (put_inside && option("ii")) {
-		// first check is to ensure no text or comment direct subnodes
-		if (element.contents().length == 1
-		    && element.contents().first().is("div, span")) {
-		    console.log(">> " + element.text());
-		    element = element.children().first();
-		}
-	    }
-	}
-
-	// always put hints after tr elements (else messes up table
-	// formatting as treats hint tag as first column):
-	if (element.is("tr")) 
-	     put_before = false;
-
-
-	if (use_overlay)
+	if (hint_info.use_overlay)
 	    overlays.push({element:         element, 
 			   overlay_element: hint_tag.children().first(),
 			   children_number: element.children().length});
 
-	insert_hint_tag(element, hint_tag, put_before, put_inside);
+	insert_hint_tag(element, hint_tag, hint_info.put_before, hint_info.put_inside);
 	//$("body").append(hint_tag);
 
 	next_CBV_hint += 1;
@@ -265,9 +259,9 @@ function add_hints() {
     });
 
 
-    console.log("total hints assigned: " + next_CBV_hint 
-		+ "    (" + overlays.length + " overlays added)");
-    console.log("  " + (performance.now()-start) + " ms");
+    // console.log("total hints assigned: " + next_CBV_hint 
+    // 		+ "    (" + overlays.length + " overlays added)");
+    // console.log("  " + (performance.now()-start) + " ms");
 }
 
 function refresh_hints() {
