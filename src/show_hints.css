@@ -23,6 +23,7 @@
     }
 
 
+
     [CBV_outer_inline]:not(#CBV_override):not(#CBVISayOverride) {
 	position: 	static	       !important;
 	/* vertical-align: super       !important; */
@@ -43,6 +44,7 @@
 	color:            black  !important;
 	background-color: yellow !important;
     }
+
 
 
     [CBV_outer_overlay]:not(#CBV_override):not(#CBVISayOverride) {
@@ -85,6 +87,7 @@
 	background-color: white	 !important;
 	font-weight:      bold	 !important;
     }
+
 
 
     .CBV_highlight_class {

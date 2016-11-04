@@ -175,8 +175,12 @@ function each_hintable(callback) {
 	    if (element.attr("CBV_hint_number"))
 		return;
 
-	    if (element.css("cursor") != "pointer")
-		return;
+	    try {
+		if (element.css("cursor") != "pointer")
+		    return;
+	    } catch (e) {
+		return;  // XML pages...
+	    }
 	    if (element.parent().css("cursor")=="pointer")
 		return;
 
