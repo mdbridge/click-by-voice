@@ -69,6 +69,11 @@ function hintable(element) {
     if (option("!"))
 	return false;
 
+    // don't hint invisible elements (their children may be another matter)
+    if (element.css("visibility") == "hidden" && !option ("+")) 
+	return false;
+
+
     //
     // Experiments:
     //
@@ -184,6 +189,8 @@ function each_hintable(callback) {
 	    } catch (e) {
 		return;  // XML pages...
 	    }
+	    if (element.css("visibility") == "hidden") 
+		return;  // visibility blocks cursor: pointer
 	    if (element.parent().css("cursor")=="pointer")
 		return;
 
