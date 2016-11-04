@@ -65,36 +65,15 @@ function clickable_space(element) {
 
 
 function hintable(element) {
+    // for timing how much hintable costs:
+    if (option("!"))
+	return false;
+
     //
     // Experiments:
     //
-    if (option("II")) {
-	if (element.is("div")) {
-	    if (element.css("background-image") != "none" &&
-		element.parent().css("background-image") == "none")
-		return true;
-	}
-    }
-
-    // just a particular element kind:
-    if (option("I"))
-	return element.is("img");
-    if (option("S"))
-	return element.is("span");
-    if (option("D"))
-	return element.is("div");
-    if (option("L"))
-	return element.is("li");
-    if (option("R"))
-	return element.is("[role]");
-
-    if (option("FB")) {
-	if (element.is("th")) {
-	    if (/^C\d+[ON]L\d+$/.test(element.attr("id")))
-		return true;
-	}
-    }
-
+    if (target_selector)
+	return element.is(target_selector);
 
 
     //
@@ -122,8 +101,8 @@ function hintable(element) {
     //
     if (element.is("[onclick]")) 
 	return true;
-    if (element.is("[tabindex]")) 
-	return element.attr("tabindex") != "-1";
+    if (element.is("[tabindex]") && element.attr("tabindex") != "-1")
+	return true;
 
 
     //
@@ -147,16 +126,12 @@ function hintable(element) {
 	return true;
     }
 
-    // if (element.is("li")) {
-    // 	try {
-    // 	    if (element.css("cursor")=="pointer")
-    // 		return true;
-    // 	} catch (e) {}
-    // }
     // hard coding XML file buttons: <<<>>>
-    if (element.is("span.button.collapse-button") ||
-        element.is("span.button.expand-button"))
-	return true;
+    if (/\.xml/.test(window.location.href)) {
+	if (element.is("span.button.collapse-button") ||
+            element.is("span.button.expand-button"))
+	    return true;
+    }
 
 
     if (!option("+"))
@@ -197,21 +172,21 @@ function each_hintable(callback) {
 	    if (hintable(element))
 		callback(element);
 	}, function (element) {
-	    if (element.css("cursor")!="pointer")
-		return;
-	    if (element.parent().css("cursor")=="pointer")
+	    if (element.attr("CBV_hint_number"))
 		return;
 
-	    if (element.is("[CBV_hint_number]"))
+	    if (element.css("cursor") != "pointer")
+		return;
+	    if (element.parent().css("cursor")=="pointer")
 		return;
 
 	    if (!clickable_space(element))
 		return;
 
-	    if (element.has("[CBV_hint_number]").length != 0)
+	    if (element.parent().attr("CBV_hint_number"))
 		return;
 
-	    if (element.parent().is("[CBV_hint_number]"))
+	    if (element.has("[CBV_hint_number]").length != 0)
 		return;
 
 	    var saved = hinting_parameters;
