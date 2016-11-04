@@ -41,11 +41,11 @@ function build_base_element() {
 
 function add_text(element, text) {
     element.attr("CBV_add_text", "true");  // activate style rules
+    if (option("c"))
+	element.attr("CBV_high_contrast", "true");
     element.append(text);
-
     return element;
 }
-
 
 function build_hint(hint_number, use_overlay) {
     var outer = build_base_element();
@@ -55,34 +55,21 @@ function build_hint(hint_number, use_overlay) {
 	outer.attr("CBV_outer_overlay", "true");
 
 	var inner = build_base_element();
+	outer.append(inner);
+
 	inner.attr("CBV_inner_overlay", "true");
+	add_text(inner, hint_number);
 
 	// IMPORTANT: need to have top, left set so offset(-[,-])
 	//            works correctly on this element:
-	set_important(inner, "top", "0");
+	set_important(inner, "top",  "0");
 	set_important(inner, "left", "0");
 
-	add_text(inner, hint_number);
 	/* opacity: .75; */
-
-	if (option("c")) {
-	    inner.attr("CBV_high_contrast", "true");
-	    set_important(inner, "color", "red");
-	} else {
-	    set_important(inner, "color", "purple");
-	}
-	set_important(inner, "background-color", "white");
-	set_important(inner, "font-weight", "bold");
-	
-	outer.append(inner);
 
     } else {
 	outer.attr("CBV_outer_inline", "true");
 	add_text(outer, hint_number);
-
-	if (option("c")) {
-	    outer.attr("CBV_high_contrast", "true");
-	}
     }
 
     return outer;

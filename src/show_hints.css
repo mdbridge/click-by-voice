@@ -47,47 +47,47 @@
     [CBV_outer_overlay]:not(#CBV_override):not(#CBVISayOverride) {
 	position:   relative !important;
 	text-align: left     !important;
-	/* avoid any properties here that would give outer a nonzero height? */
     }
 
     [CBV_inner_overlay]:not(#CBV_override):not(#CBVISayOverride) {
 	position: absolute !important;
-	/*
-	 * IMPORTANT: need to have top, left set so offset(-[,-])
-         * 	      works correctly on this element:
-	 */
-	top: 0;
+	/* these are mostly for XML; elsewhere overridden by inline style */
+	/* not important because jquery offset does not use important <<<>>> */
+	top:  0;
 	left: 0;
 
-	width: auto !important;
-	height: auto !important;
-	max-width:     20px	       !important;
-	max-height:    10px	       !important;
-	clip: auto !important;
-	text-indent: 0px !important;
-	vertical-align: top !important;
-	z-index: 1000 !important;
+	text-indent: 	0px		!important;
+	vertical-align: top		!important;
+	z-index: 	1000		!important;
 
-	padding: 0px 2px 0px 2px !important;
-	border-style: none !important;
-	margin: 0px !important;
+	width:          auto		!important;
+	height:         auto		!important;
+	max-width:      20px		!important;
+	max-height:     10px		!important;
+	clip:           auto		!important;
 
-	color: purple !important;
-
-	background-color: white !important;
-	font-weight: bold !important;
+	padding:        0px 2px 0px 2px !important;
+	border-style:   none		!important;
+	margin: 	0px		!important;
     }
 
     [CBV_inner_overlay][CBV_high_contrast]:not(#CBV_override):not(#CBVISayOverride) {
-	/* fallback for XML files, which do not interpret style attributes */
-	color: red !important;
+	color:            red    !important;
+	background-color: white	 !important;
+	font-weight:      bold	 !important;
+
+    }
+    [CBV_inner_overlay]:not([CBV_high_contrast]):not(#CBV_override):not(#CBVISayOverride) {
+	color:            purple !important;
+	background-color: white	 !important;
+	font-weight:      bold	 !important;
     }
 
 
     .CBV_highlight_class {
 	background-color: yellow !important;
-	outline-style:    dashed  !important;
-	outline-color:    red !important;
-	outline-width:    3px !important;
+	outline-style:    dashed !important;
+	outline-color:    red	 !important;
+	outline-width:    3px	 !important;
     }
 }
