@@ -127,7 +127,21 @@ function insert_hint_tag(element, hint_tag, put_before, put_inside) {
 
 function contents(element) {
     return element.contents().filter(function () {
-	return this.nodeType !== Node.COMMENT_NODE;
+	if (this.nodeType === Node.COMMENT_NODE)
+	    return false;
+
+	// ignore nodes intended solely for screen readers and the like
+	if (this.nodeType === Node.ELEMENT_NODE) {
+	    if ($(this).css("display") == "none")
+		 return false;
+	    var indent = $(this).css("text-indent");
+	    if (indent && /^-999/.test(indent))
+		 return false;
+	    if ($(this).width()==0 && $(this).height()==0)
+		return false;
+	}
+
+	return true;
     });
 }
 
@@ -203,9 +217,7 @@ function prepare_hint (element) {
 	var inside = contents(current);
 	if (can_put_span_inside(current)
 	    && inside.length > 0
-	    && inside.last()[0].nodeType == Node.TEXT_NODE
-//	    && inside.last().text().length> 1) {
-){
+	    && inside.last()[0].nodeType == Node.TEXT_NODE){
 	    element = current;
 	    use_overlay = false;
 	    put_before = false;
