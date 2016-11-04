@@ -127,6 +127,10 @@ function hintable(element) {
     }
 
 
+    // code for finding clickable elements due to cursor: pointer in
+    // post-order traversal of each_hintable
+
+
     // hard coding XML file buttons: <<<>>>
     if (/\.xml/.test(window.location.href)) {
 	if (element.is("span.button.collapse-button, span.button.expand-button"))
@@ -161,17 +165,16 @@ function hintable(element) {
 
 // Enumerate each element that we should hint:
 function each_hintable(callback) {
-    if (!option("C")) {
-	each_displaying(function (element) {
+    each_displaying(
+	// pre-order traversal:
+	function (element) {
 	    if (hintable(element))
 		callback(element);
-	}, undefined);
 
-    } else {
-	each_displaying(function (element) {
-	    if (hintable(element))
-		callback(element);
+	// post-order traversal:
 	}, function (element) {
+	    if (target_selector && !option("C"))
+		return;
 	    if (element.attr("CBV_hint_number"))
 		return;
 
@@ -194,9 +197,9 @@ function each_hintable(callback) {
 		return;
 
 	    var saved = hinting_parameters;
-	    hinting_parameters += "c";  // <<<>>>
+	    if (option("C"))
+		hinting_parameters += "c";  // <<<>>>
 	    callback(element);
 	    hinting_parameters = saved;
 	});
-    }
 }
