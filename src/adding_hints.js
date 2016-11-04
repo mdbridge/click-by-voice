@@ -227,6 +227,31 @@ function add_hints() {
 		put_before = false;
 	    }
 	}
+	if (option("Z0")) {
+	    try {
+		if (element.contents().length == 1 && element.children().length == 0
+		    && element.text().length > 0
+		    && can_put_span_inside(element)) {
+		    use_overlay = false;
+		    put_before = false;
+		    put_inside = true;
+		} 
+
+		// first check is to ensure no text or comment direct subnodes
+		if (element.contents().length == 1
+		    && element.contents().first().is("div, span, strong, i, b, em")) {
+		    var candidate = element.children().first();
+		    if (candidate.contents().length == 1 && candidate.children().length == 0
+			&& candidate.text().length > 0
+			&& can_put_span_inside(candidate)) {
+			element = candidate;
+			use_overlay = false;
+			put_before = false;
+			put_inside = true;
+		    } 
+		}
+	    } catch (e) {}
+	}
 
 	if (option("Y")) {
 	    var constrained = false;
