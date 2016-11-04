@@ -122,6 +122,13 @@ function insert_hint_tag(element, hint_tag, put_before, put_inside) {
 }
 
 
+function contents(element) {
+    return element.contents().filter(function () {
+	return this.nodeType !== Node.COMMENT_NODE;
+    });
+}
+
+
 function prepare_hint (element) {
     var put_inside   = false;
     var put_before   = option("b");
@@ -170,6 +177,45 @@ function prepare_hint (element) {
 	    }
 	} catch (e) {}
     }
+
+
+    if (option("Z1")) {
+	var current = element;
+	var inner = false;
+	for (;;) {
+	    var inside = contents(current);
+	    if (can_put_span_inside(current)
+		&& inside.length > 0
+		&& inside.last()[0].nodeType == Node.ELEMENT_NODE
+		&& (!inner || current.is("div, span, strong, em, i, b"))) {
+		// console.log(current[0]);
+		current = inside.last();
+		// console.log("> ");
+		// console.log(current[0]);
+		inner = true;
+	    } else
+		break;
+	}
+
+	var inside = contents(current);
+	if (can_put_span_inside(current)
+	    && inside.length > 0
+	    && inside.last()[0].nodeType == Node.TEXT_NODE
+//	    && inside.last().text().length> 1) {
+){
+	    element = current;
+	    use_overlay = false;
+	    put_before = false;
+	    put_inside = true;
+	} else {
+	    // console.log("failed: ");
+	    // console.log(current[0]);
+	    // console.log(inside);
+	    // console.log(inside.length);
+	    // console.log(inside.last[0]);
+	}
+    }
+
 
     if (use_overlay) {
 	put_inside = can_put_span_inside(element);
