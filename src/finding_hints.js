@@ -126,10 +126,10 @@ function hintable(element) {
 	return true;
     }
 
+
     // hard coding XML file buttons: <<<>>>
     if (/\.xml/.test(window.location.href)) {
-	if (element.is("span.button.collapse-button") ||
-            element.is("span.button.expand-button"))
+	if (element.is("span.button.collapse-button, span.button.expand-button"))
 	    return true;
     }
 
@@ -190,7 +190,7 @@ function each_hintable(callback) {
 		return;
 
 	    var saved = hinting_parameters;
-	    hinting_parameters += "c";
+	    hinting_parameters += "c";  // <<<>>>
 	    callback(element);
 	    hinting_parameters = saved;
 	});
