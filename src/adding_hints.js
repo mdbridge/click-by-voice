@@ -18,8 +18,8 @@ function remove_hints() {
 function set_important(element, item, value) {
     try {
 	// jquery .css(-,-)  does not handle !important correctly:
-	//element[0].style.setProperty(item, value, "important");
-	element[0].style.setProperty(item, value);
+	element[0].style.setProperty(item, value, "important");
+	//element[0].style.setProperty(item, value);
     } catch (e) {
 	// fallback for XML files:
 	var style = element.attr("style");
