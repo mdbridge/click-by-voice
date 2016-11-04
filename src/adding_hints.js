@@ -47,7 +47,7 @@ function add_text(element, text) {
     return element;
 }
 
-function build_hint(hint_number, use_overlay) {
+function build_hint(element, hint_number, use_overlay) {
     var outer = build_base_element();
     outer.attr("CBV_hint_tag", hint_number);
 
@@ -65,7 +65,12 @@ function build_hint(hint_number, use_overlay) {
 	set_important(inner, "top",  "0");
 	set_important(inner, "left", "0");
 
-	/* opacity: .75; */
+	// try and allow some opacity:
+	var opacity = element.css("opacity");
+	if (opacity && opacity < .5)
+	    set_important(inner, "opacity",  "1");
+	else
+	    set_important(inner, "opacity", opacity);
 
     } else {
 	outer.attr("CBV_outer_inline", "true");
@@ -228,7 +233,7 @@ function add_hints() {
 
 
 
-	var hint_tag = build_hint(next_CBV_hint, use_overlay);
+	var hint_tag = build_hint(element, next_CBV_hint, use_overlay);
 
 	if (use_overlay) {
 	    put_inside = can_put_span_inside(element);

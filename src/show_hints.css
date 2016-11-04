@@ -25,7 +25,8 @@
 
     [CBV_outer_inline]:not(#CBV_override):not(#CBVISayOverride) {
 	position: 	static	       !important;
-	vertical-align: center	       !important;
+	/* vertical-align: super       !important; */
+	vertical-align: baseline       !important;
 	/* in case we are a child of a flex box: */
 	align-self:     flex-start     !important;
 
@@ -51,6 +52,8 @@
 
     [CBV_inner_overlay]:not(#CBV_override):not(#CBVISayOverride) {
 	position: absolute !important;
+	right: 	  auto	   !important;
+	bottom:   auto	   !important;
 	/* these are mostly for XML; elsewhere overridden by inline style */
 	/* not important because jquery offset does not use important <<<>>> */
 	top:  0;
@@ -62,8 +65,8 @@
 
 	width:          auto		!important;
 	height:         auto		!important;
-	max-width:      20px		!important;
-	max-height:     10px		!important;
+	/* max-width:      20px		!important; */
+	/* max-height:     10px		!important; */
 	clip:           auto		!important;
 
 	padding:        0px 2px 0px 2px !important;
