@@ -123,9 +123,10 @@ function insert_hint_tag(element, hint_tag, put_before, put_inside) {
 
 
 function prepare_hint (element) {
-    var put_inside  = false;
-    var put_before  = option("b");
-    var use_overlay = option("v");
+    var put_inside   = false;
+    var put_before   = option("b");
+    var use_overlay  = option("v");
+    var displacement = 0;
 
     if (option("h")) {
 	if (element.is("a") && element.text().length > 30) {
@@ -196,9 +197,18 @@ function prepare_hint (element) {
     if (element.is("tr")) 
 	put_before = false;
 
+
+    if (option('E')) {
+	if (element.is("a") && element.children ().length == 0) {
+	    displacement = 4;
+	}
+    }
+
     return {use_overlay:    use_overlay,
 	    put_before:     put_before,
 	    put_inside:     put_inside,
+	    offset_end:     option('e'),
+	    displacement:   displacement,
 	    target_element: element};
 }
 
@@ -226,10 +236,10 @@ function add_hints() {
 	element = hint_info.target_element;
 	var hint_tag  = build_hint(element, next_CBV_hint, hint_info.use_overlay);
 
-	if (hint_info.use_overlay)
-	    overlays.push({element:         element, 
-			   overlay_element: hint_tag.children().first(),
-			   children_number: element.children().length});
+	if (hint_info.use_overlay) {
+	    hint_info.overlay_element = hint_tag.children().first();
+	    overlays.push(hint_info);
+	}
 
 	insert_hint_tag(element, hint_tag, hint_info.put_before, hint_info.put_inside);
 	//$("body").append(hint_tag);
@@ -237,24 +247,15 @@ function add_hints() {
 	next_CBV_hint += 1;
     });
 
-
-    overlays.map(function (overlay) {
-	var element	    = overlay.element;
-	var overlay_element = overlay.overlay_element;
-
+    overlays.map(function (o) {
 	try { // this fails for XML files... <<<>>>
-	    var offset = element.offset();
-	    if (option('e'))
-		offset.left +=  element.outerWidth() - overlay_element.outerWidth();
-
-	    if (option('E')) {
-		if (element.is("a") && overlay.children_number == 0) {
-		    offset.left += 4;
-		    offset.top  -= 4;
-		}
-	    }
-
-	    overlay_element.offset(offset);
+	    var offset = o.target_element.offset();
+	    if (o.offset_end)
+		offset.left += o.target_element .outerWidth() 
+		             - o.overlay_element.outerWidth();
+	    offset.left += o.displacement;
+	    offset.top  -= o.displacement;
+	    o.overlay_element.offset(offset);
 	} catch (e) {}
     });
 
