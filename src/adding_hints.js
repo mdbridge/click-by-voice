@@ -18,8 +18,8 @@ function remove_hints() {
 function set_important(element, item, value) {
     try {
 	// jquery .css(-,-)  does not handle !important correctly:
-	element[0].style.setProperty(item, value, "important");
-	//    element[0].style.setProperty(item, value);
+	//element[0].style.setProperty(item, value, "important");
+	element[0].style.setProperty(item, value);
     } catch (e) {
 	// fallback for XML files:
 	var style = element.attr("style");
@@ -47,18 +47,7 @@ function build_base_element() {
 
 
 function add_text(element, text) {
-    // add fallback versions of these in the style file for XML files
-    element.attr("CBV_add_text", "true");
-
-    //set_important(element, "font-size", "xx-small");
-    set_important(element, "font-size", "x-small");
-    set_important(element, "font-family", "arial, sans-serif");
-    set_important(element, "line-height", "130%");
-
-    set_important(element, "text-align", "left");
-    set_important(element, "text-shadow", "none");
-    set_important(element, "word-break", "normal");  // prevent breaking of hint numbers
-    
+    element.attr("CBV_add_text", "true");  // activate style rules
     element.append(text);
 
     return element;

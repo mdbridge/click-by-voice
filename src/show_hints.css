@@ -1,11 +1,12 @@
 @media print {
-    [CBV_hint_element] {
+    /* Never display hint tags */
+    [CBV_hint_element]:not(#CBV_override):not(#CBVISayOverride) {
 	display: none !important;
     }
 }
 
 @media not print {
-    [CBV_hint_element] {
+    [CBV_hint_element]:not(#CBV_override):not(#CBVISayOverride) {
 	/*
 	 * deal with cases where website style rules make spans display: none
          * example: Office365 login page
@@ -13,65 +14,67 @@
 	display: inline !important;
 
 	/* fallback for XML files, which do not interpret style attributes */
-	overflow: visible;
-	float: none;
+	overflow: visible !important;
+	float: none !important;
     }
 
 
-    [CBV_add_text] {
-	/* fallback for XML files, which do not interpret style attributes */
-	font-size: x-small;
-	font-family: arial, sans-serif;
-	line-height: 130%;
-	text-align: left;
-	word-break: normal;
+    [CBV_add_text]:not(#CBV_override):not(#CBVISayOverride) {
+	font-family: arial, sans-serif !important;
+	text-shadow: none	       !important;
+
+	font-size:   x-small	       !important;
+	line-height: 130%	       !important;
+
+	text-align:  left	       !important;
+	word-break:  normal	       !important;  /* prevent breaking of hint numbers */
     }
 
-    [CBV_outer_inline] {
+    [CBV_outer_inline]:not(#CBV_override):not(#CBVISayOverride) {
 	/* fallback for XML files, which do not interpret style attributes */
-	position: static;
-	vertical-align: center;
-	padding: 0px 2px 0px 2px;
-	border-style: solid;
-	border-width: 1px;
-	margin-left: 2px;
+	position: static !important;
+	vertical-align: center !important;
+	padding: 0px 2px 0px 2px !important;
+	border-style: solid !important;
+	border-width: 1px !important;
+	margin-left: 2px !important;
     }
 
-    [CBV_outer_inline][CBV_high_contrast] {
+    [CBV_outer_inline][CBV_high_contrast]:not(#CBV_override):not(#CBVISayOverride) {
 	/* fallback for XML files, which do not interpret style attributes */
-	color: black;
-	background-color: yellow;
+	color: black !important;
+	background-color: yellow !important;
     }
 
 
-    [CBV_outer_overlay] {
+    [CBV_outer_overlay]:not(#CBV_override):not(#CBVISayOverride) {
 	/* fallback for XML files, which do not interpret style attributes */
-	position: relative;
-	text-align: left;
+	position: relative !important;
+	text-align: left !important;
     }
 
-    [CBV_inner_overlay] {
+    [CBV_inner_overlay]:not(#CBV_override):not(#CBVISayOverride) {
 	/* fallback for XML files, which do not interpret style attributes */
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: auto;
-	text-indent: 0px;
-	vertical-align: top;
-	z-index: 10;
-	padding: 0px 2px 0px 2px;
-	border-style: none;
-	margin: 0px;
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: auto !important;
+	text-indent: 0px !important;
+	vertical-align: top !important;
+	z-index: 10 !important;
+	padding: 0px 2px 0px 2px !important;
+	border-style: none !important;
+	margin: 0px !important;
 
-	color: purple;
+	color: purple !important;
 
-	background-color: white;
-	font-weight: bold;
+	background-color: white !important;
+	font-weight: bold !important;
     }
 
-    [CBV_inner_overlay][CBV_high_contrast] {
+    [CBV_inner_overlay][CBV_high_contrast]:not(#CBV_override):not(#CBVISayOverride) {
 	/* fallback for XML files, which do not interpret style attributes */
-	color: red;
+	color: red !important;
     }
 
 
