@@ -63,7 +63,7 @@
 
 	text-indent: 	0px		!important;
 	vertical-align: top		!important;
-	z-index: 	1000		!important;
+	/* z-index: 	1000		!important; */
 
 	width:          auto		!important;
 	height:         auto		!important;
