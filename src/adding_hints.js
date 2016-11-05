@@ -223,7 +223,8 @@ function prepare_hint (element) {
 
 	if (can_put_span_inside(current)
 	    && inside.length > 0
-	    && inside.last()[0].nodeType == Node.TEXT_NODE){
+	    && inside.last()[0].nodeType == Node.TEXT_NODE
+	    && current.css("display") != "flex"){
 //	    if (!option (".") || current.css("text-overflow") == "clip") {
 	    if (!option (".") || element.css("text-overflow") == "clip") {
 		element = current;
