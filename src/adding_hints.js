@@ -197,7 +197,7 @@ function prepare_hint (element) {
 
 	    // first check is to ensure no text or comment direct subnodes
 	    if (element.contents().length == 1
-		&& element.contents().first().is("div, span, strong, i, b, em")) {
+		&& element.contents().first().is("div, span, strong, i, b, em, font, abbr")) {
 		var candidate = element.children().first();
 		if (candidate.contents().length == 1 && candidate.children().length == 0
 		    && candidate.text().length > 0
@@ -220,7 +220,7 @@ function prepare_hint (element) {
 	    if (can_put_span_inside(current)
 		&& inside.length > 0
 		&& inside.last()[0].nodeType == Node.ELEMENT_NODE
-		&& (!inner || current.is("div, span, strong, em, i, b, font"))) {
+		&& (!inner || current.is("div, span, strong, em, i, b, font, abbr"))) {
 		// console.log(current[0]);
 		current = inside.last();
 		inside  = visual_contents(current);
