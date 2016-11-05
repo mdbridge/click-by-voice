@@ -72,6 +72,11 @@ function build_hint(element, hint_number, use_overlay) {
 	else
 	    set_important(inner, "opacity", opacity);
 
+	// experiment: try and beat hinted element's z-index by one:
+	var zindex = element.css("z-index");
+	if (zindex && zindex > 0)
+	    set_important(inner, "z-index", zindex+1);
+
     } else {
 	outer.attr("CBV_outer_inline", "true");
 	add_text(outer, hint_number);
