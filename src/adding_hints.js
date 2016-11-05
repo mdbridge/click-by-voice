@@ -151,6 +151,16 @@ function visual_contents(element) {
     });
 }
 
+function is_text_overflow_ellipisis(element) {
+    for (;;) {
+	if (element.css("text-overflow") != "clip")
+	    return true;
+	if (element.css("display") != "inline")
+	    return false;
+	element = element.parent();
+    }
+}
+
 
 function prepare_hint (element) {
     var put_inside   = false;
@@ -225,8 +235,7 @@ function prepare_hint (element) {
 	    && inside.length > 0
 	    && inside.last()[0].nodeType == Node.TEXT_NODE
 	    && current.css("display") != "flex"){
-//	    if (!option (".") || current.css("text-overflow") == "clip") {
-	    if (!option (".") || element.css("text-overflow") == "clip") {
+	    if (!option (".") || !is_text_overflow_ellipisis(current)) {
 		element = current;
 		use_overlay = false;
 		put_before = false;
