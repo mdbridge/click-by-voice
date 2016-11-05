@@ -125,7 +125,11 @@ function insert_hint_tag(element, hint_tag, put_before, put_inside) {
 }
 
 
-function contents(element) {
+function visual_contents(element) {
+    var indent = element.css("text-indent");
+    if (indent && /^-999/.test(indent))
+	return [];
+
     return element.contents().filter(function () {
 	if (this.nodeType === Node.COMMENT_NODE)
 	    return false;
@@ -134,10 +138,9 @@ function contents(element) {
 	if (this.nodeType === Node.ELEMENT_NODE) {
 	    if ($(this).css("display") == "none")
 		 return false;
-	    var indent = $(this).css("text-indent");
-	    if (indent && /^-999/.test(indent))
-		 return false;
-	    if ($(this).width()==0 && $(this).height()==0)
+//	    if ($(this).width()==0 && $(this).height()==0)
+	    if ($(this).css("position")=="absolute"
+		|| $(this).css("position")=="fixed")
 		return false;
 	}
 
@@ -198,15 +201,16 @@ function prepare_hint (element) {
 
     if (option("Z1")) {
 	var current = element;
-	var inner = false;
+	var inside  = visual_contents(current);
+	var inner   = false;
 	for (;;) {
-	    var inside = contents(current);
 	    if (can_put_span_inside(current)
 		&& inside.length > 0
 		&& inside.last()[0].nodeType == Node.ELEMENT_NODE
 		&& (!inner || current.is("div, span, strong, em, i, b"))) {
 		// console.log(current[0]);
 		current = inside.last();
+		inside  = visual_contents(current);
 		// console.log("> ");
 		// console.log(current[0]);
 		inner = true;
@@ -214,7 +218,6 @@ function prepare_hint (element) {
 		break;
 	}
 
-	var inside = contents(current);
 	if (can_put_span_inside(current)
 	    && inside.length > 0
 	    && inside.last()[0].nodeType == Node.TEXT_NODE){
