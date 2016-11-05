@@ -54,6 +54,16 @@
 
     [CBV_inner_overlay]:not(#CBV_override):not(#CBVISayOverride) {
 	position: absolute !important;
+	/*
+	 * Put us above any website simple overlays (e.g.,
+         * notification count over Facebook icons) and website
+         * elements marked relative lacking z-index.
+         *
+         * Drawback: we also appear above custom tooltips like Google
+         * News video previews
+	 */
+	z-index:  1        !important;
+
 	right: 	  auto	   !important;
 	bottom:   auto	   !important;
 	/* these are mostly for XML; elsewhere overridden by inline style */
