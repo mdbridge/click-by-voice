@@ -171,6 +171,7 @@ function silently_activate(element, operation) {
 
     case "D":
 	console.log(element[0]);
+	console.log(element[0].getBoundingClientRect());
 	break;
 
     case "X":

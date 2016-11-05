@@ -126,6 +126,9 @@ function insert_hint_tag(element, hint_tag, put_before, put_inside) {
 
 
 function visual_contents(element) {
+    if (element.is("iframe"))
+	return [];
+	
     var indent = element.css("text-indent");
     if (indent && /^-999/.test(indent))
 	return [];
@@ -207,7 +210,7 @@ function prepare_hint (element) {
 	    if (can_put_span_inside(current)
 		&& inside.length > 0
 		&& inside.last()[0].nodeType == Node.ELEMENT_NODE
-		&& (!inner || current.is("div, span, strong, em, i, b"))) {
+		&& (!inner || current.is("div, span, strong, em, i, b, font"))) {
 		// console.log(current[0]);
 		current = inside.last();
 		inside  = visual_contents(current);
@@ -221,10 +224,13 @@ function prepare_hint (element) {
 	if (can_put_span_inside(current)
 	    && inside.length > 0
 	    && inside.last()[0].nodeType == Node.TEXT_NODE){
-	    element = current;
-	    use_overlay = false;
-	    put_before = false;
-	    put_inside = true;
+//	    if (!option (".") || current.css("text-overflow") == "clip") {
+	    if (!option (".") || element.css("text-overflow") == "clip") {
+		element = current;
+		use_overlay = false;
+		put_before = false;
+		put_inside = true;
+	    }
 	} else {
 	    // console.log("failed: ");
 	    // console.log(current[0]);
