@@ -167,6 +167,45 @@ function is_text_overflow_ellipisis(element) {
 }
 
 
+function CSS_number(element, property_name) {
+    var value = element.css(property_name);
+    console.log(property_name + " -> " + value);
+    if (value == "none")
+	return 0;
+    if (/^[0-9]+px$/.test(value))
+	return parseFloat(value);
+    if (value == "100%")
+	return element.parent().width(); // <<<>>>
+    return 0;
+}
+function get_text_overflow_ellipisis_clip(element) {
+    for (;;) {
+	if (element.css("text-overflow") != "clip") {
+	    var clip = {right: element[0].getBoundingClientRect().right};
+
+	    clip.right  -= CSS_number(element,"border-right-width") - 
+		           CSS_number(element,"padding-right");
+	    var slop = CSS_number(element,"max-width") - element.width();
+	    if (slop>0)
+		clip.right += slop;
+
+	    if (slop>0)
+		clip.top = -slop;
+	    // if (slop>0)
+	    // 	console.log(clip);
+	    // console.log(element[0]);
+	    // console.log(element.css("max-width"));
+	    // console.log(slop);
+
+	    return clip;
+	}
+	if (element.css("display") != "inline")
+	    return null;
+	element = element.parent();
+    }
+}
+
+
 function prepare_hint (element) {
     var put_inside   = false;
     var put_before   = option("b");
@@ -241,7 +280,31 @@ function prepare_hint (element) {
 	    && inside.length > 0
 	    && inside.last()[0].nodeType == Node.TEXT_NODE
 	    && current.css("display") != "flex"){
-	    if (!option (".") || !is_text_overflow_ellipisis(current)) {
+	    var okay = true;
+
+	    if (option (".")) {
+		var clip = get_text_overflow_ellipisis_clip(current);
+		if (clip) {
+		    okay = false;
+		    if (option(".."))
+//			if (current[0].scrollWidth + 40 < current.width())
+			if (current[0].getBoundingClientRect().right + 40 < clip.right)
+			    okay = true;
+			// if (current[0].scrollWidth>0 &&
+			//     (current[0].scrollWidth + 40 < current.width()))
+			//     okay = true;
+
+		    console.log(current[0]);
+		    // console.log(current[0].scrollWidth);
+		    // console.log(current.width());
+		    // console.log(current[0].offsetWidth);
+		    // console.log(current[0].clientWidth);
+		    console.log(current[0].getBoundingClientRect());
+		    console.log(clip);
+		}
+	    }
+
+	    if (okay) {
 		element = current;
 		use_overlay = false;
 		put_before = false;
