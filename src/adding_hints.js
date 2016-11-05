@@ -167,6 +167,7 @@ function prepare_hint (element) {
     var put_before   = option("b");
     var use_overlay  = option("v");
     var displacement = 0;
+    var offset_end   = option('e');
 
     if (option("h")) {
 	if (element.is("a") && element.text().length > 30) {
@@ -285,10 +286,17 @@ function prepare_hint (element) {
 	}
     }
 
+    // hard coding reddit entire story link:
+    if (/\.reddit\.com/.test(window.location.href)) {
+	if (use_overlay && element.is(".thing"))
+	    offset_end = false;
+    }
+
+
     return {use_overlay:    use_overlay,
 	    put_before:     put_before,
 	    put_inside:     put_inside,
-	    offset_end:     option('e'),
+	    offset_end:     offset_end,
 	    displacement:   displacement,
 	    target_element: element};
 }
