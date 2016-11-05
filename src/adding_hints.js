@@ -270,7 +270,8 @@ function prepare_hint (element) {
 
     if (option('E')) {
 	if (element.is("a") && element.children ().length == 0) {
-	    displacement = 4;
+//	    displacement = 4;
+	    displacement = 3;
 	}
     }
 

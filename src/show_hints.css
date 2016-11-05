@@ -84,7 +84,8 @@
     }
     [CBV_inner_overlay]:not([CBV_high_contrast]):not(#CBV_override):not(#CBVISayOverride) {
 	color:            purple !important;
-	background-color: white	 !important;
+	/* background-color: white	 !important; */
+	background-color: rgba(255,255,255,0.5)	 !important;
 	font-weight:      bold	 !important;
     }
 
