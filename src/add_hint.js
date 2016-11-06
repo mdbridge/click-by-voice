@@ -163,17 +163,26 @@ function add_overlay_hint(element, hint_number) {
 	    show_at_end = false;
     }
 
-    //
-    // We prefer to put overlays inside the element so they share the
-    // element's fate.  If we cannot legally do that, we prefer before
-    // the element because after the element has caused the inserted
-    // span to wrap to the next line box, adding space.
-    //
-    if (can_put_span_inside(element))
-	insert_element(element, hint_tag, true, true);
-    else 
-	insert_element(element, hint_tag, span_before_okay(element), false);
-    //$("body").append(hint_tag);
+    // temporary kludge for Gmail: <<<>>>
+    if (element.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {
+	var current = element;
+	while (current.is("table, tr, td, th, colgroup, tbody, thead, tfoot"))
+	    current = current.parent();
+	insert_element(current, hint_tag, true, false);
+
+    } else {
+	//
+	// We prefer to put overlays inside the element so they share the
+	// element's fate.  If we cannot legally do that, we prefer before
+	// the element because after the element has caused the inserted
+	// span to wrap to the next line box, adding space.
+	//
+	if (can_put_span_inside(element))
+	    insert_element(element, hint_tag, true, true);
+	else 
+	    insert_element(element, hint_tag, span_before_okay(element), false);
+	//$("body").append(hint_tag);
+    }
 
 
     var displacement = compute_displacement(element);
