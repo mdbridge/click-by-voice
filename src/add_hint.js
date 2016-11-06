@@ -261,7 +261,7 @@ function visual_contents(element) {
 
 
 function CSS_number(element, property_name) {
-    var value = element.css(property_name);
+    var value = css(element, property_name, "none");
     //console.log(property_name + " -> " + value);
     if (value == "none")
 	return 0;
