@@ -463,6 +463,30 @@ function prepare_hint (element) {
 
 
 function add_hint(element, hint_number) {
+    if (option("#")) {
+	if (element.is("a") || element.is("button")) {
+	    var hint_tag = build_hint(current, hint_number, false);
+	    insert_element(current, hint_tag, false, true);
+	    return null;
+	}
+	add_inline_hint_outside(element, hint_number);
+	return null;
+    }
+    if (option("Z1")) {
+	var hint_info = prepare_hint(element);
+	if (hint_info.use_overlay) 
+	    return add_overlay_hint(element, hint_number);
+
+
+	element = hint_info.target_element;
+	var hint_tag  = build_hint(element, hint_number, false);
+
+	insert_element(element, hint_tag, hint_info.put_before, hint_info.put_inside);
+
+	return null;
+    }
+
+
     if (option("o"))
 	return add_overlay_hint(element, hint_number);
 
@@ -475,20 +499,6 @@ function add_hint(element, hint_number) {
     if (option("h")) {
 	if (!add_inline_hint_inside(element, hint_number))
 	    return add_overlay_hint(element, hint_number);
-	return null;
-    }
-
-    if (option("Z1")) {
-	var hint_info = prepare_hint(element);
-	if (hint_info.use_overlay) 
-	    return add_overlay_hint(element, hint_number);
-
-
-	element = hint_info.target_element;
-	var hint_tag  = build_hint(element, hint_number, false);
-
-	insert_element(element, hint_tag, hint_info.put_before, hint_info.put_inside);
-
 	return null;
     }
 
