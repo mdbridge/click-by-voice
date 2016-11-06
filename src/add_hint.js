@@ -250,7 +250,7 @@ function CSS_number(element, property_name) {
 }
 function get_text_overflow_ellipisis_clip(element) {
     for (;;) {
-	if (element.css("text-overflow") != "clip") {
+	if (css(element, "text-overflow", "clip") != "clip") {
 	    var clip = {right: element[0].getBoundingClientRect().right};
 
 	    clip.right  -= CSS_number(element,"border-right-width") - 
@@ -269,7 +269,7 @@ function get_text_overflow_ellipisis_clip(element) {
 
 	    return clip;
 	}
-	if (element.css("display") != "inline")
+	if (css(element, "display") != "inline")
 	    return null;
 	element = element.parent();
     }
