@@ -237,69 +237,6 @@ function visual_contents(element) {
 }
 
 
-// returns false iff unable to safely add hint
-function add_inline_hint_inside(element, hint_number) {
-    var current = element;
-    for (;;) {
-	if (!can_put_span_inside(current))
-	    return false;
-
-	var inside = visual_contents(current);
-	if (inside.length == 0)
-	    return false;
-	var last_inside = inside.last();
-
-	if (last_inside[0].nodeType == Node.ELEMENT_NODE
-	    && last_inside.is("div, span, i, b, strong, em, code, font, abbr")) {
-	    current = last_inside;
-	    continue;
-	}
-
-	if (last_inside[0].nodeType != Node.TEXT_NODE)
-	    return false;
-	if (css(current, "display") == "flex")
-	    return false;
-
-	// check for text-overflow...
-
-	//var hint_tag = build_hint(element, hint_number, false);
-	var hint_tag = build_hint(current, hint_number, false);
-	insert_element(current, hint_tag, false, true);
-	return true;
-    }
-}
-
-
-// this is often unsafe; prefer add_inline_hint_inside
-function add_inline_hint_outside(element, hint_number) {
-    var hint_tag = build_hint(element, hint_number, false);
-    insert_element(element, hint_tag, false, false);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function is_text_overflow_ellipisis(element) {
-    for (;;) {
-	if (element.css("text-overflow") != "clip")
-	    return true;
-	if (element.css("display") != "inline")
-	    return false;
-	element = element.parent();
-    }
-}
-
-
 function CSS_number(element, property_name) {
     var value = element.css(property_name);
     //console.log(property_name + " -> " + value);
@@ -337,6 +274,76 @@ function get_text_overflow_ellipisis_clip(element) {
 	element = element.parent();
     }
 }
+
+
+function ellipsis_clipping_possible(element) {
+    var clip = get_text_overflow_ellipisis_clip(element);
+    if (!clip)
+	return false;
+
+    if (element[0].getBoundingClientRect().right + 40 < clip.right)
+	return false;
+
+    return true;
+}
+
+
+// returns false iff unable to safely add hint
+function add_inline_hint_inside(element, hint_number) {
+    var current = element;
+    for (;;) {
+	if (!can_put_span_inside(current))
+	    return false;
+
+	var inside = visual_contents(current);
+	if (inside.length == 0)
+	    return false;
+	var last_inside = inside.last();
+
+	if (last_inside[0].nodeType == Node.ELEMENT_NODE
+	    && last_inside.is("div, span, i, b, strong, em, code, font, abbr")) {
+	    current = last_inside;
+	    continue;
+	}
+
+	if (last_inside[0].nodeType != Node.TEXT_NODE)
+	    return false;
+	if (css(current, "display") == "flex")
+	    return false;
+
+	var put_before = false;
+	if (!option(".") && ellipsis_clipping_possible(current)) {
+	    if (option("<"))
+		put_before = true;
+	    else
+		return false;
+	}
+
+	//var hint_tag = build_hint(element, hint_number, false);
+	var hint_tag = build_hint(current, hint_number, false);
+	insert_element(current, hint_tag, put_before, true);
+	return true;
+    }
+}
+
+
+// this is often unsafe; prefer add_inline_hint_inside
+function add_inline_hint_outside(element, hint_number) {
+    var hint_tag = build_hint(element, hint_number, false);
+    insert_element(element, hint_tag, false, false);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function prepare_hint (element) {
