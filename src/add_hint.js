@@ -155,7 +155,7 @@ function compute_displacement(element) {
 function add_overlay_hint(element, hint_number) {
     var hint_tag    = build_hint(element, hint_number, true);
     var inner	    = hint_tag.children().first();
-    var show_at_end = true;
+    var show_at_end = !option("s");
 
     // hard coding reddit entire story link: <<<>>>
     if (/\.reddit\.com/.test(window.location.href)) {
@@ -171,7 +171,7 @@ function add_overlay_hint(element, hint_number) {
     //
     if (can_put_span_inside(element))
 	insert_element(element, hint_tag, true, true);
-    else
+    else 
 	insert_element(element, hint_tag, span_before_okay(element), false);
     //$("body").append(hint_tag);
 
