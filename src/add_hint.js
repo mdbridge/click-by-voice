@@ -362,3 +362,30 @@ function prepare_hint (element) {
 }
 
 
+function add_hint(element, hint_number) {
+    var hint_info = prepare_hint(element);
+    element = hint_info.target_element;
+    var hint_tag  = build_hint(element, hint_number, hint_info.use_overlay);
+
+    if (hint_info.use_overlay) {
+	hint_info.overlay_element = hint_tag.children().first();
+    }
+
+    insert_hint_tag(element, hint_tag, hint_info.put_before, hint_info.put_inside);
+    //$("body").append(hint_tag);
+
+    if (hint_info.use_overlay) {
+	return () => {
+	    try { // this fails for XML files... <<<>>>
+		var offset = hint_info.target_element.offset();
+		if (hint_info.offset_end)
+		    offset.left += hint_info.target_element .outerWidth() 
+		    - hint_info.overlay_element.outerWidth();
+		offset.left += hint_info.displacement;
+		offset.top  -= hint_info.displacement;
+		hint_info.overlay_element.offset(offset);
+	    } catch (e) {}
+	};
+    } else
+	return null;
+}

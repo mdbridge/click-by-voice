@@ -34,32 +34,13 @@ function add_hints() {
 	    return;
 	element.attr("CBV_hint_number", next_CBV_hint);
 
-	var hint_info = prepare_hint(element);
-	element = hint_info.target_element;
-	var hint_tag  = build_hint(element, next_CBV_hint, hint_info.use_overlay);
-
-	if (hint_info.use_overlay) {
-	    hint_info.overlay_element = hint_tag.children().first();
-	    overlays.push(hint_info);
-	}
-
-	insert_hint_tag(element, hint_tag, hint_info.put_before, hint_info.put_inside);
-	//$("body").append(hint_tag);
+	var delayed = add_hint(element, next_CBV_hint);
+	overlays.push(delayed);
 
 	next_CBV_hint += 1;
     });
 
-    overlays.map(function (o) {
-	try { // this fails for XML files... <<<>>>
-	    var offset = o.target_element.offset();
-	    if (o.offset_end)
-		offset.left += o.target_element .outerWidth() 
-		             - o.overlay_element.outerWidth();
-	    offset.left += o.displacement;
-	    offset.top  -= o.displacement;
-	    o.overlay_element.offset(offset);
-	} catch (e) {}
-    });
+    overlays.map(function (o) { if (o) o(); });
 
 
     // console.log("total hints assigned: " + next_CBV_hint 
