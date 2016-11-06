@@ -143,13 +143,18 @@ function span_before_okay(element) {
 //
 
 function compute_displacement(element) {
+    if (option('E')) {
+	if (element.is("a") && element.children().length == 0) {
+	    return {up: 3, right: 3};
+	}
+    }
     return {up: 0, right: 0};
 }
 
 
 function add_overlay_hint(element, hint_number) {
-    var hint_tag = build_hint(element, hint_number, true);
-    var inner	 = hint_tag.children().first();
+    var hint_tag    = build_hint(element, hint_number, true);
+    var inner	    = hint_tag.children().first();
     var show_at_end = true;
 
     // hard coding reddit entire story link: <<<>>>
@@ -168,8 +173,12 @@ function add_overlay_hint(element, hint_number) {
 	insert_element(element, hint_tag, true, true);
     else
 	insert_element(element, hint_tag, span_before_okay(element), false);
+    //$("body").append(hint_tag);
+
 
     var displacement = compute_displacement(element);
+    // move overlay into place at end after all inline hints have been
+    // inserted so their insertion doesn't mess up the overlay's position:
     return () => {
 	try { 
 	    // this fails for XML files...
@@ -460,29 +469,16 @@ function add_hint(element, hint_number) {
     if (option("o"))
 	return add_overlay_hint(element, hint_number);
 
+
     var hint_info = prepare_hint(element);
+    if (hint_info.use_overlay) 
+	return add_overlay_hint(element, hint_number);
+
+
     element = hint_info.target_element;
     var hint_tag  = build_hint(element, hint_number, hint_info.use_overlay);
 
-    if (hint_info.use_overlay) {
-	hint_info.overlay_element = hint_tag.children().first();
-    }
-
     insert_element(element, hint_tag, hint_info.put_before, hint_info.put_inside);
-    //$("body").append(hint_tag);
 
-    if (hint_info.use_overlay) {
-	return () => {
-	    try { // this fails for XML files... <<<>>>
-		var offset = hint_info.target_element.offset();
-		if (hint_info.offset_end)
-		    offset.left += hint_info.target_element .outerWidth() 
-		    - hint_info.overlay_element.outerWidth();
-		offset.left += hint_info.displacement;
-		offset.top  -= hint_info.displacement;
-		hint_info.overlay_element.offset(offset);
-	    } catch (e) {}
-	};
-    } else
-	return null;
+    return null;
 }
