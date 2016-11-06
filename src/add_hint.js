@@ -1,3 +1,8 @@
+///
+/// Labeling an element with a hint tag
+///
+
+
 function set_important(element, item, value) {
     try {
 	// jquery .css(-,-)  does not handle !important correctly:
