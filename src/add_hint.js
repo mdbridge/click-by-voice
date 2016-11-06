@@ -75,8 +75,8 @@ function build_hint(element, hint_number, use_overlay) {
 	set_important(inner, "left", "0");
 
 	// experiment: try and beat hinted element's z-index by one:
-	var zindex = element.css("z-index");
-	if (zindex && zindex > 0)
+	var zindex = css(element, "z-index", 0);
+	if (zindex > 0)
 	    set_important(inner, "z-index", zindex+1);
 
     } else {

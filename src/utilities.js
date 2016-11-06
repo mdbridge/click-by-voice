@@ -35,3 +35,19 @@ function set_hinting_parameters(value) {
 function option(option_name) {
     return (hinting_parameters.indexOf(option_name) != -1);
 }
+
+
+
+//
+// Inspecting (safely) CSS properties
+//
+
+// omitting default_value gives a default of undefined
+function css(element, property_name, default_value) {
+    try {
+	return element.css(property_name);
+    } catch (e) {
+	// the jQuery method .css throws an exception on XML elements
+	return default_value;
+    }
+}

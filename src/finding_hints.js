@@ -11,11 +11,8 @@ function each_displaying_helper(element, pre_callback, post_callback) {
     if (CBV_inserted_element(element))
     	return;
 
-    try {
-	// Jquery gives an error error for this if no CSS (e.g., XML files):
-	if (element.css("display") == "none")
-	    return true;
-    } catch (e) {}
+    if (css(element, "display") == "none")
+	return true;
 
     if (pre_callback)
 	pre_callback(element);
@@ -70,7 +67,7 @@ function hintable(element) {
 	return false;
 
     // don't hint invisible elements (their children may be another matter)
-    if (element.css("visibility") == "hidden" && !option ("+")) 
+    if (css(element, "visibility") == "hidden" && !option ("+")) 
 	return false;
 
 
@@ -185,12 +182,8 @@ function each_hintable(callback) {
 	    if (element.attr("CBV_hint_number"))
 		return;
 
-	    try {
-		if (element.css("cursor") != "pointer")
-		    return;
-	    } catch (e) {
-		return;  // XML pages...
-	    }
+	    if (css(element, "cursor") != "pointer")
+		return;  // XML webpages return here
 	    if (element.css("visibility") == "hidden") 
 		return;  // visibility blocks cursor: pointer
 	    if (element.parent().css("cursor")=="pointer")
