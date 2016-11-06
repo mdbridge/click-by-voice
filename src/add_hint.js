@@ -3,22 +3,43 @@
 ///
 
 
+//
+// Generic manipulations of DOM elements
+//
+
+// add CSS declaration '<item>: <value> !important' to element's
+// inline styles;
+// has no effect on XML elements, which ignore inline styles
 function set_important(element, item, value) {
     try {
 	// jquery .css(-,-)  does not handle !important correctly:
 	element[0].style.setProperty(item, value, "important");
 	//element[0].style.setProperty(item, value);
-    } catch (e) {
-	// fallback for XML files:
-	var style = element.attr("style");
-	if (style)
-	    style += " ";
-	else
-	    style = "";
-	element.attr("style",  style + item + ": "+value+" !important;");
-    }
+    } catch (e) {}  // XML elements throw an exception
 }
 
+
+// insert element before/after target or (if put_inside), at the
+// beginning of target's contents or at the end of target's contents
+function insert_element(target, element, put_before, put_inside) {
+    if (put_inside) {
+	if (put_before)
+	    target.prepend(element);
+	else
+	    target.append(element);
+    } else {
+	if (put_before)
+	    target.before(element);
+	else
+	    target.after(element);
+    }    
+}
+
+
+
+//
+// 
+//
 
 function build_base_element() {
     var element = $("<span></span>");
@@ -100,21 +121,6 @@ function can_put_span_inside(element) {
 	    return true;
     } catch (e) {}
     return false;
-}
-
-
-function insert_hint_tag(element, hint_tag, put_before, put_inside) {
-    if (put_inside) {
-	if (put_before)
-	    element.prepend(hint_tag);
-	else
-	    element.append(hint_tag);
-    } else {
-	if (put_before)
-	    element.before(hint_tag);
-	else
-	    element.after(hint_tag);
-    }    
 }
 
 
@@ -376,7 +382,7 @@ function add_hint(element, hint_number) {
 	hint_info.overlay_element = hint_tag.children().first();
     }
 
-    insert_hint_tag(element, hint_tag, hint_info.put_before, hint_info.put_inside);
+    insert_element(element, hint_tag, hint_info.put_before, hint_info.put_inside);
     //$("body").append(hint_tag);
 
     if (hint_info.use_overlay) {
