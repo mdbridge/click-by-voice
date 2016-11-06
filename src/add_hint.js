@@ -304,6 +304,7 @@ function ellipsis_clipping_possible(element) {
     if (!clip)
 	return false;
 
+    // hardwire 40 pixels as the maximum hint tag length for now: <<<>>>
     if (element[0].getBoundingClientRect().right + 40 < clip.right)
 	return false;
 
