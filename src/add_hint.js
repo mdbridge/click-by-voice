@@ -74,7 +74,9 @@ function build_hint(element, hint_number, use_overlay) {
 	set_important(inner, "top",  "0");
 	set_important(inner, "left", "0");
 
-	// experiment: try and beat hinted element's z-index by one:
+	// beat hinted element's z-index by at least one;
+	// if we are not in a different stacking context, this should
+	// put us on top of it.
 	var zindex = css(element, "z-index", 0);
 	if (zindex > 0)
 	    set_important(inner, "z-index", zindex+1);
@@ -88,10 +90,13 @@ function build_hint(element, hint_number, use_overlay) {
 }
 
 
+
 //
-// 
+// Analysis routines
 //
 
+// Can we legally put a span element inside of element and have it be
+// visible?  Does not take CSS properties into account.
 function can_put_span_inside(element) {
     // unconditionally _empty elements_ that cannot have any child
     // nodes (text or nested elements):
@@ -102,9 +107,10 @@ function can_put_span_inside(element) {
 	return false;
 
     if (element.is("iframe")) 
-	// iframe elements are displayed only if browser doesn't support iframe's
+	// iframe contents are displayed only if browser doesn't support iframe's
 	return false;
 
+    // only actual webpage elements are fair game:
     if (CBV_inserted_element(element))
 	return false;
 
@@ -112,13 +118,93 @@ function can_put_span_inside(element) {
 	return true;
 
     // above absolutely correct; below is heuristic:
-
     try {
 	if (element.contents().length > 0)
 	    return true;
     } catch (e) {}
     return false;
 }
+
+
+// is it okay to put a span before this element?
+function span_before_okay(element) {
+    // don't put spans before tr elements (else messes up table
+    // formatting as treats span as first column):
+    if (element.is("tr")) 
+	return false;
+
+    return true;
+}
+
+
+
+//
+// Adding overlay hints
+//
+
+function compute_displacement(element) {
+    return {up: 0, right: 0};
+}
+
+
+function add_overlay_hint(element, hint_number) {
+    var hint_tag = build_hint(element, hint_number, true);
+    var inner	 = hint_tag.children().first();
+    var show_at_end = true;
+
+    // hard coding reddit entire story link: <<<>>>
+    if (/\.reddit\.com/.test(window.location.href)) {
+	if (element.is(".thing"))
+	    show_at_end = false;
+    }
+
+    //
+    // We prefer to put overlays inside the element so they share the
+    // element's fate.  If we cannot legally do that, we prefer before
+    // the element because after the element has caused the inserted
+    // span to wrap to the next line box, adding space.
+    //
+    if (can_put_span_inside(element))
+	insert_element(element, hint_tag, true, true);
+    else
+	insert_element(element, hint_tag, span_before_okay(element), false);
+
+    var displacement = compute_displacement(element);
+    return () => {
+	try { 
+	    // this fails for XML files...
+	    var target_offset = element.offset();
+	    if (show_at_end) {
+		target_offset.left += element.outerWidth() 
+    		             	    -   inner.outerWidth();
+	    }
+	    target_offset.top  -= displacement.up;
+	    target_offset.left += displacement.right;
+	    inner.offset(target_offset);
+	} catch (e) {}
+    };
+}
+
+
+
+//
+// 
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function visual_contents(element) {
@@ -371,6 +457,9 @@ function prepare_hint (element) {
 
 
 function add_hint(element, hint_number) {
+    if (option("o"))
+	return add_overlay_hint(element, hint_number);
+
     var hint_info = prepare_hint(element);
     element = hint_info.target_element;
     var hint_tag  = build_hint(element, hint_number, hint_info.use_overlay);
