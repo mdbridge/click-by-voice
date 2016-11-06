@@ -326,7 +326,7 @@ function add_inline_hint_inside(element, hint_number) {
 
 	var put_before = false;
 	if (!option(".") && ellipsis_clipping_possible(current)) {
-	    if (option("<"))
+	    if (!option(">"))
 		put_before = true;
 	    else
 		return false;
