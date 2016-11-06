@@ -210,12 +210,6 @@ function add_overlay_hint(element, hint_number) {
 
 
 
-
-
-
-
-
-
 function visual_contents(element) {
     if (element.is("iframe"))
 	return [];
@@ -241,6 +235,53 @@ function visual_contents(element) {
 	return true;
     });
 }
+
+
+// returns false iff unable to safely add hint
+function add_inline_hint_inside(element, hint_number) {
+    var current = element;
+    for (;;) {
+	if (!can_put_span_inside(current))
+	    return false;
+
+	var inside = visual_contents(current);
+	if (inside.length == 0)
+	    return false;
+	var last_inside = inside.last();
+
+	if (last_inside[0].nodeType == Node.ELEMENT_NODE
+	    && last_inside.is("div, span, strong, em, i, b, font, abbr")) {
+	    current = last_inside;
+	    continue;
+	}
+
+	if (last_inside[0].nodeType != Node.TEXT_NODE)
+	    return false;
+	if (css(current, "display") == "flex")
+	    return false;
+
+	// check for text-overflow...
+
+	//var hint_tag  = build_hint(element, hint_number, false);
+	var hint_tag  = build_hint(current, hint_number, false);
+	insert_element(current, hint_tag, false, true);
+	return true;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function is_text_overflow_ellipisis(element) {
     for (;;) {
@@ -381,13 +422,13 @@ function prepare_hint (element) {
 			//     (current[0].scrollWidth + 40 < current.width()))
 			//     okay = true;
 
-		    console.log(current[0]);
+		    // console.log(current[0]);
 		    // console.log(current[0].scrollWidth);
 		    // console.log(current.width());
 		    // console.log(current[0].offsetWidth);
 		    // console.log(current[0].clientWidth);
-		    console.log(current[0].getBoundingClientRect());
-		    console.log(clip);
+		    // console.log(current[0].getBoundingClientRect());
+		    // console.log(clip);
 		    if (!okay && option(".<")) {
 			okay = true;
 			force_before = true;
@@ -414,10 +455,7 @@ function prepare_hint (element) {
 	}
     }
 
-
-    if (use_overlay) {
-	put_inside = can_put_span_inside(element);
-    } else {
+    if (!use_overlay) {
 	if (element.is("a") || element.is("button"))
 	    put_inside = true;
 
@@ -442,20 +480,6 @@ function prepare_hint (element) {
 	put_before = false;
 
 
-    if (option('E')) {
-	if (element.is("a") && element.children ().length == 0) {
-//	    displacement = 4;
-	    displacement = 3;
-	}
-    }
-
-    // hard coding reddit entire story link:
-    if (/\.reddit\.com/.test(window.location.href)) {
-	if (use_overlay && element.is(".thing"))
-	    offset_end = false;
-    }
-
-
     return {use_overlay:    use_overlay,
 	    put_before:     put_before,
 	    put_inside:     put_inside,
@@ -476,7 +500,7 @@ function add_hint(element, hint_number) {
 
 
     element = hint_info.target_element;
-    var hint_tag  = build_hint(element, hint_number, hint_info.use_overlay);
+    var hint_tag  = build_hint(element, hint_number, false);
 
     insert_element(element, hint_tag, hint_info.put_before, hint_info.put_inside);
 
