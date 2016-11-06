@@ -288,6 +288,10 @@ function ellipsis_clipping_possible(element) {
 }
 
 
+//
+// Adding inline hints
+//
+
 // returns false iff unable to safely add hint
 function add_inline_hint_inside(element, hint_number) {
     var current = element;
@@ -352,16 +356,6 @@ function prepare_hint (element) {
     var use_overlay  = option("v");
     var displacement = 0;
     var offset_end   = option('e');
-
-    if (option("h")) {
-	if (element.is("a") && element.text().length > 30) {
-	    console.log(element[0]);
-	    use_overlay = false;
-	    put_before  = false;
-	} else {
-	    use_overlay = true;
-	}
-    }
 
     if (option("y")) {
 	if (element.parents().is("p")) {
