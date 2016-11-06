@@ -342,8 +342,8 @@ function add_inline_hint_outside(element, hint_number) {
 function add_hint(element, hint_number) {
     if (option("#")) {
 	if (element.is("a") || element.is("button")) {
-	    var hint_tag = build_hint(current, hint_number, false);
-	    insert_element(current, hint_tag, false, true);
+	    var hint_tag = build_hint(element, hint_number, false);
+	    insert_element(element, hint_tag, false, true);
 	    return null;
 	}
 	add_inline_hint_outside(element, hint_number);
