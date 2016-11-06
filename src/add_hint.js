@@ -357,33 +357,6 @@ function prepare_hint (element) {
     var displacement = 0;
     var offset_end   = option('e');
 
-    if (option("Z0")) {
-	try {
-	    if (element.contents().length == 1 && element.children().length == 0
-		&& element.text().length > 0
-		&& can_put_span_inside(element)) {
-		use_overlay = false;
-		put_before = false;
-		put_inside = true;
-	    } 
-
-	    // first check is to ensure no text or comment direct subnodes
-	    if (element.contents().length == 1
-		&& element.contents().first().is("div, span, strong, i, b, em, font, abbr")) {
-		var candidate = element.children().first();
-		if (candidate.contents().length == 1 && candidate.children().length == 0
-		    && candidate.text().length > 0
-		    && can_put_span_inside(candidate)) {
-		    element = candidate;
-		    use_overlay = false;
-		    put_before = false;
-		    put_inside = true;
-		} 
-	    }
-	} catch (e) {}
-    }
-
-
     if (option("Z1")) {
 	var current = element;
 	var inside  = visual_contents(current);
@@ -505,15 +478,6 @@ function add_hint(element, hint_number) {
 	return null;
     }
 
-    if (option("p")) {
-	if (element.parents().is("p") ||
-	    (element.parents().is("article") && !element.parents().is("nav"))) {
-	    if (!add_inline_hint_inside(element, hint_number))
-		add_inline_hint_outside(element, hint_number);
-	    return null;
-	}
-	return add_overlay_hint(element, hint_number);
-    }
 
 
 
