@@ -478,18 +478,22 @@ function add_hint(element, hint_number) {
 	return null;
     }
 
+    if (option("Z1")) {
+	var hint_info = prepare_hint(element);
+	if (hint_info.use_overlay) 
+	    return add_overlay_hint(element, hint_number);
 
 
+	element = hint_info.target_element;
+	var hint_tag  = build_hint(element, hint_number, false);
 
-    var hint_info = prepare_hint(element);
-    if (hint_info.use_overlay) 
-	return add_overlay_hint(element, hint_number);
+	insert_element(element, hint_tag, hint_info.put_before, hint_info.put_inside);
 
+	return null;
+    }
 
-    element = hint_info.target_element;
-    var hint_tag  = build_hint(element, hint_number, false);
-
-    insert_element(element, hint_tag, hint_info.put_before, hint_info.put_inside);
-
+    // current fallback is inline
+    if (!add_inline_hint_inside(element, hint_number))
+	add_inline_hint_outside(element, hint_number);
     return null;
 }
