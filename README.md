@@ -104,10 +104,12 @@ functionality:
     because of event listeners
     * hopefully, the extended hints `:++` should find most of these.
 * The placement of hints is suboptimal and disrupts the flow of some webpages
-  * Experimental: `:+vb` uses overlays for hints; this can make text hard
+  * Experimental: `:+o` uses overlays for hints; this can make text hard
     to read, but disturbs the flow less.
 * Sometimes hints are unreadable due to clipping
-  * Experimental: `:+a` puts hints before elements; this may reduce clipping
+  * Experimental: `:+h` uses overlays when inline hints might get
+    clipped.
+puts hints before elements; this may reduce clipping
 * Sometime hints are too hard to read due to inadequate contrast between
   foreground and background colors
   * Experimental: `:+c` increases the contrast of hints
