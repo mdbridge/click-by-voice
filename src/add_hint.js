@@ -38,7 +38,7 @@ function insert_element(target, element, put_before, put_inside) {
 
 
 //
-// 
+// Building hint tags
 //
 
 function build_base_element() {
@@ -74,13 +74,6 @@ function build_hint(element, hint_number, use_overlay) {
 	set_important(inner, "top",  "0");
 	set_important(inner, "left", "0");
 
-	// try and allow some opacity:
-	var opacity = element.css("opacity");
-	if (opacity && opacity < .5)
-	    set_important(inner, "opacity",  "1");
-	else
-	    set_important(inner, "opacity", opacity);
-
 	// experiment: try and beat hinted element's z-index by one:
 	var zindex = element.css("z-index");
 	if (zindex && zindex > 0)
@@ -94,6 +87,10 @@ function build_hint(element, hint_number, use_overlay) {
     return outer;
 }
 
+
+//
+// 
+//
 
 function can_put_span_inside(element) {
     // unconditionally _empty elements_ that cannot have any child
