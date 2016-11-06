@@ -143,10 +143,22 @@ function span_before_okay(element) {
 //
 
 function compute_displacement(element) {
-    if (option('E')) {
-	if (element.is("a") && element.children().length == 0) {
-	    return {up: 3, right: 3};
-	}
+    var displacement = 0;
+    if (option('E0'))
+	displacement = 0;
+    if (option('E1'))
+	displacement = 1;
+    if (option('E2'))
+	displacement = 2;
+    if (option('E3'))
+	displacement = 3;
+    if (option('E4'))
+	displacement = 4;
+    if (option('E5'))
+	displacement = 5;
+
+    if (element.is("a, code, b, i, strong, em, abbr") && element.children().length == 0) {
+	return {up: displacement, right: displacement};
     }
     return {up: 0, right: 0};
 }
@@ -162,6 +174,9 @@ function add_overlay_hint(element, hint_number) {
 	if (element.is(".thing"))
 	    show_at_end = false;
     }
+
+    // needs to be before we insert the hint tag <<<>>>
+    var displacement = compute_displacement(element);
 
     // temporary kludge for Gmail: <<<>>>
     if (element.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {
@@ -185,7 +200,6 @@ function add_overlay_hint(element, hint_number) {
     }
 
 
-    var displacement = compute_displacement(element);
     // move overlay into place at end after all inline hints have been
     // inserted so their insertion doesn't mess up the overlay's position:
     return () => {
