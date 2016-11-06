@@ -214,7 +214,7 @@ function visual_contents(element) {
     if (element.is("iframe"))
 	return [];
 	
-    var indent = element.css("text-indent");
+    var indent = css(element, "text-indent");
     if (indent && /^-999/.test(indent))
 	return [];
 
@@ -224,11 +224,11 @@ function visual_contents(element) {
 
 	// ignore nodes intended solely for screen readers and the like
 	if (this.nodeType === Node.ELEMENT_NODE) {
-	    if ($(this).css("display") == "none")
+	    if (css($(this),"display") == "none")
 		 return false;
 //	    if ($(this).width()==0 && $(this).height()==0)
-	    if ($(this).css("position")=="absolute"
-		|| $(this).css("position")=="fixed")
+	    if (css($(this),"position")=="absolute"
+		|| css($(this),"position")=="fixed")
 		return false;
 	}
 
@@ -262,13 +262,19 @@ function add_inline_hint_inside(element, hint_number) {
 
 	// check for text-overflow...
 
-	//var hint_tag  = build_hint(element, hint_number, false);
-	var hint_tag  = build_hint(current, hint_number, false);
+	//var hint_tag = build_hint(element, hint_number, false);
+	var hint_tag = build_hint(current, hint_number, false);
 	insert_element(current, hint_tag, false, true);
 	return true;
     }
 }
 
+
+// this is often unsafe; prefer add_inline_hint_inside
+function add_inline_hint_outside(element, hint_number) {
+    var hint_tag = build_hint(element, hint_number, false);
+    insert_element(element, hint_tag, false, false);
+}
 
 
 
@@ -492,6 +498,13 @@ function prepare_hint (element) {
 function add_hint(element, hint_number) {
     if (option("o"))
 	return add_overlay_hint(element, hint_number);
+
+    if (option("i")) {
+	if (!add_inline_hint_inside(element, hint_number))
+	    add_inline_hint_outside(element, hint_number);
+	return null;
+    }
+
 
 
     var hint_info = prepare_hint(element);
