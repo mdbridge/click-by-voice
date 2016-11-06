@@ -169,7 +169,7 @@ function is_text_overflow_ellipisis(element) {
 
 function CSS_number(element, property_name) {
     var value = element.css(property_name);
-    console.log(property_name + " -> " + value);
+    //console.log(property_name + " -> " + value);
     if (value == "none")
 	return 0;
     if (/^[0-9]+px$/.test(value))
@@ -281,6 +281,7 @@ function prepare_hint (element) {
 	    && inside.last()[0].nodeType == Node.TEXT_NODE
 	    && current.css("display") != "flex"){
 	    var okay = true;
+	    var force_before = false;
 
 	    if (option (".")) {
 		var clip = get_text_overflow_ellipisis_clip(current);
@@ -301,6 +302,11 @@ function prepare_hint (element) {
 		    // console.log(current[0].clientWidth);
 		    console.log(current[0].getBoundingClientRect());
 		    console.log(clip);
+		    if (!okay && option(".<")) {
+			okay = true;
+			force_before = true;
+		    }
+
 		}
 	    }
 
@@ -309,6 +315,9 @@ function prepare_hint (element) {
 		use_overlay = false;
 		put_before = false;
 		put_inside = true;
+		if (force_before)
+		    put_before = true;
+
 	    }
 	} else {
 	    // console.log("failed: ");
