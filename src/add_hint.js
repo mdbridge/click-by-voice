@@ -357,13 +357,6 @@ function prepare_hint (element) {
     var displacement = 0;
     var offset_end   = option('e');
 
-    if (option("y")) {
-	if (element.parents().is("p")) {
-	    use_overlay = false;
-	    put_before = false;
-	}
-    }
-
     if (option("Z0")) {
 	try {
 	    if (element.contents().length == 1 && element.children().length == 0
@@ -510,6 +503,16 @@ function add_hint(element, hint_number) {
 	if (!add_inline_hint_inside(element, hint_number))
 	    return add_overlay_hint(element, hint_number);
 	return null;
+    }
+
+    if (option("p")) {
+	if (element.parents().is("p") ||
+	    (element.parents().is("article") && !element.parents().is("nav"))) {
+	    if (!add_inline_hint_inside(element, hint_number))
+		add_inline_hint_outside(element, hint_number);
+	    return null;
+	}
+	return add_overlay_hint(element, hint_number);
     }
 
 
