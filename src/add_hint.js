@@ -250,7 +250,7 @@ function add_inline_hint_inside(element, hint_number) {
 	var last_inside = inside.last();
 
 	if (last_inside[0].nodeType == Node.ELEMENT_NODE
-	    && last_inside.is("div, span, strong, em, i, b, font, abbr")) {
+	    && last_inside.is("div, span, i, b, strong, em, code, font, abbr")) {
 	    current = last_inside;
 	    continue;
 	}
@@ -502,6 +502,12 @@ function add_hint(element, hint_number) {
     if (option("i")) {
 	if (!add_inline_hint_inside(element, hint_number))
 	    add_inline_hint_outside(element, hint_number);
+	return null;
+    }
+
+    if (option("h")) {
+	if (!add_inline_hint_inside(element, hint_number))
+	    return add_overlay_hint(element, hint_number);
 	return null;
     }
 
