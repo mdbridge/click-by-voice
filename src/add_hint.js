@@ -3,6 +3,20 @@
 ///
 
 
+// place me <<<>>>
+function CSS_number(element, property_name) {
+    var value = css(element, property_name, "none");
+    //console.log(property_name + " -> " + value);
+    if (value == "none")
+	return 0;
+    if (/^[0-9]+px$/.test(value))
+	return parseFloat(value);
+    if (value == "100%")
+	return element.parent().width(); // <<<>>>
+    return 0;
+}
+
+
 //
 // Generic manipulations of DOM elements
 //
@@ -157,10 +171,20 @@ function compute_displacement(element) {
     if (option('E5'))
 	displacement = 5;
 
-    if (element.is("a, code, b, i, strong, em, abbr") && element.children().length == 0) {
-	return {up: displacement, right: displacement};
+    var extra_displacement_right = 0;
+    if (option("?") && element.is("input")) {
+	var padding = CSS_number(element,"padding-right");
+	// too large padding mean something's probably being
+	// positioned there absolutely so don't put overlay there
+	if (padding > 10)
+	    extra_displacement_right = -padding + 5;
     }
-    return {up: 0, right: 0};
+
+    if (element.is("a, code, b, i, strong, em, abbr") && element.children().length == 0) {
+	return {up: displacement, right: displacement+extra_displacement_right};
+    }
+
+    return {up: 0, right: extra_displacement_right};
 }
 
 
@@ -260,17 +284,6 @@ function visual_contents(element) {
 }
 
 
-function CSS_number(element, property_name) {
-    var value = css(element, property_name, "none");
-    //console.log(property_name + " -> " + value);
-    if (value == "none")
-	return 0;
-    if (/^[0-9]+px$/.test(value))
-	return parseFloat(value);
-    if (value == "100%")
-	return element.parent().width(); // <<<>>>
-    return 0;
-}
 function get_text_overflow_ellipisis_clip(element) {
     for (;;) {
 	if (css(element, "text-overflow", "clip") != "clip") {
