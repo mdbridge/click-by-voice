@@ -70,13 +70,13 @@ function point_to_click(element) {
     var x = (rectangle.left + rectangle.right) /2;
     var y = (rectangle.top  + rectangle.bottom)/2;
 
-    console.log(">> point_to_click:");
-    console.log(rectangles);
-    console.log(rectangle);
-    console.log(element[0].getBoundingClientRect());
-    console.log(element.offset());
-    console.log(element.offset().top  - window.scrollY);
-    console.log(element.offset().left - window.scrollX);
+    // console.log(">> point_to_click:");
+    // console.log(rectangles);
+    // console.log(rectangle);
+    // console.log(element[0].getBoundingClientRect());
+    // console.log(element.offset());
+    // console.log(element.offset().top  - window.scrollY);
+    // console.log(element.offset().left - window.scrollX);
 
     return {x: x, y: y};
 }
@@ -178,14 +178,34 @@ function silently_activate(element, operation) {
 	var target = point_to_click(element);
 	console.log(target);
 
-	var zoom = 1.0;
-//	var zoom = 1.25;
-	var x = target.x*zoom + 0;
-	var y = target.y*zoom + 90;
+	var zoom = window.devicePixelRatio;
+	console.log("zoom: " + zoom);
 
-	x -= window.screenX - 8;
-	y -= window.screenY - 8;
-	console.log(window.screenY);
+	// console.log(window.screenX);
+	// console.log(window.screenY);
+	// x -= window.screenX - 8;
+	// y -= window.screenY - 8;
+
+	console.log(window.outerHeight);
+	console.log(window.innerHeight);
+	var delta = window.outerHeight - window.innerHeight*zoom;
+	// I believe this is the height of the browser chrome at the top
+	console.log("delta: " + delta);
+
+	var x = target.x*zoom + 0;
+	var y = target.y*zoom + delta;
+
+	if (window.outerWidth == window.screen.width) {
+	    console.log("maximized");
+	    // window actually starts at -8, -8:
+	    x += 8;
+	    y += 8;
+	} else {
+	    // still have side border, but not top one
+	    x += 8; // maybe should be 7?
+	    y -= 8;
+	}
+
 	var answer = Math.floor(x) + "," + Math.floor(y);
 	console.log(answer);
 
@@ -207,12 +227,16 @@ function silently_activate(element, operation) {
 	break;
     case "INSPECT":
 	$('body').click(function (event) {
+	    var zoom = window.devicePixelRatio;
 	     console.log(event.originalEvent);
 	     console.log("Y: " + (event.screenY - event.clientY));
 	     console.log("X: " + (event.screenX - event.clientX));
 	     console.log("WY: " + (event.screenY - window.screenY - event.clientY));
 	     console.log("WX: " + (event.screenX - window.screenX - event.clientX));
 	     console.log("X ratio: " + ( event.clientX / event.screenX));
+
+	     console.log("measured Delta: " + (event.screenY - window.screenY - event.clientY*zoom));
+
 
 	});
 	break;
