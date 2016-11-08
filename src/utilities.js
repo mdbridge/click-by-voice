@@ -22,14 +22,12 @@ var hinting_parameters = ""; // extra argument to :+ if any
 var target_selector    = undefined;
 
 function set_hinting_parameters(value) {
-    var i = value.indexOf("$");
-    if (i != -1) {
-	hinting_parameters = value.slice(0,i);
-	target_selector    = value.slice(i+1);
-    } else {
-	hinting_parameters = value;
-	target_selector    = undefined;
-    }
+    target_selector = undefined;
+    value = value.replace(/\$\{([^\}]*)\}/, function (x,argument){
+	target_selector = argument;
+	return "";
+    });
+    hinting_parameters = value;
 }
 
 function option(option_name) {

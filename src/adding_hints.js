@@ -18,7 +18,7 @@ function remove_hints() {
 
 function add_hints() {
     console.log("adding hints: " + hinting_parameters 
-		+ (target_selector ? "$" + target_selector : ""));
+		+ (target_selector ? "${"+target_selector+"}" : ""));
 
     if (next_CBV_hint < 0)
 	next_CBV_hint = 0;
