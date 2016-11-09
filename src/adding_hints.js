@@ -9,7 +9,7 @@ var next_CBV_hint = 0;  // -1 means hints are off
 function remove_hints() {
     //console.log("removing hints");
 
-    $("[CBV_hint_tag]").remove();
+    $("[CBV_hint_element]").remove();
     $("[CBV_hint_number]").removeAttr("CBV_hint_number");
 
     next_CBV_hint = -1;

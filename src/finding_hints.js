@@ -103,7 +103,7 @@ function hintable(element) {
     //
     if (element.is("[onclick]")) 
 	return true;
-    if (element.is("[tabindex]") && element.attr("tabindex") != "-1")
+    if (element.is("[tabindex]") && element.attr("tabindex") >= 0)
 	return true;
 
 
