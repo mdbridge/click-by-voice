@@ -202,8 +202,10 @@ function add_overlay_hint(element, hint_number) {
     // needs to be before we insert the hint tag <<<>>>
     var displacement = compute_displacement(element);
 
-    // temporary kludge for Gmail: <<<>>>
-    if (element.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {
+    if (option("r")) {
+	$("body").after(hint_tag);
+    } else if (element.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {
+	// temporary kludge for Gmail: <<<>>>
 	var current = element;
 	while (current.is("table, tr, td, th, colgroup, tbody, thead, tfoot"))
 	    current = current.parent();
@@ -220,7 +222,6 @@ function add_overlay_hint(element, hint_number) {
 	    insert_element(element, hint_tag, true, true);
 	else 
 	    insert_element(element, hint_tag, span_before_okay(element), false);
-	//$("body").append(hint_tag);
     }
 
 
