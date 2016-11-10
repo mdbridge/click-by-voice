@@ -202,7 +202,7 @@ function add_overlay_hint(element, hint_number) {
     // needs to be before we insert the hint tag <<<>>>
     var displacement = compute_displacement(element);
 
-    if (option("r")) {
+    if (option("f")) {
 	$("body").after(hint_tag);
     } else if (element.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {
 	// temporary kludge for Gmail: <<<>>>

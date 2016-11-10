@@ -13,6 +13,9 @@ $(document).ready(function() {
 
 	// send hint number and operation to content_script.js for current tab:
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+	    // chrome.tabs.update(tabs[0].id, {selected: true});
+	    // chrome.tabs.update(tabs[0].id, {highlighted: true});
+	    // chrome.tabs.update(tabs[0].id, {active: true});
 	    chrome.tabs.sendMessage(tabs[0].id, 
 				    {hint_number: hint_number,
 				     operation:   operation});
