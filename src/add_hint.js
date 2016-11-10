@@ -350,6 +350,9 @@ function add_inline_hint_inside(element, hint_number) {
 
 	if (last_inside[0].nodeType != Node.TEXT_NODE)
 	    return false;
+	if (last_inside.text() == " ")  // &nsbp
+	    // Google docs uses &nsbp; to take up space for visual items
+	    return false;
 	if (css(current, "display") == "flex")
 	    return false;
 
