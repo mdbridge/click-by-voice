@@ -140,6 +140,24 @@ var last_hover = null;
 
 function silently_activate(element, operation) {
     switch (operation) {
+	// Focusing:
+    case "f":
+	// this also works for iframes
+	element[0].focus();
+	break;
+
+	// Clicking:
+    case "c":
+	// quora.com needs the mouseover event for clicking 'comments':
+	dispatch_mouse_events(element, ['mouseover', 'mousedown']);
+	element[0].focus();
+	dispatch_mouse_events(element, ['mouseup', 'click', 'mouseout']);
+	break;
+
+
+
+
+
 	// Hovering:
     case "h":
 	if (last_hover) {
@@ -151,25 +169,6 @@ function silently_activate(element, operation) {
 	    last_hover = element;
 	} else
 	    last_hover = null;
-	break;
-
-	// Focusing:
-    case "f":
-	// this also works for iframes
-	element[0].focus();
-	break;
-
-	// Clicking:
-    case "c":
-	// dispatch_mouse_events(element, ['mouseover', 'mousedown']);
-	// element[0].focus();
-	// dispatch_mouse_events(element, ['mouseup', 'click']);
-	// dispatch_mouse_events(element, ['mouseover', 'mousedown']);
-	// element[0].focus();
-	// dispatch_mouse_events(element, ['mouseup', 'click', 'mouseout']);
-	dispatch_mouse_events(element, ['mousedown']);
-	element[0].focus();
-	dispatch_mouse_events(element, ['mouseup', 'click']);
 	break;
 
 	// Following or copying explicit links:
