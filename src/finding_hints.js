@@ -42,8 +42,13 @@ function each_displaying_helper(element, pre_callback, post_callback) {
 // pre_callback is the preorder traversal, post_callback the
 // post-order traversal
 function each_displaying(pre_callback, post_callback) {
-    var root = $("body");
-    each_displaying_helper(root, pre_callback, post_callback);
+    // var root = $("body");
+    // each_displaying_helper(root, pre_callback, post_callback);
+
+    // some popover ads are after <body> element
+    $("html").children().filter(":not(head)").each(function (index) {
+	each_displaying_helper($(this), pre_callback, post_callback);
+    });
 }
 
 
