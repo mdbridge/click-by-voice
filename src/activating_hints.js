@@ -84,6 +84,42 @@ function top_right_point(element) {
     return {x: x, y: y};
 }
 
+// convert viewpoint point to screen coordinates relative to window
+// and place in clipboard
+function output_viewport_point(point) {
+    var zoom = window.devicePixelRatio;
+    console.log("zoom: " + zoom);
+
+    // console.log(window.screenX);
+    // console.log(window.screenY);
+    // x -= window.screenX - 8;
+    // y -= window.screenY - 8;
+
+    console.log(window.outerHeight);
+    console.log(window.innerHeight);
+    var delta = window.outerHeight - window.innerHeight*zoom;
+    // I believe this is the height of the browser chrome at the top
+    console.log("delta: " + delta);
+
+    var x = point.x*zoom + 0;
+    var y = point.y*zoom + delta;
+
+    if (window.outerWidth == window.screen.width) {
+	console.log("maximized");
+	// window actually starts at -8, -8:
+	x += 8;
+	y += 8;
+    } else {
+	// still have side border, but not top one
+	x += 8; // maybe should be 7?
+	y -= 8;
+    }
+
+    var answer = Math.floor(x) + "," + Math.floor(y);
+    console.log(answer);
+
+    act("copy_to_clipboard", {text: answer});
+}
 
 
 var last_hover = null;
@@ -141,42 +177,16 @@ function silently_activate(element, operation) {
 	break;
 
 
+    case "D":
+	console.log(element[0]);
+	console.log(element[0].getBoundingClientRect());
+	break;
+
     case "X":
-	var target = point_to_click(element);
-	console.log(target);
-
-	var zoom = window.devicePixelRatio;
-	console.log("zoom: " + zoom);
-
-	// console.log(window.screenX);
-	// console.log(window.screenY);
-	// x -= window.screenX - 8;
-	// y -= window.screenY - 8;
-
-	console.log(window.outerHeight);
-	console.log(window.innerHeight);
-	var delta = window.outerHeight - window.innerHeight*zoom;
-	// I believe this is the height of the browser chrome at the top
-	console.log("delta: " + delta);
-
-	var x = target.x*zoom + 0;
-	var y = target.y*zoom + delta;
-
-	if (window.outerWidth == window.screen.width) {
-	    console.log("maximized");
-	    // window actually starts at -8, -8:
-	    x += 8;
-	    y += 8;
-	} else {
-	    // still have side border, but not top one
-	    x += 8; // maybe should be 7?
-	    y -= 8;
-	}
-
-	var answer = Math.floor(x) + "," + Math.floor(y);
-	console.log(answer);
-
-	act("copy_to_clipboard", {text: answer});
+	output_viewport_point(point_to_click(element));
+	break;
+    case "XX":
+	output_viewport_point(top_right_point(element));
 	break;
 
 
@@ -209,52 +219,6 @@ function silently_activate(element, operation) {
 	break;
     case "FFF":
 	element[0].contentWindow.focus();
-	break;
-
-    case "D":
-	console.log(element[0]);
-	console.log(element[0].getBoundingClientRect());
-	break;
-
-    case "XX":
-	var rectangles = element[0].getClientRects();
-	var rectangle  = rectangles[0];
-	var x = rectangle.right;
-	var y = rectangle.top;
-	var target = {x: x, y: y};
-
-	var zoom = window.devicePixelRatio;
-	console.log("zoom: " + zoom);
-
-	// console.log(window.screenX);
-	// console.log(window.screenY);
-	// x -= window.screenX - 8;
-	// y -= window.screenY - 8;
-
-	console.log(window.outerHeight);
-	console.log(window.innerHeight);
-	var delta = window.outerHeight - window.innerHeight*zoom;
-	// I believe this is the height of the browser chrome at the top
-	console.log("delta: " + delta);
-
-	var x = target.x*zoom + 0;
-	var y = target.y*zoom + delta;
-
-	if (window.outerWidth == window.screen.width) {
-	    console.log("maximized");
-	    // window actually starts at -8, -8:
-	    x += 8;
-	    y += 8;
-	} else {
-	    // still have side border, but not top one
-	    x += 8; // maybe should be 7?
-	    y -= 8;
-	}
-
-	var answer = Math.floor(x) + "," + Math.floor(y);
-	console.log(answer);
-
-	act("copy_to_clipboard", {text: answer});
 	break;
 
     case "L":
