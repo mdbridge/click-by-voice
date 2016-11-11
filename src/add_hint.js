@@ -274,6 +274,8 @@ function visual_contents(element) {
 	if (this.nodeType === Node.ELEMENT_NODE) {
 	    if (css($(this),"display") == "none")
 		 return false;
+	    if (css($(this),"visibility") == "hidden")
+		 return false;
 //	    if ($(this).width()==0 && $(this).height()==0)
 	    if (css($(this),"position")=="absolute"
 		|| css($(this),"position")=="fixed")
