@@ -151,24 +151,8 @@ function silently_activate(element, operation) {
 	// quora.com needs the mouseover event for clicking 'comments':
 	dispatch_mouse_events(element, ['mouseover', 'mousedown']);
 	element[0].focus();
+	// we are not simulating leaving the mouse hovering over the element here <<<>>>
 	dispatch_mouse_events(element, ['mouseup', 'click', 'mouseout']);
-	break;
-
-
-
-
-
-	// Hovering:
-    case "h":
-	if (last_hover) {
-	    dispatch_mouse_events(last_hover, ['mouseout', 'mouseleave']);	    
-	}
-	// hover same element means unhover
-	if (last_hover==null || last_hover[0] !== element[0]) {
-	    dispatch_mouse_events(element, ['mouseover', 'mouseenter']);	    
-	    last_hover = element;
-	} else
-	    last_hover = null;
 	break;
 
 	// Following or copying explicit links:
@@ -190,16 +174,47 @@ function silently_activate(element, operation) {
 	break;
 
 
-    case "D":
-	console.log(element[0]);
-	console.log(element[0].getBoundingClientRect());
+
+	// Hovering:
+    case "h":
+	if (last_hover) {
+	    dispatch_mouse_events(last_hover, ['mouseout', 'mouseleave']);	    
+	}
+	// hover same element means unhover
+	if (last_hover==null || last_hover[0] !== element[0]) {
+	    dispatch_mouse_events(element, ['mouseover', 'mouseenter']);	    
+	    last_hover = element;
+	} else
+	    last_hover = null;
 	break;
 
+	// Debug information:
+    case "D":
+	console.log("");
+	console.log("Element information:");
+	console.log(element[0].getBoundingClientRect());
+	console.log(element[0]);
+	break;
+
+	// Moving the physical mouse:
     case "X":
 	output_viewport_point(point_to_click(element));
 	break;
     case "XX":
 	output_viewport_point(top_right_point(element));
+	break;
+
+
+	// experimental:
+    case "R":
+	dispatch_mouse_events(element, ['mouseover', 'contextmenu']);
+	break;
+
+    case ">":
+	dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseout']);
+	break;
+    case "<":
+	dispatch_mouse_events(element, ['mouseover', 'mouseup', 'click', 'mouseout']);
 	break;
 
 
@@ -222,31 +237,11 @@ function silently_activate(element, operation) {
 	element.siblings().attr("tabindex", "-1");
 	break;
 
-
-    case "F":
-	element[0].focus();
-	break;
     case "FF":
 	element[0].focusin();
 	element[0].focus();
 	break;
-    case "FFF":
-	element[0].contentWindow.focus();
-	break;
 
-    case "L":
-	console.log(element.offset());
-	break;
-    case "LL":
-	var delta = window.outerHeight - window.innerHeight;
-	console.log(delta);
-	act("copy_to_clipboard", {text: Math.floor(element.offset().top + delta) 
-				  + "," + Math.floor(element.offset().left)});
-
-	console.log(window.screenY);
-	console.log(window.screenX);
-	console.log(element.offset());
-	break;
     case "INSPECT":
 	$('body').click(function (event) {
 	    var zoom = window.devicePixelRatio;
@@ -258,29 +253,15 @@ function silently_activate(element, operation) {
 	     console.log("X ratio: " + ( event.clientX / event.screenX));
 
 	     console.log("measured Delta: " + (event.screenY - window.screenY - event.clientY*zoom));
-
-
 	});
 	break;
-
-	// experimental:
-    case "R":
-	dispatch_mouse_events(element, ['mouseover', 'contextmenu']);
-	break;
-
-    case ">":
-	dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseout']);
-	break;
-    case "<":
-	dispatch_mouse_events(element, ['mouseover', 'mouseup', 'click', 'mouseout']);
-	break;
-
 
 
     default:
 	console.log("unknown activate operation: " + operation);
     }
 }
+
 
 function activate(element, operation) {
     if (operation=="c" && element.is("div, span")) {
