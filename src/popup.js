@@ -5,7 +5,7 @@ $(document).ready(function() {
 	// optional operation field is :<suffix> at end
 	var hint_number = input_text;
 	var operation	= "";
-	var match = input_text.match(/^([^:]*):(.*)$/);
+	var match = input_text.match(/^((?:[^:\{]|\{[^\}]*\})*):(.*)$/);
 	if (match) {
 	    hint_number = match[1];
 	    operation	= match[2];

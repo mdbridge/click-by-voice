@@ -288,7 +288,12 @@ function activate(element, operation) {
 }
 
 function goto_hint(hint, operation) {
-    var element = $("[CBV_hint_number='" + hint + "']");
+    var element;
+    var match = hint.match(/^\$\{(.*)\}$/);
+    if (match) {
+	element = $(match[1]).first();
+    } else
+	element = $("[CBV_hint_number='" + hint + "']");
     if (element.length == 0) {
 	console.log("goto_hint: unable to find hint: " + hint);
 	return;
