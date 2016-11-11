@@ -70,13 +70,16 @@ function point_to_click(element) {
     var x = (rectangle.left + rectangle.right) /2;
     var y = (rectangle.top  + rectangle.bottom)/2;
 
-    // console.log(">> point_to_click:");
-    // console.log(rectangles);
-    // console.log(rectangle);
-    // console.log(element[0].getBoundingClientRect());
-    // console.log(element.offset());
-    // console.log(element.offset().top  - window.scrollY);
-    // console.log(element.offset().left - window.scrollX);
+    return {x: x, y: y};
+}
+
+// position relative to viewpoint of top right point of element
+function top_right_point(element) {
+    var rectangles = element[0].getClientRects();
+    var rectangle  = rectangles[0];
+
+    var x = rectangle.right;
+    var y = rectangle.top;
 
     return {x: x, y: y};
 }
@@ -138,6 +141,45 @@ function silently_activate(element, operation) {
 	break;
 
 
+    case "X":
+	var target = point_to_click(element);
+	console.log(target);
+
+	var zoom = window.devicePixelRatio;
+	console.log("zoom: " + zoom);
+
+	// console.log(window.screenX);
+	// console.log(window.screenY);
+	// x -= window.screenX - 8;
+	// y -= window.screenY - 8;
+
+	console.log(window.outerHeight);
+	console.log(window.innerHeight);
+	var delta = window.outerHeight - window.innerHeight*zoom;
+	// I believe this is the height of the browser chrome at the top
+	console.log("delta: " + delta);
+
+	var x = target.x*zoom + 0;
+	var y = target.y*zoom + delta;
+
+	if (window.outerWidth == window.screen.width) {
+	    console.log("maximized");
+	    // window actually starts at -8, -8:
+	    x += 8;
+	    y += 8;
+	} else {
+	    // still have side border, but not top one
+	    x += 8; // maybe should be 7?
+	    y -= 8;
+	}
+
+	var answer = Math.floor(x) + "," + Math.floor(y);
+	console.log(answer);
+
+	act("copy_to_clipboard", {text: answer});
+	break;
+
+
 	// old versions for comparison purposes; depreciated
     case "C":
 	element[0].click();
@@ -174,9 +216,12 @@ function silently_activate(element, operation) {
 	console.log(element[0].getBoundingClientRect());
 	break;
 
-    case "X":
-	var target = point_to_click(element);
-	console.log(target);
+    case "XX":
+	var rectangles = element[0].getClientRects();
+	var rectangle  = rectangles[0];
+	var x = rectangle.right;
+	var y = rectangle.top;
+	var target = {x: x, y: y};
 
 	var zoom = window.devicePixelRatio;
 	console.log("zoom: " + zoom);
