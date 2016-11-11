@@ -2,6 +2,78 @@
 /// Activating a hint by number
 ///
 
+//
+// Working with points
+//
+
+// return position relative to viewpoint to click
+function point_to_click(element) {
+    var rectangles = element[0].getClientRects();
+    var rectangle  = rectangles[0];
+
+    var x = (rectangle.left + rectangle.right) /2;
+    var y = (rectangle.top  + rectangle.bottom)/2;
+
+    return {x: x, y: y};
+}
+
+// return position relative to viewpoint of top right point of element
+function top_right_point(element) {
+    var rectangles = element[0].getClientRects();
+    var rectangle  = rectangles[0];
+
+    var x = rectangle.right;
+    var y = rectangle.top;
+
+    return {x: x, y: y};
+}
+
+
+// convert viewpoint point to screen coordinates relative to window
+// and place in clipboard
+function output_viewport_point(point) {
+    var zoom = window.devicePixelRatio;
+    console.log("zoom: " + zoom);
+
+    // console.log(window.screenX);
+    // console.log(window.screenY);
+    // x -= window.screenX - 8;
+    // y -= window.screenY - 8;
+
+    console.log(window.outerHeight);
+    console.log(window.innerHeight);
+    var delta = window.outerHeight - window.innerHeight*zoom;
+    // I believe this is the height of the browser chrome at the top
+    console.log("delta: " + delta);
+
+    var x = point.x*zoom + 0;
+    var y = point.y*zoom + delta;
+
+    if (window.outerWidth == window.screen.width) {
+	console.log("maximized");
+	// window actually starts at -8, -8:
+	x += 8;
+	y += 8;
+    } else {
+	// still have side border, but not top one
+	x += 8; // maybe should be 7?
+	y -= 8;
+    }
+
+    var answer = Math.floor(x) + "," + Math.floor(y);
+    console.log(answer);
+
+    act("copy_to_clipboard", {text: answer});
+}
+
+
+
+//
+// 
+//
+
+
+
 
 // apply heuristics to determine if an element should be clicked or
 // focused
@@ -62,64 +134,6 @@ function href(element) {
     return undefined;
 }
 
-// position relative to viewpoint to click
-function point_to_click(element) {
-    var rectangles = element[0].getClientRects();
-    var rectangle  = rectangles[0];
-
-    var x = (rectangle.left + rectangle.right) /2;
-    var y = (rectangle.top  + rectangle.bottom)/2;
-
-    return {x: x, y: y};
-}
-
-// position relative to viewpoint of top right point of element
-function top_right_point(element) {
-    var rectangles = element[0].getClientRects();
-    var rectangle  = rectangles[0];
-
-    var x = rectangle.right;
-    var y = rectangle.top;
-
-    return {x: x, y: y};
-}
-
-// convert viewpoint point to screen coordinates relative to window
-// and place in clipboard
-function output_viewport_point(point) {
-    var zoom = window.devicePixelRatio;
-    console.log("zoom: " + zoom);
-
-    // console.log(window.screenX);
-    // console.log(window.screenY);
-    // x -= window.screenX - 8;
-    // y -= window.screenY - 8;
-
-    console.log(window.outerHeight);
-    console.log(window.innerHeight);
-    var delta = window.outerHeight - window.innerHeight*zoom;
-    // I believe this is the height of the browser chrome at the top
-    console.log("delta: " + delta);
-
-    var x = point.x*zoom + 0;
-    var y = point.y*zoom + delta;
-
-    if (window.outerWidth == window.screen.width) {
-	console.log("maximized");
-	// window actually starts at -8, -8:
-	x += 8;
-	y += 8;
-    } else {
-	// still have side border, but not top one
-	x += 8; // maybe should be 7?
-	y -= 8;
-    }
-
-    var answer = Math.floor(x) + "," + Math.floor(y);
-    console.log(answer);
-
-    act("copy_to_clipboard", {text: answer});
-}
 
 
 var last_hover = null;
