@@ -217,6 +217,14 @@ function silently_activate(element, operation) {
 	dispatch_mouse_events(element, ['mouseover', 'mouseup', 'click', 'mouseout']);
 	break;
 
+    case "K":
+	element[0].remove();
+	break;
+    case "V":
+	element.css("visibility", "hidden");
+	break;
+
+
 
 	// old versions for comparison purposes; depreciated
     case "C":
