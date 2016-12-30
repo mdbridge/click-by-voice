@@ -15,28 +15,6 @@ function request(action, arguments, callback) {
 
 
 //
-// Testing for parameters to last show hints command
-//
-
-var hinting_parameters = ""; // extra argument to :+ if any
-var target_selector    = undefined;
-
-function set_hinting_parameters(value) {
-    target_selector = undefined;
-    value = value.replace(/\$\{([^\}]*)\}/, function (x,argument){
-	target_selector = argument;
-	return "";
-    });
-    hinting_parameters = value;
-}
-
-function option(option_name) {
-    return (hinting_parameters.indexOf(option_name) != -1);
-}
-
-
-
-//
 // Inspecting (safely) CSS properties
 //
 

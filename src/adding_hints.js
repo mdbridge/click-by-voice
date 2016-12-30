@@ -8,6 +8,36 @@ var Hints = null;
 (function() {
 
 
+    //
+    // Testing for parameters to last show hints command
+    //
+
+    var hinting_parameters = ""; // extra argument to :+ if any
+    var target_selector_   = undefined;
+
+    function set_hinting_parameters(value) {
+	target_selector = undefined;
+	value = value.replace(/\$\{([^\}]*)\}/, function (x,argument){
+	    target_selector = argument;
+	    return "";
+	});
+	hinting_parameters = value;
+    }
+
+    function option(option_name) {
+	return (hinting_parameters.indexOf(option_name) != -1);
+    }
+
+    function target_selector() {
+	return target_selector_;
+    }
+
+
+
+    //
+    // 
+    //
+
     var next_CBV_hint = 0;  // -1 means hints are off
 
 
@@ -64,6 +94,9 @@ var Hints = null;
 
 
     Hints = {
+	set_hinting_parameters: set_hinting_parameters,
+	option: option,
+	target_selector: target_selector,
 	add_hints: add_hints,
 	remove_hints: remove_hints,
 	refresh_hints, refresh_hints

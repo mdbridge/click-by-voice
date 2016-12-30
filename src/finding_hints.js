@@ -23,19 +23,19 @@ var FindHint = null;
 
     function hintable(element) {
 	// for timing how much hintable costs:
-	if (option("!"))
+	if (Hints.option("!"))
 	    return false;
 
 	// don't hint invisible elements (their children may be another matter)
-	if (css(element, "visibility") == "hidden" && !option ("+")) 
+	if (css(element, "visibility") == "hidden" && !Hints.option("+")) 
 	    return false;
 
 
 	//
 	// Experiments:
 	//
-	if (target_selector)
-	    return element.is(target_selector);
+	if (Hints.target_selector())
+	    return element.is(Hints.target_selector());
 
 
 	//
@@ -71,7 +71,7 @@ var FindHint = null;
 	// HTML elements that might be clickable due to event listeners or
 	// focusable via tabindex=-1
 	//
-	if (!option("A")) {
+	if (!Hints.option("A")) {
 	    var role = element.attr("role");
 	    switch (role) {
 	    case "button":
@@ -102,7 +102,7 @@ var FindHint = null;
 	}
 
 
-	if (!option("+"))
+	if (!Hints.option("+"))
 	    return false;
 
 	//
@@ -137,7 +137,7 @@ var FindHint = null;
 
 		// post-order traversal:
 	    }, function (element) {
-		if (target_selector && !option("C"))
+		if (Hints.target_selector() && !Hints.option("C"))
 		    return;
 		if (element.attr("CBV_hint_number"))
 		    return;
@@ -159,7 +159,7 @@ var FindHint = null;
 		    return;
 
 		var saved = hinting_parameters;
-		if (option("C"))
+		if (Hints.option("C"))
 		    hinting_parameters += "c";  // <<<>>>
 		callback(element);
 		hinting_parameters = saved;

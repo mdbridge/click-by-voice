@@ -69,7 +69,7 @@ var AddHint = null;
 
     function add_text(element, text) {
 	element.attr("CBV_add_text", "true");  // activate style rules
-	if (option("c"))
+	if (Hints.option("c"))
 	    element.attr("CBV_high_contrast", "true");
 	element.append(text);
 	return element;
@@ -163,21 +163,21 @@ var AddHint = null;
 
     function compute_displacement(element) {
 	var displacement = 0;
-	if (option('E0'))
+	if (Hints.option('E0'))
 	    displacement = 0;
-	if (option('E1'))
+	if (Hints.option('E1'))
 	    displacement = 1;
-	if (option('E2'))
+	if (Hints.option('E2'))
 	    displacement = 2;
-	if (option('E3'))
+	if (Hints.option('E3'))
 	    displacement = 3;
-	if (option('E4'))
+	if (Hints.option('E4'))
 	    displacement = 4;
-	if (option('E5'))
+	if (Hints.option('E5'))
 	    displacement = 5;
 
 	var extra_displacement_right = 0;
-	if (option("?") && element.is("input")) {
+	if (Hints.option("?") && element.is("input")) {
 	    var padding = CSS_number(element,"padding-right");
 	    // too large padding mean something's probably being
 	    // positioned there absolutely so don't put overlay there
@@ -196,7 +196,7 @@ var AddHint = null;
     function add_overlay_hint(element, hint_number) {
 	var hint_tag    = build_hint(element, hint_number, true);
 	var inner	    = hint_tag.children().first();
-	var show_at_end = !option("s");
+	var show_at_end = !Hints.option("s");
 
 	// hard coding reddit entire story link: <<<>>>
 	if (/\.reddit\.com/.test(window.location.href)) {
@@ -207,7 +207,7 @@ var AddHint = null;
 	// needs to be before we insert the hint tag <<<>>>
 	var displacement = compute_displacement(element);
 
-	if (option("f")) {
+	if (Hints.option("f")) {
 	    $("body").after(hint_tag);
 	} else if (element.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {
 	    // temporary kludge for Gmail: <<<>>>
@@ -364,8 +364,8 @@ var AddHint = null;
 		return false;
 
 	    var put_before = false;
-	    if (!option(".") && ellipsis_clipping_possible(current)) {
-		if (!option(">"))
+	    if (!Hints.option(".") && ellipsis_clipping_possible(current)) {
+		if (!Hints.option(">"))
 		    put_before = true;
 		else
 		    return false;
@@ -388,7 +388,7 @@ var AddHint = null;
 
 
     function add_hint(element, hint_number) {
-	if (option("#")) {
+	if (Hints.option("#")) {
 	    if (element.is("a") || element.is("button")) {
 		var hint_tag = build_hint(element, hint_number, false);
 		insert_element(element, hint_tag, false, true);
@@ -399,16 +399,16 @@ var AddHint = null;
 	}
 
 
-	if (option("o"))
+	if (Hints.option("o"))
 	    return add_overlay_hint(element, hint_number);
 
-	if (option("i")) {
+	if (Hints.option("i")) {
 	    if (!add_inline_hint_inside(element, hint_number))
 		add_inline_hint_outside(element, hint_number);
 	    return null;
 	}
 
-	if (option("h")) {
+	if (Hints.option("h")) {
 	    if (!add_inline_hint_inside(element, hint_number))
 		return add_overlay_hint(element, hint_number);
 	    return null;
