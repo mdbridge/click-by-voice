@@ -2,7 +2,7 @@
     "manifest_version": 2,
 
     "name": "Click by Voice",
-   "version": "0.16.16",
+   "version": "0.16.17",
     "description": "This Chrome browser extension provides support for activating links and other HTML elements using voice commands.",
 
     "short_name": "CbV", 
@@ -57,8 +57,10 @@
             "css": ["show_hints.css"],
             "js": ["jquery-3.0.0.min.js", "utilities.js", 
 		   "DOM_walking.js",
+		   "add_hint.js",
+		   "adding_hints.js", 
 		   "finding_hints.js", 
-		   "add_hint.js", "adding_hints.js", 
+
 		   "activating_hints.js", "content_script.js"]
         }
     ],

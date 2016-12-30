@@ -1,58 +1,71 @@
 ///
 /// Overall control code for labeling elements with hint tags
 ///
+/// Provides Hints
+
+var Hints = null;
+
+(function() {
 
 
-var next_CBV_hint = 0;  // -1 means hints are off
+    var next_CBV_hint = 0;  // -1 means hints are off
 
 
-function remove_hints() {
-    //console.log("removing hints");
+    function remove_hints() {
+	//console.log("removing hints");
 
-    $("[CBV_hint_element]").remove();
-    $("[CBV_hint_number]").removeAttr("CBV_hint_number");
+	$("[CBV_hint_element]").remove();
+	$("[CBV_hint_number]").removeAttr("CBV_hint_number");
 
-    next_CBV_hint = -1;
-}
-
-
-function add_hints() {
-    console.log("adding hints: " + hinting_parameters 
-		+ (target_selector ? "${"+target_selector+"}" : ""));
-
-    if (next_CBV_hint < 0)
-	next_CBV_hint = 0;
+	next_CBV_hint = -1;
+    }
 
 
-    var start = performance.now();
-    // FindHint.each_hintable(function(element) {});
-    // console.log("  just FindHint.each_hintable time:   " + (performance.now()-start) + " ms");
-    // start = performance.now();
-    
+    function add_hints() {
+	console.log("adding hints: " + hinting_parameters 
+		    + (target_selector ? "${"+target_selector+"}" : ""));
 
-    var delayed_work = [];
-    FindHint.each_hintable(function(element) {
-	if (element.is("[CBV_hint_number]"))
-	    return;
-	element.attr("CBV_hint_number", next_CBV_hint);
-
-	var delayed = add_hint(element, next_CBV_hint);
-	if (delayed)
-	    delayed_work.push(delayed);
-
-	next_CBV_hint += 1;
-    });
-
-    delayed_work.map(function (o) { o(); });
+	if (next_CBV_hint < 0)
+	    next_CBV_hint = 0;
 
 
-    // console.log("total hints assigned: " + next_CBV_hint 
-    // 		+ "    (" + delayed_work.length + " overlays added)");
-    // console.log("  " + (performance.now()-start) + " ms");
-}
+	var start = performance.now();
+	// FindHint.each_hintable(function(element) {});
+	// console.log("  just FindHint.each_hintable time:   " + (performance.now()-start) + " ms");
+	// start = performance.now();
+	
+
+	var delayed_work = [];
+	FindHint.each_hintable(function(element) {
+	    if (element.is("[CBV_hint_number]"))
+		return;
+	    element.attr("CBV_hint_number", next_CBV_hint);
+
+	    var delayed = AddHint.add_hint(element, next_CBV_hint);
+	    if (delayed)
+		delayed_work.push(delayed);
+
+	    next_CBV_hint += 1;
+	});
+
+	delayed_work.map(function (o) { o(); });
 
 
-function refresh_hints() {
-    if (next_CBV_hint >= 0)
-	add_hints();
-}
+	// console.log("total hints assigned: " + next_CBV_hint 
+	// 		+ "    (" + delayed_work.length + " overlays added)");
+	// console.log("  " + (performance.now()-start) + " ms");
+    }
+
+
+    function refresh_hints() {
+	if (next_CBV_hint >= 0)
+	    add_hints();
+    }
+
+
+    Hints = {
+	add_hints: add_hints,
+	remove_hints: remove_hints,
+	refresh_hints, refresh_hints
+    };
+})();

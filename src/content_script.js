@@ -5,12 +5,12 @@
 function perform_operation(operation, hint_number) {
     if (operation.startsWith("+")) {
 	act("set_initial_operation", {initial_operation: operation});
-	remove_hints();
+	Hints.remove_hints();
 	set_hinting_parameters(operation.substr(1));
-	add_hints();
+	Hints.add_hints();
     } else if (operation == "-") {
 	act("set_initial_operation", {initial_operation: operation});
-	remove_hints();
+	Hints.remove_hints();
     } else {
 	goto_hint(hint_number, operation);
     }
@@ -30,5 +30,5 @@ $(document).ready(function() {
 
     //setTimeout(function() { add_hints(); }, 5000);
     // This runs even when our tab is in the background:
-    setInterval(refresh_hints, 3000);
+    setInterval(Hints.refresh_hints, 3000);
 });
