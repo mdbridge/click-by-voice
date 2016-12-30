@@ -12,7 +12,7 @@ function perform_operation(operation, hint_number) {
 	act("set_initial_operation", {initial_operation: operation});
 	Hints.remove_hints();
     } else {
-	goto_hint(hint_number, operation);
+	Activate.goto_hint(hint_number, operation);
     }
 }
 
