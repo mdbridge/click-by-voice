@@ -7,18 +7,41 @@ var Hints = null;
 
 (function() {
 
-
-    //
-    // Testing for parameters to last show hints command
-    //
-
+    var next_CBV_hint	   = 0;  // -1 means hints are off
     var hinting_parameters = ""; // extra argument to :+ if any
-    var target_selector_   = undefined;
+    var target_selector_   = null;
+
+
+    //
+    // Main exported actions:
+    //
+
+    function add_hints(parameters) {
+	set_hinting_parameters(parameters);
+	place_hints();
+    }
+
+    function refresh_hints() {
+	if (next_CBV_hint >= 0)
+	    place_hints();
+    }
+
+    function remove_hints() {
+	$("[CBV_hint_element]").remove();
+	$("[CBV_hint_number]").removeAttr("CBV_hint_number");
+
+	next_CBV_hint = -1;
+    }
+
+
+    //
+    // Parameters for hinting:
+    //
 
     function set_hinting_parameters(value) {
-	target_selector = undefined;
+	target_selector_ = undefined;
 	value = value.replace(/\$\{([^\}]*)\}/, function (x,argument){
-	    target_selector = argument;
+	    target_selector_ = argument;
 	    return "";
 	});
 	hinting_parameters = value;
@@ -33,27 +56,13 @@ var Hints = null;
     }
 
 
-
     //
     // 
     //
 
-    var next_CBV_hint = 0;  // -1 means hints are off
-
-
-    function remove_hints() {
-	//console.log("removing hints");
-
-	$("[CBV_hint_element]").remove();
-	$("[CBV_hint_number]").removeAttr("CBV_hint_number");
-
-	next_CBV_hint = -1;
-    }
-
-
-    function add_hints() {
+    function place_hints() {
 	console.log("adding hints: " + hinting_parameters 
-		    + (target_selector ? "${"+target_selector+"}" : ""));
+		    + (target_selector_ ? "${"+target_selector_+"}" : ""));
 
 	if (next_CBV_hint < 0)
 	    next_CBV_hint = 0;
@@ -87,18 +96,13 @@ var Hints = null;
     }
 
 
-    function refresh_hints() {
-	if (next_CBV_hint >= 0)
-	    add_hints();
-    }
-
 
     Hints = {
-	set_hinting_parameters: set_hinting_parameters,
+	add_hints: add_hints,
+	refresh_hints, refresh_hints,
+	remove_hints: remove_hints,
+
 	option: option,
 	target_selector: target_selector,
-	add_hints: add_hints,
-	remove_hints: remove_hints,
-	refresh_hints, refresh_hints
     };
 })();

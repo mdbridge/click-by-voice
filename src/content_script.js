@@ -6,8 +6,7 @@ function perform_operation(operation, hint_number) {
     if (operation.startsWith("+")) {
 	act("set_initial_operation", {initial_operation: operation});
 	Hints.remove_hints();
-	Hints.set_hinting_parameters(operation.substr(1));
-	Hints.add_hints();
+	Hints.add_hints(operation.substr(1));
     } else if (operation == "-") {
 	act("set_initial_operation", {initial_operation: operation});
 	Hints.remove_hints();
