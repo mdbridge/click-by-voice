@@ -49,3 +49,14 @@ function css(element, property_name, default_value) {
 	return default_value;
     }
 }
+
+
+
+
+//
+// <<<>>>
+//
+
+function CBV_inserted_element(element) {
+    return element.attr("CBV_hint_element") == "true";
+}

@@ -25,13 +25,13 @@ function add_hints() {
 
 
     var start = performance.now();
-    // each_hintable(function(element) {});
-    // console.log("  just each_hintable time:   " + (performance.now()-start) + " ms");
+    // FindHint.each_hintable(function(element) {});
+    // console.log("  just FindHint.each_hintable time:   " + (performance.now()-start) + " ms");
     // start = performance.now();
     
 
     var delayed_work = [];
-    each_hintable(function(element) {
+    FindHint.each_hintable(function(element) {
 	if (element.is("[CBV_hint_number]"))
 	    return;
 	element.attr("CBV_hint_number", next_CBV_hint);
