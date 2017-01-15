@@ -158,11 +158,11 @@ var FindHint = null;
 		if (element.has("[CBV_hint_number]").length != 0)
 		    return;
 
-		var saved = hinting_parameters;
 		if (Hints.option("C"))
-		    hinting_parameters += "c";  // <<<>>>
-		callback(element);
-		hinting_parameters = saved;
+		    Hints.with_high_contrast(
+			function () { callback(element); });
+		else
+		    callback(element);
 	    });
     }
 

@@ -55,6 +55,13 @@ var Hints = null;
 	return target_selector_;
     }
 
+    function with_high_contrast(callback) {
+	var saved = hinting_parameters;
+	hinting_parameters += "c";  
+	callback();
+	hinting_parameters = saved;
+    }
+
 
     //
     // 
@@ -104,5 +111,6 @@ var Hints = null;
 
 	option: option,
 	target_selector: target_selector,
+	with_high_contrast: with_high_contrast,
     };
 })();
