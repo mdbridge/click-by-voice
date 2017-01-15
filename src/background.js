@@ -33,6 +33,12 @@ function copyTextToClipboard(text) {
 
 
 var initial_operation = "+";
+chrome.storage.sync.get({
+    startingCommand: ':' + initial_operation
+}, function(items) {
+    // kludge: strip off (hopefully) leading colon:
+    initial_operation = items.startingCommand.substring(1);
+});
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
