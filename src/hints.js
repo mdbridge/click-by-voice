@@ -22,6 +22,10 @@ var Hints = null;
     }
 
     function refresh_hints() {
+	if (document.hidden) {
+	    console.log("skipping refresh...");
+	    return;
+	}
 	if (next_CBV_hint >= 0)
 	    place_hints();
     }
