@@ -409,8 +409,13 @@ var AddHint = null;
 	}
 
 	if (Hints.option("h")) {
-	    if (!add_inline_hint_inside(element, hint_number))
+	    if (!add_inline_hint_inside(element, hint_number)) {
+		if (element.is("input[type=checkbox], input[type=radio]")) {
+		    add_inline_hint_outside(element, hint_number);
+		    return null;
+		}
 		return add_overlay_hint(element, hint_number);
+	    }
 	    return null;
 	}
 
