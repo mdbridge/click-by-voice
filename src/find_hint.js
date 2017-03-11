@@ -36,6 +36,8 @@ var FindHint = null;
 	//
 	if (Hints.target_selector())
 	    return element.is(Hints.target_selector());
+	if (Hints.anti_target_selector() && element.is(Hints.anti_target_selector()))
+	    return false;
 
 
 	//
@@ -157,6 +159,9 @@ var FindHint = null;
 
 		if (element.has("[CBV_hint_number]").length != 0)
 		    return;
+
+		if (Hints.anti_target_selector() && element.is(Hints.anti_target_selector()))
+		    return false;
 
 		if (Hints.option("C"))
 		    Hints.with_high_contrast(
