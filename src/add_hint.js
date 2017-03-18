@@ -175,6 +175,14 @@ var AddHint = null;
 	    displacement = 4;
 	if (Hints.option('E5'))
 	    displacement = 5;
+	if (Hints.option('E6'))
+	    displacement = 6;
+	if (Hints.option('E7'))
+	    displacement = 7;
+	if (Hints.option('E8'))
+	    displacement = 8;
+	if (Hints.option('E9'))
+	    displacement = 9;
 
 	var extra_displacement_right = 0;
 	if (Hints.option("?") && element.is("input")) {
@@ -185,7 +193,10 @@ var AddHint = null;
 		extra_displacement_right = -padding + 5;
 	}
 
-	if (element.is("a, code, b, i, strong, em, abbr") && element.children().length == 0) {
+	if (element.is('a, code, b, i, strong, em, abbr, input[type="checkbox"], input[type="radio"]') && element.children().length == 0) {
+	    return {up: displacement, right: displacement+extra_displacement_right};
+	}
+	if (Hints.option('f')) {
 	    return {up: displacement, right: displacement+extra_displacement_right};
 	}
 
@@ -410,10 +421,10 @@ var AddHint = null;
 
 	if (Hints.option("h")) {
 	    if (!add_inline_hint_inside(element, hint_number)) {
-		if (element.is("input[type=checkbox], input[type=radio]")) {
-		    add_inline_hint_outside(element, hint_number);
-		    return null;
-		}
+		// if (element.is("input[type=checkbox], input[type=radio]")) {
+		//     add_inline_hint_outside(element, hint_number);
+		//     return null;
+		// }
 		return add_overlay_hint(element, hint_number);
 	    }
 	    return null;
