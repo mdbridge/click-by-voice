@@ -72,6 +72,10 @@ var Hints = null;
 	    options_.set('$', argument);
 	    return "";
 	});
+	value = value.replace(/\|\{([^\}]*)\}/, function (x,argument){
+	    options_.set('|', argument);
+	    return "";
+	});
 	value = value.replace(/\^\{([^\}]*)\}/, function (x,argument){
 	    options_.set('^', argument);
 	    return "";

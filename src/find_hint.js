@@ -36,6 +36,8 @@ var FindHint = null;
 	//
 	if (Hints.option('$'))
 	    return element.is(Hints.option_value('$'));
+	if (Hints.option('|') && element.is(Hints.option_value('|')))
+	    return true;
 	if (Hints.option('^') && element.is(Hints.option_value('^')))
 	    return false;
 
