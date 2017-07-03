@@ -7,8 +7,8 @@ var Hints = null;
 
 (function() {
 
-    var next_CBV_hint	      = 0;  // -1 means hints are off
-    var hinting_parameters    = ""; // extra argument to :+ if any
+    var next_CBV_hint         = 0;  // -1 means hints are off
+    var options_              = new Map();
     var target_selector_      = null;
     var anti_target_selector_ = null;
 
@@ -44,21 +44,51 @@ var Hints = null;
     //
 
     function set_hinting_parameters(value) {
+	options_              = new Map();
 	target_selector_      = undefined;
 	anti_target_selector_ = undefined;
 	value = value.replace(/\$\{([^\}]*)\}/, function (x,argument){
 	    target_selector_ = argument;
+	    options_.set('$', argument);
 	    return "";
 	});
 	value = value.replace(/\^\{([^\}]*)\}/, function (x,argument){
 	    anti_target_selector_ = argument;
+	    options_.set('^', argument);
 	    return "";
 	});
-	hinting_parameters = value;
+	value = value.replace(/E([0-9])/, function (x,argument){
+	    options_.set('E', argument);
+	    return "";
+	});
+	for (var c of value) {
+	    options_.set(c, undefined);
+	}
     }
 
     function option(option_name) {
-	return (hinting_parameters.indexOf(option_name) != -1);
+	return options_.has(option_name);
+    }
+    function option_value(option_name, default_value) {
+	if (options_.has(option_name)) {
+	    return options_.get(option_name);
+	} else {
+	    return default_value;
+	}
+    }
+
+    function options_to_string() {
+	var result = "";
+	options_.forEach(function(value, key) {
+	    if (result != "") {
+		result += " ";
+	    }
+	    result += key;
+	    if (value != undefined) {
+		result += '{' + value + '}';
+	    }
+	});
+	return result;
     }
 
     function target_selector() {
@@ -70,10 +100,11 @@ var Hints = null;
     }
 
     function with_high_contrast(callback) {
-	var saved = hinting_parameters;
-	hinting_parameters += "c";  
+	var saved = options_;
+	options_= new Map(options_);
+	options_.set('c', undefined);
 	callback();
-	hinting_parameters = saved;
+	options_ = saved;
     }
 
 
@@ -82,10 +113,7 @@ var Hints = null;
     //
 
     function place_hints() {
-	console.log("adding hints: " + hinting_parameters 
-		    + (target_selector_ ? "${"+target_selector_+"}" : "")
-		    + (anti_target_selector_ ? "^{"+anti_target_selector_+"}" : "")
-		   );
+	console.log("adding hints: " + options_to_string());
 
 	if (next_CBV_hint < 0)
 	    next_CBV_hint = 0;
@@ -126,6 +154,7 @@ var Hints = null;
 	remove_hints  : remove_hints,
 
 	option		     : option,
+	option_value 	     : option_value,
 	target_selector	     : target_selector,
 	anti_target_selector : anti_target_selector,
 	with_high_contrast   : with_high_contrast,

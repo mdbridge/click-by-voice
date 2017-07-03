@@ -162,28 +162,7 @@ var AddHint = null;
     //
 
     function compute_displacement(element) {
-	var displacement = 0;
-	if (Hints.option('E0'))
-	    displacement = 0;
-	if (Hints.option('E1'))
-	    displacement = 1;
-	if (Hints.option('E2'))
-	    displacement = 2;
-	if (Hints.option('E3'))
-	    displacement = 3;
-	if (Hints.option('E4'))
-	    displacement = 4;
-	if (Hints.option('E5'))
-	    displacement = 5;
-	if (Hints.option('E6'))
-	    displacement = 6;
-	if (Hints.option('E7'))
-	    displacement = 7;
-	if (Hints.option('E8'))
-	    displacement = 8;
-	if (Hints.option('E9'))
-	    displacement = 9;
-
+	var displacement = parseInt(Hints.option_value('E', '0'));
 	var extra_displacement_right = 0;
 	if (Hints.option("?") && element.is("input")) {
 	    var padding = CSS_number(element,"padding-right");
