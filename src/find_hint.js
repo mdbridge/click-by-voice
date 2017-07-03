@@ -34,9 +34,9 @@ var FindHint = null;
 	//
 	// Experiments:
 	//
-	if (Hints.target_selector())
-	    return element.is(Hints.target_selector());
-	if (Hints.anti_target_selector() && element.is(Hints.anti_target_selector()))
+	if (Hints.option('$'))
+	    return element.is(Hints.option_value('$'));
+	if (Hints.option('^') && element.is(Hints.option_value('^')))
 	    return false;
 
 
@@ -139,7 +139,7 @@ var FindHint = null;
 
 		// post-order traversal:
 	    }, function (element) {
-		if (Hints.target_selector() && !Hints.option("C"))
+		if (Hints.option('$') && !Hints.option("C"))
 		    return;
 		if (element.attr("CBV_hint_number"))
 		    return;
@@ -160,7 +160,7 @@ var FindHint = null;
 		if (element.has("[CBV_hint_number]").length != 0)
 		    return;
 
-		if (Hints.anti_target_selector() && element.is(Hints.anti_target_selector()))
+		if (Hints.option('^') && element.is(Hints.option_value('^')))
 		    return false;
 
 		if (Hints.option("C"))

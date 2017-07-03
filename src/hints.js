@@ -7,10 +7,8 @@ var Hints = null;
 
 (function() {
 
-    var next_CBV_hint         = 0;  // -1 means hints are off
-    var options_              = new Map();
-    var target_selector_      = null;
-    var anti_target_selector_ = null;
+    var next_CBV_hint = 0;  // -1 means hints are off
+    var options_      = new Map();
 
 
     //
@@ -45,15 +43,11 @@ var Hints = null;
 
     function set_hinting_parameters(value) {
 	options_              = new Map();
-	target_selector_      = undefined;
-	anti_target_selector_ = undefined;
 	value = value.replace(/\$\{([^\}]*)\}/, function (x,argument){
-	    target_selector_ = argument;
 	    options_.set('$', argument);
 	    return "";
 	});
 	value = value.replace(/\^\{([^\}]*)\}/, function (x,argument){
-	    anti_target_selector_ = argument;
 	    options_.set('^', argument);
 	    return "";
 	});
@@ -89,14 +83,6 @@ var Hints = null;
 	    }
 	});
 	return result;
-    }
-
-    function target_selector() {
-	return target_selector_;
-    }
-
-    function anti_target_selector() {
-	return anti_target_selector_;
     }
 
     function with_high_contrast(callback) {
@@ -153,10 +139,8 @@ var Hints = null;
 	refresh_hints : refresh_hints,
 	remove_hints  : remove_hints,
 
-	option		     : option,
-	option_value 	     : option_value,
-	target_selector	     : target_selector,
-	anti_target_selector : anti_target_selector,
-	with_high_contrast   : with_high_contrast,
+	option		   : option,
+	option_value 	   : option_value,
+	with_high_contrast : with_high_contrast,
     };
 })();
