@@ -230,6 +230,15 @@ var Activate = null;
 	    element.css("visibility", "hidden");
 	    break;
 
+	case "s":
+	    var clone = element.clone();
+	    console.log(clone[0]);
+	    clone.find("[CBV_hint_element]").remove();
+	    console.log(clone[0]);
+	    var text = clone[0].textContent;
+	    console.log('"' + text + '"');
+	    act("copy_to_clipboard", {text: text});
+	    break;
 
 
 	    // old versions for comparison purposes; depreciated
