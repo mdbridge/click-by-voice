@@ -23,7 +23,7 @@ var FindHint = null;
 
     function hintable(element) {
 	// for timing how much hintable costs:
-	if (Hints.option("!"))
+	if (Hints.option("N"))
 	    return false;
 
 	// don't hint invisible elements (their children may be another matter)
@@ -168,7 +168,9 @@ var FindHint = null;
 			function () { callback(element); });
 		else
 		    callback(element);
-	    });
+	    },
+	    Hints.option_value('!') // exclusion
+	);
     }
 
 

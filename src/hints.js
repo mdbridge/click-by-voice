@@ -76,6 +76,10 @@ var Hints = null;
 	    options_.set('^', argument);
 	    return "";
 	});
+	value = value.replace(/!\{([^\}]*)\}/, function (x,argument){
+	    options_.set('!', argument);
+	    return "";
+	});
 	value = value.replace(/E([0-9]+)/, function (x,argument){
 	    options_.set('E', argument);
 	    return "";
