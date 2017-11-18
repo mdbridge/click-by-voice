@@ -164,10 +164,12 @@ var Activate = null;
 	    // Following or copying explicit links:
 	case "t":
 	    if (href(element))
+		// change focus to new tab
 		act("create_tab", {URL: href(element), active: true});
 	    break;
 	case "b":
 	    if (href(element))
+		// do not change focus to new tab
 		act("create_tab", {URL: href(element), active: false});
 	    break;
 	case "w":
@@ -178,8 +180,6 @@ var Activate = null;
 	    if (href(element))
 		act("copy_to_clipboard", {text: href(element)});
 	    break;
-
-
 
 	    // Hovering:
 	case "h":
@@ -193,6 +193,9 @@ var Activate = null;
 	    } else
 		last_hover = null;
 	    break;
+
+
+
 
 	    // Debug information:
 	case "D":

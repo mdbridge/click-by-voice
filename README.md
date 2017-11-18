@@ -29,19 +29,20 @@ focusing.)
 To specify that something different be done with the element, add a
 colon and one of the following operation codes:
 
+* 'f' focuses the element (doesn't work on all elements, does work on iframes)
 * 'c' clicks the element
-* 'f' focuses the element (doesn't work on all elements)
 * 't' opens links and iframes in a new tab, changing focus to that tab
 * 'b' opens links and iframes in a new tab, but does not change focus to
 that tab
 * 'w' opens links and iframes in a new window, changing focus to that window
 * 'k' copies link and iframe locations to the clipboard
+* 'h' simulates hovering the mouse over the element; repeat to unhover
 
 For example, `153:t` opens the link with hint number 153 in a new tab.
 An empty operation (e.g., `153:`) is equivalent to specifying no
-operation.  Note that t, b, w, and k work only on links and iframes that
-explicitly give a target address (currently `<a href=`...`>` and
-`<iframe src=`...`>`).
+operation.  Note that `t`, `b`, `w`, and `k` work only on links and
+iframes that explicitly give a target address (currently `<a
+href=`...`>` and `<iframe src=`...`>`).
 
 More command types will be added later.  You can dismiss the command
 dialog box by typing `{escape}`.
