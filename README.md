@@ -17,6 +17,8 @@ to the overall webpage.  This can be useful, for example, when you want
 to page the website up and down and an input element like a text field
 has focus.
 
+### Activating hints
+
 The pop-up command shortcut pops up a small dialog box in the upper
 right asking for the hint number that should be activated.  At its
 simplest, typing the number displayed next to an element then pressing
@@ -45,8 +47,15 @@ operation.  Note that `t`, `b`, `w`, and `k` work only on links and
 iframes that explicitly give a target address (currently `<a
 href=`...`>` and `<iframe src=`...`>`).
 
-More command types will be added later.  You can dismiss the command
-dialog box by typing `{escape}`.
+Instead of providing a hint number, you can provide a CSS selector that
+specifies which element you wish to activate.  For example,
+`${button.go}:c` clicks the first element that is a both button and of
+class `go`.  This feature is useful for programmatically activating
+elements.
+
+You can dismiss the command dialog box by typing `{escape}`.
+
+###  Displaying hints
 
 When a page is loaded (this includes reloading the current page), Click
 by Voice displays hints according to the last _show [no] hints_ command
