@@ -39,7 +39,7 @@ that tab
 * 'w' opens links and iframes in a new window, changing focus to that window
 * 'k' copies link and iframe locations to the clipboard
 * 'h' simulates hovering the mouse over the element; repeat to unhover
-* 's' copies text contents of the element to the clipboard
+* 's' copies the text contents of the element to the clipboard
 
 For example, `153:t` opens the link with hint number 153 in a new tab.
 An empty operation (e.g., `153:`) is equivalent to specifying no
@@ -94,12 +94,14 @@ functionality:
     <pick> 0..9 [0..9 [0..9 [0..9]]] = {ctrl+shift+space} Wait(500) $2$3$4$5 ":$1"{enter};
     
     <pick> := (        pick = ""    # guess whether to click or focus
+              | go     pick = f
               | click  pick = c
               | push   pick = b     # stay but open new tab w/ link or iframe
               | tab    pick = t
               | window pick = w
-              | copy   pick = k
-              | go     pick = f
+              | hover  pick = h
+              | link   pick = k     # copy link destination address
+              | copy   pick = s
               );
 
 
@@ -120,7 +122,6 @@ functionality:
 * Sometimes hints are unreadable due to clipping
   * Experimental: `:+h` uses overlays when inline hints might get
     clipped.
-puts hints before elements; this may reduce clipping
 * Sometime hints are too hard to read due to inadequate contrast between
   foreground and background colors
   * Experimental: `:+c` increases the contrast of hints
@@ -136,10 +137,6 @@ notice.
 
 
 ## Other
-
-(July 7, 2016) I've been working on this extension for several days now
-and while it's not where I'd like it to be, it is certainly functional
-enough for most uses.
 
 Please address questions and issues to <a
 href="http://www.knowbrainer.com/forums/forum/messageview.cfm?catid=25&threadid=22663">this
