@@ -260,6 +260,9 @@ var AddHint = null;
 	var indent = css(element, "text-indent");
 	if (indent && /^-999/.test(indent))
 	    return [];
+	var font_size = css(element, "font-size");
+	if (font_size && /^0[^0-9]/.test(font_size))
+            return [];
 
 	return element.contents().filter(function () {
 	    if (this.nodeType === Node.COMMENT_NODE)
