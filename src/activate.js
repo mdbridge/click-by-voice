@@ -194,6 +194,15 @@ var Activate = null;
 		last_hover = null;
 	    break;
 
+	    // Copying element text:
+	case "s":
+	    var clone = element.clone();
+	    clone.find("[CBV_hint_element]").remove();
+	    console.log(clone[0]);
+	    var text = clone[0].textContent;
+	    console.log('"' + text + '"');
+	    act("copy_to_clipboard", {text: text});
+	    break;
 
 
 
@@ -232,16 +241,11 @@ var Activate = null;
 	case "V":
 	    element.css("visibility", "hidden");
 	    break;
+       case "ZAP":
+           element.value = "fill";
+           break;
 
-	case "s":
-	    var clone = element.clone();
-	    console.log(clone[0]);
-	    clone.find("[CBV_hint_element]").remove();
-	    console.log(clone[0]);
-	    var text = clone[0].textContent;
-	    console.log('"' + text + '"');
-	    act("copy_to_clipboard", {text: text});
-	    break;
+
 
 
 	    // old versions for comparison purposes; depreciated

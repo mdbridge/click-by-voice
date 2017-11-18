@@ -37,6 +37,7 @@ that tab
 * 'w' opens links and iframes in a new window, changing focus to that window
 * 'k' copies link and iframe locations to the clipboard
 * 'h' simulates hovering the mouse over the element; repeat to unhover
+* 's' copies text contents of the element to the clipboard
 
 For example, `153:t` opens the link with hint number 153 in a new tab.
 An empty operation (e.g., `153:`) is equivalent to specifying no
