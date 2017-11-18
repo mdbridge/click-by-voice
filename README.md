@@ -131,5 +131,5 @@ and while it's not where I'd like it to be, it is certainly functional
 enough for most uses.
 
 Please address questions and issues to <a
-href="https://www.knowbrainer.com/forums/forum/messageview.cfm?catid=25&threadid=22663">this
+href="http://www.knowbrainer.com/forums/forum/messageview.cfm?catid=25&threadid=22663">this
 thread</a>.
