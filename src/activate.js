@@ -322,9 +322,16 @@ var Activate = null;
 
     function goto_hint(hint, operation) {
 	var element;
-	var match = hint.match(/^\$\{(.*)\}$/);
+	var match = hint.match(/^\$\{(.*)\}("(.*)")?$/);
 	if (match) {
-	    element = $(match[1]).first();
+	    element = $(match[1]);
+	    if (match[3]) {
+		target = match[3].toLowerCase();
+		element = element.filter(function(index, e) {
+		    return e.textContent.toLowerCase().includes(target);
+		});
+	    }
+	    element = element.first();
 	} else
 	    element = $("[CBV_hint_number='" + hint + "']");
 	if (element.length == 0) {
