@@ -3,7 +3,7 @@
 //
 
 chrome.commands.onCommand.addListener(function(command) {
-    console.log('Command:', command);
+    console.log('Keyboard shortcut name:', command);
 
     if (command == "blur") {
 	console.log('Bluring...');
@@ -11,7 +11,19 @@ chrome.commands.onCommand.addListener(function(command) {
 	chrome.tabs.executeScript({
 	    code: 'document.activeElement.blur()'
 	});
-    }
+
+    } else if (command == "execute_command_from_clipboard") {
+	var clipboard	 = getClipboard();
+	var command_text = clipboard;
+	var match	 = clipboard.match(/^(.*?)!!!(.*)$/);
+	if (match) {
+	    command_text = match[1];
+	    clipboard    = match[2];
+	    copyTextToClipboard(clipboard);
+	}
+	console.log('Cmd: "' + command_text + '"');
+	doUserCommand(command_text, false);
+    };
 });
 
 
@@ -19,18 +31,6 @@ chrome.commands.onCommand.addListener(function(command) {
 //
 // Performing actions on behalf of the content script
 //
-
-// Copy provided text to the clipboard.
-function copyTextToClipboard(text) {
-    //console.log("copying: " + text);
-    var copyFrom = $('<textarea/>');
-    copyFrom.text(text);
-    $('body').append(copyFrom);
-    copyFrom.select();
-    document.execCommand('copy');
-    copyFrom.remove();
-}
-
 
 var initial_operation = "+";
 chrome.storage.sync.get({
