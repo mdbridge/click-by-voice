@@ -15,7 +15,7 @@ chrome.commands.onCommand.addListener(function(command) {
     } else if (command == "execute_command_from_clipboard") {
 	var clipboard	 = getClipboard();
 	var command_text = clipboard;
-	var match	 = clipboard.match(/^(.*?)!!!(.*)$/);
+	var match	 = clipboard.match(/^(.*?)!!!([\s\S]*)/m);
 	if (match) {
 	    command_text = match[1];
 	    clipboard    = match[2];
