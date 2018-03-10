@@ -14,7 +14,7 @@ href="chrome://extensions/">extensions page</a>.
 
 The blur shortcut removes keyboard focus from an element, returning it
 to the overall webpage.  This can be useful, for example, when you want
-to page the website up and down and an input element like a text field
+to page the website up and down but an input element like a text field
 has focus.
 
 ### Activating hints
