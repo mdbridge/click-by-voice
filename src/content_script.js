@@ -12,6 +12,7 @@ function perform_operation(operation, hint_number) {
 	Hints.remove_hints();
     } else {
 	Activate.goto_hint(hint_number, operation);
+	setTimeout(Hints.refresh_hints, 750);
     }
 }
 
