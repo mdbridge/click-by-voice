@@ -41,12 +41,25 @@ var Hints = null;
     // Parameters for hinting:
     //
 
+    function reset_option(option_name) {
+	options_.delete(option_name);
+    }
+    function set_option(option_name, arguments) {
+	// The main mode switches are exclusive:
+	if (/^[ioh]$/.test(option_name)) {
+	    reset_option("i");
+	    reset_option("o");
+	    reset_option("h");
+	}
+	options_.set(option_name, arguments);
+    }
+
     function option(option_name) {
 	return options_.has(option_name);
     }
     function option_value(option_name, default_value) {
-	if (options_.has(option_name)) {
-	    return options_.get(option_name);
+	if (options_.has(option_name) && options_.get(option_name).length>0) {
+	    return options_.get(option_name)[0];
 	} else {
 	    return default_value;
 	}
@@ -54,49 +67,51 @@ var Hints = null;
 
     function options_to_string() {
 	var result = "";
+	var flags = "";
 	options_.forEach(function(value, key) {
-	    if (result != "") {
-		result += " ";
-	    }
-	    result += key;
-	    if (value != undefined) {
-		result += '{' + value + '}';
+	    if (value.length == 0) {
+		flags += key;
+	    } else {
+		if (result != "") {
+		    result += " ";
+		}
+		result += key + '{' + value[0] + '}';
 	    }
 	});
-	return result;
+	return flags + " " + result;
     }
 
     function set_hinting_parameters(value) {
 	options_ = new Map();
 	value = value.replace(/\$\{([^\}]*)\}/, function (x,argument){
-	    options_.set('$', argument);
+	    set_option('$', [argument]);
 	    return "";
 	});
 	value = value.replace(/\|\{([^\}]*)\}/, function (x,argument){
-	    options_.set('|', argument);
+	    set_option('|', [argument]);
 	    return "";
 	});
 	value = value.replace(/\^\{([^\}]*)\}/, function (x,argument){
-	    options_.set('^', argument);
+	    set_option('^', [argument]);
 	    return "";
 	});
 	value = value.replace(/!\{([^\}]*)\}/, function (x,argument){
-	    options_.set('!', argument);
+	    set_option('!', [argument]);
 	    return "";
 	});
 	value = value.replace(/E([0-9]+)/, function (x,argument){
-	    options_.set('E', argument);
+	    set_option('E', [argument]);
 	    return "";
 	});
 	for (var c of value) {
-	    options_.set(c, undefined);
+	    set_option(c, []);
 	}
     }
 
     function with_high_contrast(callback) {
 	var saved = options_;
 	options_= new Map(options_);
-	options_.set('c', undefined);
+	set_option('c', []);
 	callback();
 	options_ = saved;
     }
