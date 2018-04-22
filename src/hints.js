@@ -81,30 +81,23 @@ var Hints = null;
 	return flags + " " + result;
     }
 
+    function parse_option(text) {
+	if (m = text.match(/^([^{])\{([^{}]*)\}(.*)/)) {
+	    return [m[1], [m[2]], m[3]];
+	}
+	return [text[0], [], text.substring(1)];
+    }
     function set_hinting_parameters(value) {
 	options_ = new Map();
-	value = value.replace(/\$\{([^\}]*)\}/, function (x,argument){
-	    set_option('$', [argument]);
-	    return "";
-	});
-	value = value.replace(/\|\{([^\}]*)\}/, function (x,argument){
-	    set_option('|', [argument]);
-	    return "";
-	});
-	value = value.replace(/\^\{([^\}]*)\}/, function (x,argument){
-	    set_option('^', [argument]);
-	    return "";
-	});
-	value = value.replace(/!\{([^\}]*)\}/, function (x,argument){
-	    set_option('!', [argument]);
-	    return "";
-	});
-	value = value.replace(/E([0-9]+)/, function (x,argument){
-	    set_option('E', [argument]);
-	    return "";
-	});
-	for (var c of value) {
-	    set_option(c, []);
+	var text = value;
+	while (text != "") {
+	    // console.log(text);
+	    r = parse_option(text);
+	    name = r[0];
+	    arguments = r[1];
+	    text = r[2];
+	    // console.log([name, arguments, text]);
+	    set_option(name, arguments);
 	}
     }
 
