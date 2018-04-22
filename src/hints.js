@@ -72,16 +72,16 @@ var Hints = null;
 	    if (value.length == 0) {
 		flags += key;
 	    } else {
-		if (result != "") {
-		    result += " ";
-		}
-		result += key + '{' + value[0] + '}';
+		result += ' ' + key + value.map(function (v) { return '{' + v + '}';}).join('');
 	    }
 	});
 	return flags + " " + result;
     }
 
     function parse_option(text) {
+	if (m = text.match(/^([^{])\{([^{}]*)\}\{([^{}]*)\}(.*)/)) {
+	    return [m[1], [m[2],m[3]], m[4]];
+	}
 	if (m = text.match(/^([^{])\{([^{}]*)\}(.*)/)) {
 	    return [m[1], [m[2]], m[3]];
 	}
