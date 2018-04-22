@@ -51,6 +51,21 @@ var Hints = null;
 	    reset_option("o");
 	    reset_option("h");
 	}
+	// syntax for long option names & reseting options:
+	if (option_name == 'X') {
+	    if (arguments.length > 0) {
+		option_name = arguments[0];
+		arguments = arguments.slice(1);
+		if (/-$/.test(option_name)) {
+		    // X{<option_name>-}
+		    reset_option(option_name.substring(0, option_name.length-1));
+		} else {
+		    // X{<option_name>}<optional arguments>
+		    set_option(option_name, arguments);
+		}
+	    }
+	    return;
+	}
 	options_.set(option_name, arguments);
     }
 
@@ -69,13 +84,13 @@ var Hints = null;
 	var result = "";
 	var flags = "";
 	options_.forEach(function(value, key) {
-	    if (value.length == 0) {
+	    if (value.length==0 && key.length==1) {
 		flags += key;
 	    } else {
 		result += ' ' + key + value.map(function (v) { return '{' + v + '}';}).join('');
 	    }
 	});
-	return flags + " " + result;
+	return flags + result;
     }
 
     function parse_option(text) {
