@@ -1,5 +1,16 @@
 ## Activating hints
 
+Click by Voice hint activation commands consist of a
+*hint_specification* optionally followed by a colon then a *operation*.
+For example, `42` specifies using the default operation on the element
+with hint number 42 and `34:k` specifies activating hint 34 using
+operation `k`.  An empty operation (e.g., `153:`) is equivalent to
+specifying no operation.
+
+
+
+Past this point being edited...
+
 The pop-up command shortcut pops up a small dialog box in the upper
 right asking for the hint number that should be activated.  At its
 simplest, typing the number displayed next to an element then pressing

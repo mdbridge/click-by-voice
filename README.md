@@ -1,7 +1,7 @@
 # Click by Voice
 
-This Chrome browser extension is being developed to provide support
-for activating links and other HTML elements using voice commands.
+This Chrome browser extension provides support for activating links and
+other HTML elements using voice commands.
 
 
 ## Using Click by Voice manually
@@ -24,13 +24,14 @@ right asking for the hint number that should be activated.  At its
 simplest, typing the number displayed next to an element then pressing
 enter will dismiss the dialog box then click or focus that element as
 appropriate.  (Click by Voice uses heuristics to attempt to determine
-whether an element should be clicked or focused.)
+whether an element should be clicked or focused if you don't specify
+which to do.)
 
 To specify that something different be done with the element, add a
 colon then an operation code.  For example, `153:t` opens the link with
 hint number 153 in a new tab.  Many different operations on hinted
 elements are available, including copying the destination URL for a link
-and copy the text of an element; see the
+and copying the text of an element; see the
 [list of available operations](./doc/activating_hints.md) for more.
 
 Instead of providing a hint number, you can provide a CSS selector that
@@ -60,7 +61,7 @@ will affect refreshes of other tabs.  Hint numbers are not shown when
 printing.
 
 
-## Using with voice commands
+## Using Click by Voice with voice commands
 
 WARNING: this extension by itself provides no voice functionality;
 procurement of the needed voice commands is the user's
