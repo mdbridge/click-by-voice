@@ -19,8 +19,8 @@ As you can see, inline is often easier to read because it does not cover
 up the element but it can severely disrupt the layout of the webpage and
 its hints may be clipped by fixed-width layouts.
 
-Click by Voice has three basic modes based on which of these methods to
-hint elements should be used:
+Click by Voice has three basic modes based on when each of these methods
+should be used:
 
 * overlay: always overlay hints
 * inline: always put hints inline
@@ -69,25 +69,17 @@ The meanings of the various levels are:
 * `++`: as `+` but also attempts to hint every element that might be
 clickable or focusable, however unlikely that might be
 
-Switches can change which elements get handed in addition to how hints
+Switches can change which elements get hinted in addition to how hints
 are displayed.
 
 ### Switches
 
-## Past this point under construction
+The following switches are officially supported:
 
-When a page is loaded (this includes reloading the current page), Click
-by Voice displays hints according to the last _show [no] hints_ command
-it received.  The current such commands are:
+* `i`: use inline mode
+* `o`: use overlay mode
+* `h`: use hybrid mode
+* `c`: use high contrast hints
 
-* ':+' show standard hints and/or refresh them
-* ':++' similar but displays more hints, attempting to hint every
-  element that might be clickable or focusable, however unlikely that
-  might be.
-* ':-' stop displaying hints, removing any existing hints
-
-To use these commands, just enter them into the hint number popup
-instead of a hint number.  On Chrome startup, Click by Voice defaults to
-standard hints.  Note that show hints commands given when using one tab
-will affect refreshes of other tabs.  Hint numbers are not shown when
-printing.
+`i`, `o`, and `h` are mutually exclusive, with the last one present
+winning.
