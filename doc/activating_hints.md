@@ -1,4 +1,4 @@
-### Activating hints
+## Activating hints
 
 The pop-up command shortcut pops up a small dialog box in the upper
 right asking for the hint number that should be activated.  At its
