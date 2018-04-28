@@ -1,4 +1,15 @@
-##  Displaying hints in detail
+#  Displaying hints in detail
+
+## Basic modes of operation
+
+There are only two basic ways of hinting an individual element: overlay
+and inline.  Overlay overlays the hint number on top of the element
+without changing its size or the flow of the webpage.  Inline, by
+contrast, makes the element bigger by inserting the hint number inline
+in the element.   Think (roughly) `<button>Submit</button>` becoming
+`<button>Submit <span class='hint'>13</span></button>`.
+
+
 
 When a page is loaded (this includes reloading the current page), Click
 by Voice displays hints according to the last _show [no] hints_ command

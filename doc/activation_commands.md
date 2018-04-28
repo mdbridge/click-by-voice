@@ -1,4 +1,4 @@
-## Hint activation commands
+# Hint activation commands
 
 Click by Voice hint activation commands consist of a
 *hint_specification* optionally followed by a colon then an *operation*.
@@ -8,7 +8,7 @@ using operation `k`.  An empty operation (e.g., `153:`) is equivalent to
 specifying the default operation.
 
 
-### Available operations
+## Available operations
 
 The following operations are currently available:
 
@@ -32,7 +32,7 @@ explicitly give a target address (currently `<a href=`...`>` and
 `<iframe src=`...`>`).
 
 
-###  Hint specifications
+##  Hint specifications
 
 The basic hint specification is just the number of a hinted element
 (e.g., `23`).
