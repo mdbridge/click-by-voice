@@ -9,11 +9,27 @@ contrast, makes the element bigger by inserting the hint number inline
 in the element.   Think (roughly) `<button>Submit</button>` becoming
 `<button>Submit <span class='hint'>13</span></button>`.
 
-Examples of each of the style (no hints first):
+Examples of each of the styles:
 
-* ![no hints](./no-hints.png)
-* ![overlay hints](./overlay.png)
-* ![inline hints](./inline.png)
+* ![no hints](./no-hints.png)  (no hints)
+* ![overlay hints](./overlay.png)  (overlay)
+* ![inline hints](./inline.png)  (inline)
+
+As you can see, inline is often easier to read because it does not cover
+up the element but it can severely disrupt the layout of the webpage and
+its hints may be clipped by fixed width layouts.
+
+Click by Voice has three basic modes based on which of these methods to
+hint elements should be used:
+
+* overlay: always overlay hints
+* inline: always put hints inline
+* hybrid: when it appears safe, use inline otherwise use overlay
+
+
+
+
+
 
 
 When a page is loaded (this includes reloading the current page), Click
