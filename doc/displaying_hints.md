@@ -39,17 +39,17 @@ the other modes.
 ## Show hints commands
 
 A show hints command takes the form of a colon followed optionally by
-`once` followed by a hint level indicator (`+`, `++`, or `-`) followed
-by zero more switches.  Examples include `:-`, `:once++`, `:+i`, and
-`:+E{2}!{.jse13}`.
+`once` followed by a _hint level indicator_ (`+`, `++`, or `-`) followed
+by zero more _switches_.  Example commands include `:-`, `:once++`,
+`:+i`, and `:+E{2}!{.jse13}`.
 
 ### Persistence
 
 Normally, show hints commands are persistent.  That is, they affect all
-future page (re)loads until the browser is restarted.  Essentially,
-Click by Voice remembers the last persistent show hints command and uses
-it to figure out how to display any newly (re)loaded page.  This is true
-both across tabs and across Chrome browser windows.
+future page (re)loads until the browser is restarted.  Click by Voice
+remembers the last persistent show hints command and uses it to figure
+out how to display any newly (re)loaded page.  This is true both across
+tabs and across Chrome browser windows.
 
 Adding the `once` specifier immediately after the colon makes a show
 hints command nonpersistent.  Such commands do not affect the display of
@@ -62,7 +62,17 @@ to start up without using hints, use `:-` as the value of this option.
 
 ### Hint level indicators
 
+The meanings of the various levels are:
 
+* `-`: display no hints at all; ignores any switches
+* `+`: display hints for elements expected to be interesting to activate
+* `++`: as `+` but also attempts to hint every element that might be
+clickable or focusable, however unlikely that might be
+
+Switches can change which elements get handed in addition to how hints
+are displayed.
+
+### Switches
 
 ## Past this point under construction
 

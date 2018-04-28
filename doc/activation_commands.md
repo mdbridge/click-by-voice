@@ -23,7 +23,7 @@ that tab
 * 's' copies the text contents of the element to the clipboard
 
 The default operation either clicks or focuses the given element using
-heuristics to decide which makes more sense.  If CBV guesses wrong, you
+heuristics to decide which makes more sense.  If CbV guesses wrong, you
 can explicity specify `c` or `f` to force clicking or focusing
 respectively.
 
@@ -40,7 +40,7 @@ The basic hint specification is just the number of a hinted element
 A more advanced form of hint specification uses a CSS selector to pick
 out the element to activate.  For example, `${button.go}:c` clicks the
 first element that is a both a button and of class `go`.  Here, the CSS
-selector is enclosed in `${` and `}`.  CBV will attempt to activate the
+selector is enclosed in `${` and `}`.  CbV will attempt to activate the
 first element on the page satisfying the CSS selector.
 
 If CBV can't find an element matching the given hint specification, the
