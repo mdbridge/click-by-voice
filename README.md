@@ -13,8 +13,8 @@ saying their hint numbers.
 Click by Voice provides two keyboard shortcuts, which are bound by
 default to `{ctrl+shift+space}` (pop up command dialog box) and
 `{ctrl+shift+,}` (blur).  You can rebind these as desired using the
-keyboard shortcuts link at the bottom of the
-[extensions page](chrome://extensions).
+keyboard shortcuts link at the bottom of the Chrome extensions page,
+chrome://extensions.
 
 The blur shortcut removes keyboard focus from an element, returning it
 to the overall webpage.  This can be useful, for example, when you want
@@ -44,7 +44,8 @@ specifies which element you wish to activate.  For example,
 class `go`.  This feature is useful for programmatically activating
 elements.
 
-You can dismiss the command dialog box by typing `{escape}`.
+You can dismiss the command dialog box without activating anything by
+typing `{escape}`.
 
 ###  Displaying hints
 

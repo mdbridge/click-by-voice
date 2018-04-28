@@ -1,27 +1,16 @@
 ## Activating hints
 
 Click by Voice hint activation commands consist of a
-*hint_specification* optionally followed by a colon then a *operation*.
-For example, `42` specifies using the default operation on the element
-with hint number 42 and `34:k` specifies activating hint 34 using
-operation `k`.  An empty operation (e.g., `153:`) is equivalent to
-specifying no operation.
+*hint_specification* optionally followed by a colon then an *operation*.
+For example, `42` specifies activating the element with hint number 42
+using the default operation and `34:k` specifies activating hint 34
+using operation `k`.  An empty operation (e.g., `153:`) is equivalent to
+specifying the default operation.
 
 
+### Available operations
 
-Past this point being edited...
-
-The pop-up command shortcut pops up a small dialog box in the upper
-right asking for the hint number that should be activated.  At its
-simplest, typing the number displayed next to an element then pressing
-enter will dismiss the dialog box then click or focus that element as
-appropriate.  (Click by Voice uses heuristics to attempt to determine
-whether an element should be clicked or focused; if it guesses wrong,
-you can use one of the more specific commands below to force clicking or
-focusing.)
-
-To specify that something different be done with the element, add a
-colon and one of the following operation codes:
+The following operations are currently available:
 
 * 'f' focuses the element (doesn't work on all elements, does work on iframes)
 * 'c' clicks the element
@@ -33,16 +22,23 @@ that tab
 * 'h' simulates hovering the mouse over the element; repeat to unhover
 * 's' copies the text contents of the element to the clipboard
 
-For example, `153:t` opens the link with hint number 153 in a new tab.
-An empty operation (e.g., `153:`) is equivalent to specifying no
-operation.  Note that `t`, `b`, `w`, and `k` work only on links and
-iframes that explicitly give a target address (currently `<a
-href=`...`>` and `<iframe src=`...`>`).
+The default operation either clicks or focuses the given element using
+heuristics to decide which makes more sense.  If CBV guesses wrong, you
+can explicity specify `c` or `f` to force clicking or focusing
+respectively.
 
-Instead of providing a hint number, you can provide a CSS selector that
-specifies which element you wish to activate.  For example,
-`${button.go}:c` clicks the first element that is a both button and of
-class `go`.  This feature is useful for programmatically activating
-elements.
+Note that `t`, `b`, `w`, and `k` work only on links and iframes that
+explicitly give a target address (currently `<a href=`...`>` and
+`<iframe src=`...`>`).
 
-You can dismiss the command dialog box by typing `{escape}`.
+
+###  Hint specifications
+
+The basic hint specification is just the number of a hinted element
+(e.g., `23`).
+
+A more advanced form of hint specification uses a CSS selector to pick
+out the element to activate.  For example, `${button.go}:c` clicks the
+first element that is a both a button and of class `go`.  Here, the CSS
+selector is enclosed in `${` and `}`.  CBV will attempt to activate the
+first element on the page satisfying the CSS selector.
