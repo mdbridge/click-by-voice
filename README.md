@@ -152,13 +152,13 @@ functionality:
 ### Other issues
 
 * Click by Voice, like any Chrome extension, is unable to run on
-  chrome:// URLs like settings and extensions pages or in built-in
-  dialog boxes like the "add bookmarks" dialog box justify line
-  * ditto https://chrome.google.com URLS (e.g., developer dashboard)
+  `chrome://` URLs like the settings and extensions pages or in built-in
+  dialog boxes like the "add bookmarks" dialog box
+  * ditto `https://chrome.google.com` URLS (e.g., the developer dashboard)
 
 
 ## Other
 
 Please address questions and issues to <a
 href="http://www.knowbrainer.com/forums/forum/messageview.cfm?catid=25&threadid=22663">this
-thread</a>.
+Knowbrainer thread</a>.
