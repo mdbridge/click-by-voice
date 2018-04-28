@@ -1,7 +1,11 @@
 # Click by Voice
 
 This Chrome browser extension provides support for activating links and
-other HTML elements using voice commands.
+other HTML elements using voice commands.  It displays small numbers
+next to each activatable element called *hints* and provides mechanisms
+to activate these elements using the hint numbers.  This allows creating
+voice commands (via other software) that lets users activate links by
+saying their hint numbers.
 
 
 ## Using Click by Voice manually
@@ -9,8 +13,8 @@ other HTML elements using voice commands.
 Click by Voice provides two keyboard shortcuts, which are bound by
 default to `{ctrl+shift+space}` (pop up command dialog box) and
 `{ctrl+shift+,}` (blur).  You can rebind these as desired using the
-keyboard shortcuts link at the bottom of the <a
-href="chrome://extensions/">extensions page</a>.
+keyboard shortcuts link at the bottom of the
+[extensions page](chrome://extensions).
 
 The blur shortcut removes keyboard focus from an element, returning it
 to the overall webpage.  This can be useful, for example, when you want
