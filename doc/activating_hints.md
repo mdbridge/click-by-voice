@@ -1,4 +1,4 @@
-## Activating hints
+## Hint activation commands
 
 Click by Voice hint activation commands consist of a
 *hint_specification* optionally followed by a colon then an *operation*.
@@ -42,3 +42,6 @@ out the element to activate.  For example, `${button.go}:c` clicks the
 first element that is a both a button and of class `go`.  Here, the CSS
 selector is enclosed in `${` and `}`.  CBV will attempt to activate the
 first element on the page satisfying the CSS selector.
+
+If CBV can't find an element matching the given hint specification, the
+activation command does nothing.
