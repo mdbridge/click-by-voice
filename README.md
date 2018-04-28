@@ -85,17 +85,18 @@ One recommended means of doing this is to use Vocola
 
 Writing voice commands to use Click by Voice should be straightforward.
 As an example, here are some Vocola 2 commands that provide access to
-some of the Click by Voice functionality:
+much of the Click by Voice functionality:
 
     CbV(command) := Clipboard.Set($command!!! Clipboard.Get("")) {ctrl+shift+.};
 
     blur me = "{ctrl+shift+,}";
-	
-    show      numbers = CbV(:+);
-    show more numbers = CbV(:++);
-    hide      numbers = CbV(:-);
+
+	<once> := (once);
+    show      numbers [<once>] = CbV(:$1+);
+    show more numbers [<once>] = CbV(:$1++);
+    hide      numbers [<once>] = CbV(:$1-);
     
-    <pick> 0..9 [0..9 [0..9 [0..9]]] = CbV($2$3$4$5 ":$1");
+    <pick> 0..9 [0..9 [0..9 [0..9]]] = CbV($2$3$4$5:$1);
     
     <pick> := (        pick = ""    # guess whether to click or focus
               | go     pick = f
