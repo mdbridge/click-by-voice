@@ -1,0 +1,17 @@
+##  Displaying hints in detail
+
+When a page is loaded (this includes reloading the current page), Click
+by Voice displays hints according to the last _show [no] hints_ command
+it received.  The current such commands are:
+
+* ':+' show standard hints and/or refresh them
+* ':++' similar but displays more hints, attempting to hint every
+  element that might be clickable or focusable, however unlikely that
+  might be.
+* ':-' stop displaying hints, removing any existing hints
+
+To use these commands, just enter them into the hint number popup
+instead of a hint number.  On Chrome startup, Click by Voice defaults to
+standard hints.  Note that show hints commands given when using one tab
+will affect refreshes of other tabs.  Hint numbers are not shown when
+printing.

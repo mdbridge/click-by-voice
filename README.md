@@ -62,18 +62,15 @@ To use these commands, just enter them into the hint number popup
 instead of a hint number.
 
 Click by Voice normally remembers the last such command you have given
-and automatically uses it when a new page is loaded or the current tab
-is reloaded.  This is true across tabs -- the show hints command given
-in one tab will affect the refresh of another tab afterwards.  If you
-want to only temporarily change how hints are displayed for a tab, add
-`once` after the colon; for example, `:once-` turns off hints for the
-current tab until it is refreshed and does not affect future loads of
-other tabs.
+(in any tab) and automatically uses it when a new page is loaded or the
+current tab is reloaded.  If you want to only temporarily change how
+hints are displayed for a tab, add `once` after the colon; for example,
+`:once-` turns off hints for the current tab until it is refreshed and
+does not affect future loads of other tabs.
 
 The hinting system is highly flexible, with these commands taking many
 optional switches.  For details, including how to change startup
-defaults, see the sub page on
-[displaying hints](./doc/displaying_hints.md).
+defaults, see [displaying hints in detail](./doc/displaying_hints.md).
 
 Hint numbers are not shown when printing but will show up when you copy
 from a hinted webpage.
