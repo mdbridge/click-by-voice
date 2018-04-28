@@ -40,7 +40,7 @@ and copying the text of an element; see the
 
 Instead of providing a hint number, you can provide a CSS selector that
 specifies which element you wish to activate.  For example,
-`${button.go}:c` clicks the first element that is a both button and of
+`${button.go}:c` clicks the first element that is both a button and of
 class `go`.  This feature is useful for programmatically activating
 elements.
 
@@ -50,20 +50,24 @@ typing `{escape}`.
 ###  Displaying hints
 
 When a page is loaded (this includes reloading the current page), Click
-by Voice displays hints according to the last _show [no] hints_ command
-it received.  The current such commands are:
+by Voice displays hints according to the last non-transient _show [no]
+hints_ command it received.  The simplest such commands are:
 
-* ':+' show standard hints and/or refresh them
+* `:+` shows standard hints
 * ':++' similar but displays more hints, attempting to hint every
   element that might be clickable or focusable, however unlikely that
   might be.
-* ':-' stop displaying hints, removing any existing hints
+* ':-' show no hints
 
 To use these commands, just enter them into the hint number popup
-instead of a hint number.  On Chrome startup, Click by Voice defaults to
-standard hints.  Note that show hints commands given when using one tab
-will affect refreshes of other tabs.  Hint numbers are not shown when
-printing.
+instead of a hint number or activation command.  In addition to
+affecting future loading of pages, these commands immediately refresh
+the current page's hints.  Thus, `:-` will turn off hints for the
+current page.
+
+Chrome startup, Click by Voice defaults to standard hints.  Note that
+show hints commands given when using one tab will affect refreshes of
+other tabs.  Hint numbers are not shown when printing.
 
 
 ## Using Click by Voice with voice commands
