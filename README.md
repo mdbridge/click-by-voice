@@ -148,7 +148,7 @@ functionality:
   * Adding the high contrast hints switch (e.g, `:+c`) should make the
     hints stand out more and be easier to read at the cost of making
     them more distracting
-* Later changes to an element can make its hint disappear
+* Changes to an element after the initial page load can make its hint disappear
   * usually refreshing hints will make the hint reappear
 
 ### Other issues

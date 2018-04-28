@@ -45,3 +45,11 @@ first element on the page satisfying the CSS selector.
 
 If CBV can't find an element matching the given hint specification, the
 activation command does nothing.
+
+
+## Experimental operations and hint specifications
+
+*To be written...*
+
+Experimental means just that.  I reserve the right to change or remove
+experimental features without notice.
