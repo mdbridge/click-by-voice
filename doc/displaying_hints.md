@@ -83,3 +83,9 @@ The following switches are officially supported:
 
 `i`, `o`, and `h` are mutually exclusive, with the last one present
 winning.
+
+
+## Experimental switches
+
+Experimental switches are just that, experimental.  I reserve the right
+to change or remove them without notice.

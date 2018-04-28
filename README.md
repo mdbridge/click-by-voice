@@ -112,10 +112,12 @@ functionality:
 ### Selecting elements to hint
 
 * Elements inside of iframes are missed
-  * iframes themselves are now hinted and can be focused or opened in a new tab or window
-* to cover elements added dynamically over time, Click by Voice
-  automatically refreshes hints every 3 seconds
-  * this can require waiting several seconds after a page changes
+  * iframes themselves are now hinted and can be focused or opened in a
+    new tab or window
+* Elements added after a page is first loaded can take a while to get
+  hinted
+  * to keep performance reasonable, Click by Voice only automatically
+    refreshes hints every three seconds
   * CbV will automatically refresh a page's hints shortly after you
     activate a hint to handle cases where activating a hint reveals
     new elements (e.g., a drop-down menu)
@@ -136,27 +138,23 @@ functionality:
 
 ### Hint display
 
-* The placement of hints is suboptimal and disrupts the flow of some webpages
-  * Experimental: `:+o` uses overlays for hints; this can make text hard
-    to read, but disturbs the flow less.
-* Sometimes hints are unreadable due to clipping
-  * Experimental: `:+h` uses overlays when inline hints might get
-    clipped.
+* The default hinting mode, inline, disrupts the flow of some webpages
+  and its hints can be clipped
+  * switching to the new hinting mode, hybrid (`:+h`), usually solves this
+  * if that fails, the overlay mode (`:+o`) should not disturb the flow
+    at all at the cost of making text hard to read
 * Sometime hints are too hard to read due to inadequate contrast between
   foreground and background colors
-  * Experimental: `:+c` increases the contrast of hints
+  * Adding the high contrast hints switch (e.g, `:+c`) should make the
+    hints stand out more and be easier to read at the cost of making
+    them more distracting
 
-### Other
+### Other issues
 
-* Executing a command (especially the popping up part) is slower than I'd like
-
-* Does not work on chrome:// URLs like settings and extensions pages;
-  ditto https://chrome.google.com URLS (e.g., developer dashboard)
-* Does not work in some pop-ups, for example, the add bookmarks pop up
-
-Experimental modifiers to show hint commands are just that,
-experimental.  I reserve the right to change or remove them without
-notice.
+* Click by Voice, like any Chrome extension, is unable to run on
+  chrome:// URLs like settings and extensions pages or in built-in
+  dialog boxes like the "add bookmarks" dialog box justify line
+  * ditto https://chrome.google.com URLS (e.g., developer dashboard)
 
 
 ## Other
