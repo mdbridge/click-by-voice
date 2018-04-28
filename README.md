@@ -92,9 +92,10 @@ much of the Click by Voice functionality:
     blur me = "{ctrl+shift+,}";
 
 	<once> := (once);
-    show      numbers [<once>] = CbV(:$1+);
-    show more numbers [<once>] = CbV(:$1++);
-    hide      numbers [<once>] = CbV(:$1-);
+	<mode> := (inline=i | overlay=o | hybrid=h | contrasting=c);
+    show      [<mode>] hints [<once>] = CbV(:$2+$1);
+    show more [<mode>] hints [<once>] = CbV(:$2++$1);
+    hide               hints [<once>] = CbV(:$1-);
     
     <pick> 0..9 [0..9 [0..9 [0..9]]] = CbV($2$3$4$5:$1);
     
@@ -111,7 +112,9 @@ much of the Click by Voice functionality:
 
 These commands take advantage of another Click by Voice keyboard
 shortcut, `{ctrl+shift+.}` by default, which makes Click by Voice accept
-a command from the clipboard rather than via the pop-up dialog box.
+a command from the clipboard rather than via the pop-up dialog box.  For
+more on how this shortcut works, see
+[on making voice commands](./doc/making_voice_commands.md).
 
 
 ## Known issues (4/2018)
