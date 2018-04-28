@@ -36,7 +36,7 @@ colon then an operation code.  For example, `153:t` opens the link with
 hint number 153 in a new tab.  Many different operations on hinted
 elements are available, including copying the destination URL for a link
 and copying the text of an element; see the
-[list of available operations](./doc/activating_hints.md) for more.
+[list of available operations](./doc/activation_commands.md) for more.
 
 Instead of providing a hint number, you can provide a CSS selector that
 specifies which element you wish to activate.  For example,
