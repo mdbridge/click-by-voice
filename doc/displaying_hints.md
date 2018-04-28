@@ -9,11 +9,11 @@ contrast, makes the element bigger by inserting the hint number inline
 in the element.   Think (roughly) `<button>Submit</button>` becoming
 `<button>Submit <span class='hint'>13</span></button>`.
 
-Example:
+Examples of each of the style (no hints first):
 
-* with no hints: ![no hints](./no-hints.png)
-* overlay hints: ![overlay hints](./overlay.png)
-* inline hints: ![inline hints](./inline.png)
+* ![no hints](./no-hints.png)
+* ![overlay hints](./overlay.png)
+* ![inline hints](./inline.png)
 
 
 When a page is loaded (this includes reloading the current page), Click
