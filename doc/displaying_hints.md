@@ -32,20 +32,39 @@ clipped.
 
 The current default mode is inline, but this will be changing with the
 next major release to hybrid.  If the default mode does not display
-hints well for the current page, switching to one of the other modes may
-help.
+hints well for the current page, you may want to try switching to one of
+the other modes.
 
 
 ## Show hints commands
 
 A show hints command takes the form of a colon followed optionally by
-`once` followed by a hint level indicator (+, ++, or -) followed by zero
-more switches.  Examples include `:-`, `:once++`, `:+i`, and
+`once` followed by a hint level indicator (`+`, `++`, or `-`) followed
+by zero more switches.  Examples include `:-`, `:once++`, `:+i`, and
 `:+E{2}!{.jse13}`.
 
+### Persistence
+
+Normally, show hints commands are persistent.  That is, they affect all
+future page (re)loads until the browser is restarted.  Essentially,
+Click by Voice remembers the last persistent show hints command and uses
+it to figure out how to display any newly (re)loaded page.  This is true
+both across tabs and across Chrome browser windows.
+
+Adding the `once` specifier immediately after the colon makes a show
+hints command nonpersistent.  Such commands do not affect the display of
+future page (re)loads, only the display of the current page.
+
+At startup, Click by Voice assumes the last persistent show hints
+command was `:+` unless the CbV option "Startup show numbers command"
+has been set, which case it uses that command instead.  If you want CbV
+to start up without using hints, use `:-` as the value of this option.
+
+### Hint level indicators
 
 
 
+## Past this point under construction
 
 When a page is loaded (this includes reloading the current page), Click
 by Voice displays hints according to the last _show [no] hints_ command
