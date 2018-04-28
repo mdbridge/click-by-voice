@@ -2,11 +2,11 @@
 
 ## Basic modes of operation
 
-There are only two basic ways of hinting an individual element: overlay
-and inline.  Overlay overlays the hint number on top of the element
-without changing its size or the flow of the webpage.  Inline, by
-contrast, makes the element bigger by inserting the hint number inline
-in the element.   Think (roughly) `<button>Submit</button>` becoming
+There are two basic ways of hinting an individual element: overlay and
+inline.  Overlay overlays the hint number on top of the element without
+changing its size or the flow of the webpage.  Inline, by contrast,
+makes the element bigger by inserting the hint number inline in the
+element.  Think (roughly) `<button>Submit</button>` becoming
 `<button>Submit <span class='hint'>13</span></button>`.
 
 Examples of each of the styles:
@@ -26,14 +26,22 @@ hint elements should be used:
 * inline: always put hints inline
 * hybrid: when it appears safe, use inline otherwise use overlay
 
-The hybrid mode uses heuristics to decide when using inline is unlikely
-to disturb the webpage too much or have the hint get clipped.
+Hybrid mode uses heuristics to decide when using inline for an element
+is unlikely to disturb the webpage too much or have the hint get
+clipped.
 
 The current default mode is inline, but this will be changing with the
-next major release to hybrid.
+next major release to hybrid.  If the default mode does not display
+hints well for the current page, switching to one of the other modes may
+help.
 
 
 ## Show hints commands
+
+A show hints command takes the form of a colon followed optionally by
+`once` followed by a hint level indicator (+, ++, or -) followed by zero
+more switches.  Examples include `:-`, `:once++`, `:+i`, and
+`:+E{2}!{.jse13}`.
 
 
 
