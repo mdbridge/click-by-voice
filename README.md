@@ -141,3 +141,6 @@ notice.
 Please address questions and issues to <a
 href="http://www.knowbrainer.com/forums/forum/messageview.cfm?catid=25&threadid=22663">this
 thread</a>.
+
+
+Testing... [Test Link](./doc/activating_hints.md)
