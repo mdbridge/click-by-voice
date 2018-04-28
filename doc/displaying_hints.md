@@ -11,13 +11,13 @@ in the element.   Think (roughly) `<button>Submit</button>` becoming
 
 Examples of each of the styles:
 
-* ![no hints](./no-hints.png)  (no hints)
+* ![no hints](./no-hints.png)  (original without hints)
 * ![overlay hints](./overlay.png)  (overlay)
 * ![inline hints](./inline.png)  (inline)
 
 As you can see, inline is often easier to read because it does not cover
 up the element but it can severely disrupt the layout of the webpage and
-its hints may be clipped by fixed width layouts.
+its hints may be clipped by fixed-width layouts.
 
 Click by Voice has three basic modes based on which of these methods to
 hint elements should be used:
@@ -26,7 +26,14 @@ hint elements should be used:
 * inline: always put hints inline
 * hybrid: when it appears safe, use inline otherwise use overlay
 
+The hybrid mode uses heuristics to decide when using inline is unlikely
+to disturb the webpage too much or have the hint get clipped.
 
+The current default mode is inline, but this will be changing with the
+next major release to hybrid.
+
+
+## Show hints commands
 
 
 
