@@ -78,22 +78,24 @@ from a hinted webpage.
 
 ## Using Click by Voice with voice commands
 
-WARNING: this extension by itself provides no voice functionality;
-procurement of the needed voice commands is the user's
-responsibility. One recommended means of doing this is to use Vocola
+**This extension by itself provides no voice functionality**;
+procurement of the needed voice commands is the user's responsibility.
+One recommended means of doing this is to use Vocola
 (http://vocola.net/) to create the needed voice commands.
 
-Writing voice commands to use Click by Voice should be straightforward,
-although delays may need to be incorporated.  As an example, here are
-Vocola 2 commands that provide access to the Click by Voice
-functionality:
+Writing voice commands to use Click by Voice should be straightforward.
+As an example, here are some Vocola 2 commands that provide access to
+some of the Click by Voice functionality:
+
+    CbV(command) := Clipboard.Set($command!!! Clipboard.Get("")) {ctrl+shift+.};
 
     blur me = "{ctrl+shift+,}";
-    show      numbers = {ctrl+shift+space} Wait(500) :+  {enter};
-    show more numbers = {ctrl+shift+space} Wait(500) :++ {enter};
-    hide      numbers = {ctrl+shift+space} Wait(500) :-  {enter};
+	
+    show      numbers = CbV(:+);
+    show more numbers = CbV(:++);
+    hide      numbers = CbV(:-);
     
-    <pick> 0..9 [0..9 [0..9 [0..9]]] = {ctrl+shift+space} Wait(500) $2$3$4$5 ":$1"{enter};
+    <pick> 0..9 [0..9 [0..9 [0..9]]] = CbV($2$3$4$5 ":$1");
     
     <pick> := (        pick = ""    # guess whether to click or focus
               | go     pick = f
@@ -105,6 +107,10 @@ functionality:
               | link   pick = k     # copy link destination address
               | copy   pick = s
               );
+
+These commands take advantage of another Click by Voice keyboard
+shortcut, `{ctrl+shift+.}` by default, which makes Click by Voice accept
+a command from the clipboard rather than via the pop-up dialog box.
 
 
 ## Known issues (4/2018)
@@ -156,7 +162,7 @@ functionality:
 * Click by Voice, like any Chrome extension, is unable to run on
   `chrome://` URLs like the settings and extensions pages or in built-in
   dialog boxes like the "add bookmarks" dialog box
-  * ditto `https://chrome.google.com` URLS (e.g., the developer dashboard)
+  * ditto `https://chrome.google.com` URLs (e.g., the developer dashboard)
 * Some applications actually read out data from the browser webpage
   representation (DOM) and can become confused by the hints
   * this unfortunately appears to include Dragon's Chrome extension
