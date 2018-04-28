@@ -107,11 +107,11 @@ functionality:
               );
 
 
-## Known issues
+## Known issues (4/2018)
 
-### Hint display
+### Selecting elements to hint
 
-* elements inside of iframes are missed
+* Elements inside of iframes are missed
   * iframes themselves are now hinted and can be focused or opened in a new tab or window
 * to cover elements added dynamically over time, Click by Voice
   automatically refreshes hints every 3 seconds
@@ -119,36 +119,23 @@ functionality:
   * CbV will automatically refresh a page's hints shortly after you
     activate a hint to handle cases where activating a hint reveals
     new elements (e.g., a drop-down menu)
-* normal hint level (`:+`) does not find elements that are only clickable
+* Normal hint level (`:+`) does not find elements that are only clickable
   because of event listeners
   * hopefully, `:++` should find most of these.
-* some invisible elements are still hinted
+* Some invisible elements are still hinted
 
-
-
-
-* The selection of elements that should be given hints needs work:
-  * elements inside of iframes are missed
-    * iframes themselves are now hinted and can be focused or opened in a new tab or window
-  * to cover elements added dynamically over time, Click by Voice
-    automatically refreshes hints every 3 seconds
-    * this can require waiting several seconds after a page changes
-    * CbV will automatically refresh a page's hints shortly after you
-      activate a hint to handle cases where activating a hint reveals
-      new elements (e.g., a drop-down menu)
-  * normal hint level (`:+`) does not find elements that are only clickable
-    because of event listeners
-    * hopefully, `:++` should find most of these.
-  * some invisible elements are still hinted
+### Hint activation
 
 * Some elements can be difficult to select even using CSS selectors
   * e.g., multiple elements that differ only by their contained text
 * Some hint activations do not work properly due to insufficient
   fidelity of the synthetically generated events
-  * e.g., mouse events do not include coordinates and hover does not
-    simulate moving the mouse over all the parent elements to the target
-    element
-	
+  * e.g., the generated mouse events do not include coordinates and
+    hover does not simulate moving the mouse over all the parent
+    elements to the target element
+
+### Hint display
+
 * The placement of hints is suboptimal and disrupts the flow of some webpages
   * Experimental: `:+o` uses overlays for hints; this can make text hard
     to read, but disturbs the flow less.
@@ -158,6 +145,9 @@ functionality:
 * Sometime hints are too hard to read due to inadequate contrast between
   foreground and background colors
   * Experimental: `:+c` increases the contrast of hints
+
+### Other
+
 * Executing a command (especially the popping up part) is slower than I'd like
 
 * Does not work on chrome:// URLs like settings and extensions pages;
