@@ -148,6 +148,8 @@ functionality:
   * Adding the high contrast hints switch (e.g, `:+c`) should make the
     hints stand out more and be easier to read at the cost of making
     them more distracting
+* Later changes to an element can make its hint disappear
+  * usually refreshing hints will make the hint reappear
 
 ### Other issues
 
@@ -155,10 +157,18 @@ functionality:
   `chrome://` URLs like the settings and extensions pages or in built-in
   dialog boxes like the "add bookmarks" dialog box
   * ditto `https://chrome.google.com` URLS (e.g., the developer dashboard)
+* Some applications actually read out data from the browser webpage
+  representation (DOM) and can become confused by the hints
+  * this unfortunately appears to include Dragon's Chrome extension
+	* Dragon may think the name of a link includes the hint number at the end
+    *  a simple workaround is to either include the hint number or only
+       use a prefix of the link name; e.g., say `click submit` or `click
+       submit form twelve` for a link named `Submit Form` with hint
+       number 12.
 
 
 ## Other
 
 Please address questions and issues to <a
 href="http://www.knowbrainer.com/forums/forum/messageview.cfm?catid=25&threadid=22663">this
-Knowbrainer thread</a>.
+KnowBrainer thread</a>.
