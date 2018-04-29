@@ -119,7 +119,7 @@ more on how this shortcut works, see
 
 ## Known issues (4/2018)
 
-### Selecting elements to hint
+### Selection of elements to hint
 
 * Elements inside of iframes are missed
   * iframes themselves are now hinted and can be focused or opened in a
@@ -129,8 +129,8 @@ more on how this shortcut works, see
   * to keep performance reasonable, Click by Voice only automatically
     refreshes hints every three seconds
   * CbV will automatically refresh a page's hints shortly after you
-    activate a hint to handle cases where activating a hint reveals
-    new elements (e.g., a drop-down menu)
+    activate a hint to quickly handle cases where activating a hint
+    reveals new elements (e.g., a drop-down menu)
 * Normal hint level (`:+`) does not find elements that are only clickable
   because of event listeners
   * hopefully, `:++` should find most of these.
@@ -158,7 +158,8 @@ more on how this shortcut works, see
   * Adding the high contrast hints switch (e.g, `:+c`) should make the
     hints stand out more and be easier to read at the cost of making
     them more distracting
-* Changes to an element after the initial page load can make its hint disappear
+* Webpages changing an element after the initial page load can make that
+  element's hint disappear
   * usually refreshing hints will make the hint reappear
 
 ### Other issues

@@ -12,15 +12,15 @@ specifying the default operation.
 
 The following operations are currently available:
 
-* 'f' focuses the element (doesn't work on all elements, does work on iframes)
-* 'c' clicks the element
-* 't' opens links and iframes in a new tab, changing focus to that tab
-* 'b' opens links and iframes in a new tab, but does not change focus to
+* `f` focuses the element (doesn't work on all elements, does work on iframes)
+* `c` clicks the element
+* `t` opens links and iframes in a new tab, changing focus to that tab
+* `b` opens links and iframes in a new tab, but does not change focus to
 that tab
-* 'w' opens links and iframes in a new window, changing focus to that window
-* 'k' copies link and iframe locations to the clipboard
-* 'h' simulates hovering the mouse over the element; repeat to unhover
-* 's' copies the text contents of the element to the clipboard
+* `w` opens links and iframes in a new window, changing focus to that window
+* `k` copies link and iframe locations to the clipboard
+* `h` simulates hovering the mouse over the element; repeat to unhover
+* `s` copies the text contents of the element to the clipboard
 
 The default operation either clicks or focuses the given element using
 heuristics to decide which makes more sense.  If CbV guesses wrong, you

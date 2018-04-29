@@ -20,7 +20,7 @@ up the element but it can severely disrupt the layout of the webpage and
 its hints may be clipped by fixed-width layouts.
 
 Click by Voice has three basic modes based on when each of these methods
-should be used:
+is used:
 
 * overlay: always overlay hints
 * inline: always put hints inline

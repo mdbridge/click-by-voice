@@ -59,8 +59,8 @@ example,
 	Refresh notifications = CbV('${._4m8j}:c');
     Mark all read = CbV('${a[data-tooltip-content="Mark All Read"]}:c');
 
-(These commands correspond to specific webpages and would normally be 
-enabled only for those pages.)
+(These commands target specific elements of specific webpages and would
+normally be enabled only for those pages.)
 
 While these are only simple accelerators, you can write parameterized
 commands to do things like select a field, fill in a value, then update
