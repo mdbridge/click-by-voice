@@ -36,11 +36,21 @@ In Vocola 2, a user-defined function to do this looks like:
 
     CbV(command) := Clipboard.Set($command!!! Clipboard.Get("")) {ctrl+shift+.};
 
+Here, Clipboard is a Vocola extension for getting and setting the
+clipboard.  It will shortly be part of the Vocola 2 release, but for now
+you can get the most recent version from
+https://github.com/mdbridge/Vocola-2/tree/master/src/extensions; you
+will need both `vocola_ext_clipboard.py` and `vocola_ext_variables.py`.
+Note that the earlier version at
+http://vocola.net/unofficial/clipboard.html has a bug that causes it to
+sometimes fail to retrieve data from the clipboard and should be
+avoided.  The `""` in `Clipboard.Get("")` is important because it means
+that Vocola will use the empty string if the clipboard can't be
+converted to text instead of producing a runtime error.  This means that
+the command will still work if the clipboard contains a photo.
 
 
-
-
-
+## Building voice commands that don't need to know the hint number
 
 *To be written...*
 
