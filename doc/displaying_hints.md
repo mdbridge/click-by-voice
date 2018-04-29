@@ -30,10 +30,9 @@ Hybrid mode uses heuristics to decide when using inline for an element
 is unlikely to disturb the webpage too much or have the hint get
 clipped.
 
-The current default mode is inline, but this will be changing with the
-next major release to hybrid.  If the default mode does not display
-hints well for the current page, you may want to try switching to one of
-the other modes.
+As of version 0.19, the default mode is inline.  If the default mode
+does not display hints well for the current page, you may want to try
+switching to one of the other modes.
 
 
 ## Show hints commands

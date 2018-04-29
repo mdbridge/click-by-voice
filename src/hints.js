@@ -104,7 +104,8 @@ var Hints = null;
     }
     function set_hinting_parameters(value) {
 	options_ = new Map();
-	var text = value;
+	var default_hints = "h";
+	var text = default_hints + value;
 	while (text != "") {
 	    // console.log(text);
 	    r = parse_option(text);

@@ -148,11 +148,10 @@ more on how this shortcut works, see
 
 ### Hint display
 
-* The default hinting mode, inline, disrupts the flow of some webpages
+* The default hinting mode, hybrid, disrupts the flow of some webpages
   and its hints can be clipped
-  * switching to the new hinting mode, hybrid (`:+h`), usually solves this
-  * if that fails, the overlay mode (`:+o`) should not disturb the flow
-    at all at the cost of making text hard to read
+  * switching to the overlay mode (`:+o`) should not disturb the flow at
+    all at the cost of making text hard to read
 * Sometime hints are too hard to read due to inadequate contrast between
   foreground and background colors
   * Adding the high contrast hints switch (e.g, `:+c`) should make the
@@ -178,8 +177,17 @@ more on how this shortcut works, see
        number 12.
 
 
+## News
+
+* 4/2018: New major version 0.19 released.
+  * default mode is now hybrid (was inline; use `:+i` to get previous behavior)
+  * different basic modes and switching between them is no longer experimental
+  * documentation now covers various features introduced recently
+	* sending commands by clipboard, nonpersistent show hints commands
+
+
 ## Other
 
 Please address questions and issues to <a
-href="http://www.knowbrainer.com/forums/forum/messageview.cfm?catid=25&threadid=22663">this
+href="http://www.knowbrainer.com/forums/forum/messageview.cfm?catid=25&threadid=30711">this
 KnowBrainer thread</a>.
