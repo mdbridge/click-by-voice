@@ -20,14 +20,21 @@ value of the clipboard.  If the shortcut sees `!!!` in the clipboard
 then it first sets the clipboard to the text after the `!!!` then
 executes the command that was before the `!!!`.
 
-That is, the recommended procedure to send a command *cmd*  to Click by
+That is, the recommended procedure to send a command *cmd* to Click by
 Voice is:
 
 * retrieve the current text value of the clipboard, call it *clip*
-* set the contents of the clipboard to *cmd*:*clip*
-* send synthetic keystrokes for {ctrl+shift+.} to invoke the shortcut
+* set the contents of the clipboard to *cmd*!!!*clip*
+* send synthetic keystrokes for `{ctrl+shift+.}` to invoke the shortcut
 
+This should avoid clobbering the clipboard as long as its format is text
+rather than a photo or the like.
 
+### Vocola 2 example code
+
+In Vocola 2, a user-defined function to do this looks like:
+
+    CbV(command) := Clipboard.Set($command!!! Clipboard.Get("")) {ctrl+shift+.};
 
 
 
