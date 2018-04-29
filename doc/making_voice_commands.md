@@ -36,7 +36,7 @@ In Vocola 2, a user-defined function to do this looks like:
 
     CbV(command) := Clipboard.Set($command!!! Clipboard.Get("")) {ctrl+shift+.};
 
-Here, Clipboard is a Vocola extension for getting and setting the
+Here, `Clipboard` is a Vocola extension for getting and setting the
 clipboard.  It will shortly be part of the Vocola 2 release, but for now
 you can get the most recent version from
 https://github.com/mdbridge/Vocola-2/tree/master/src/extensions; you
@@ -52,5 +52,13 @@ the command will still work if the clipboard contains a photo.
 
 ## Building voice commands that don't need to know the hint number
 
-*To be written...*
+You can use the ability to select hints by CSS selector to create voice
+commands that don't require the user to know the hint number.    For
+example,
+
+	Refresh notifications = CbV('^{._4m8j}:c');
+    Mark all read = CbV('^{a[data-tooltip-content="Mark All Read"}:c');
+
+(These commands correspond to specific webpages and would normally be 
+enabled only for those pages.)
 
