@@ -32,19 +32,16 @@ chrome.commands.onCommand.addListener(function(command) {
 // Performing actions on behalf of the content script
 //
 
-var initial_operation = "+";
-var config = `
-# default case:
-when .
-  # hybrid mode
-  h
-`;
+var initial_operation;
+var config;
 
 chrome.storage.sync.get({
-    startingCommand: ':' + initial_operation
+    startingCommand: initial_operation_default,
+    config:          config_default
 }, function(items) {
     // kludge: strip off (hopefully) leading colon:
     initial_operation = items.startingCommand.substring(1);
+    config	      = items.config;
 });
 
 chrome.runtime.onMessage.addListener(

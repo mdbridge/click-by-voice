@@ -74,7 +74,7 @@
     ],
 
     "background": {
-        "scripts": ["jquery-3.0.0.min.js", "background-utilities.js", "background.js"]
+        "scripts": ["jquery-3.0.0.min.js", "defaults.js", "background-utilities.js", "background.js"]
         //"page": "popup.html",
         //"persistent": false  // need to stay persistent to make browser action fast
     },
