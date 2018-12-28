@@ -173,7 +173,8 @@ var Hints = null;
 	    }
 	}
 
-	return config_hints + user_hints;
+	var default_hints = "h";
+	return default_hints + config_hints + user_hints;
     }
 
 
