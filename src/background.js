@@ -50,8 +50,11 @@ chrome.runtime.onMessage.addListener(
 	switch (request.action) {
 
 	    /*
-	     * Initial operation 
+	     * Initial operation, config
 	     */
+	case "set_config":
+	    config = request.config;
+	    break;
 	case "set_initial_operation":
 	    initial_operation =  request.initial_operation;
 	    console.log("initial_operation: " + initial_operation);

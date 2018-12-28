@@ -6,6 +6,8 @@ function save_options() {
 	startingCommand: command,
 	config:          config,
     }, function() {
+	chrome.runtime.sendMessage({action: "set_config",
+				    config: config});
 	// Update status to let user know options were saved.
 	var status = document.getElementById('status');
 	status.textContent = 'Options saved.';
