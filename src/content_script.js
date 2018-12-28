@@ -10,7 +10,6 @@ function perform_operation(operation, hint_number) {
     if (/^once(\+|-)/.test(operation)) {
 	operation = 'once=' + operation.substr(4);
     }
-    console.log(operation);
 
     if (operation.startsWith("=")) {
 	act("set_initial_operation", {initial_operation: operation});

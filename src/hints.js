@@ -10,6 +10,7 @@ var Hints = null;
 
     var next_CBV_hint_ = 0;  // -1 means hints are off
     var options_       = new Map();
+    var config_	       = "";
 
 
     //
@@ -122,8 +123,7 @@ var Hints = null;
     }
     function set_hinting_parameters(value) {
 	options_ = new Map();
-	var default_hints = "h";
-	var text = default_hints + value;
+	var text = get_effective_hints(value)
 	while (text != "") {
 	    // console.log(text);
 	    r = parse_option(text);
@@ -141,6 +141,17 @@ var Hints = null;
 	set_option('c', []);
 	callback();
 	options_ = saved;
+    }
+
+
+
+    //
+    // 
+    //
+
+    function get_effective_hints(user_hints) {
+	var default_hints = "h";
+	return default_hints + user_hints;
     }
 
 
