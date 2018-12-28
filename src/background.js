@@ -33,6 +33,13 @@ chrome.commands.onCommand.addListener(function(command) {
 //
 
 var initial_operation = "+";
+var config = `
+# default case:
+when .
+  # hybrid mode
+  h
+`;
+
 chrome.storage.sync.get({
     startingCommand: ':' + initial_operation
 }, function(items) {
@@ -53,7 +60,8 @@ chrome.runtime.onMessage.addListener(
 	    console.log("initial_operation: " + initial_operation);
 	    break;
 	case "get_initial_operation":
-	    sendResponse({initial_operation: initial_operation});
+	    sendResponse({initial_operation: initial_operation,
+			  config: config});
 	    break;
 
 

@@ -8,19 +8,18 @@ var Hints = null;
 
 (function() {
 
+    var config_	       = "";
     var next_CBV_hint_ = 0;  // -1 means hints are off
     var options_       = new Map();
-    var config_	       = `
-# default case:
-when .
-  # hybrid mode
-  h
-`;
 
 
     //
     // Main exported actions:
     //
+
+    function set_config(config) {
+	config_= config;
+    }
 
     function add_hints(parameters) {
 	set_hinting_parameters(parameters);
@@ -219,6 +218,8 @@ when .
 
 
     Hints = {
+	set_config	   : set_config,
+
 	add_hints	   : add_hints,
 	refresh_hints	   : refresh_hints,
 	remove_hints	   : remove_hints,

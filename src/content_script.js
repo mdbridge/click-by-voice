@@ -32,6 +32,7 @@ chrome.runtime.onMessage.addListener(
 
 $(document).ready(function() {
     request("get_initial_operation", {}, function(response) {
+	Hints.set_config(response.config);
 	perform_operation(response.initial_operation, "");
     });
 
