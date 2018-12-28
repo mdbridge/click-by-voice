@@ -10,7 +10,12 @@ var Hints = null;
 
     var next_CBV_hint_ = 0;  // -1 means hints are off
     var options_       = new Map();
-    var config_	       = "";
+    var config_	       = `
+# default case:
+when .
+  # hybrid mode
+  h
+`;
 
 
     //
@@ -123,7 +128,7 @@ var Hints = null;
     }
     function set_hinting_parameters(value) {
 	options_ = new Map();
-	var text = get_effective_hints(value)
+	var text = get_effective_hints(value, window.location.href);
 	while (text != "") {
 	    // console.log(text);
 	    r = parse_option(text);
@@ -149,9 +154,27 @@ var Hints = null;
     // 
     //
 
-    function get_effective_hints(user_hints) {
-	var default_hints = "h";
-	return default_hints + user_hints;
+    function get_effective_hints(user_hints, url) {
+	var without_comments = config_.replace(/^\s*#.*\n/gm, "");
+	var stanzas = without_comments.split(/\n\s*\n+/);
+
+	var config_hints = "";
+	for (const stanza of stanzas) {
+	    var match;
+	    if (match = stanza.match(/^when\s+(.+?)\s*\n((?:.|\n)*)/)) {
+		var regex = match[1];
+		var options = match[2].replace(/^\s+/gm,'').replace(/\s+$/gm, '').replace(/\n/gm,'');
+		// console.log(regex, '=>' , options);
+		if (new RegExp(regex).test(url)) {
+		    // console.log("match!");
+		    config_hints = config_hints + options
+		}
+	    } else {
+		console.log("bad stanza:", stanza);
+	    }
+	}
+
+	return config_hints + user_hints;
     }
 
 
