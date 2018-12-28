@@ -2,6 +2,7 @@
 /// Overall control code for labeling elements with hint tags
 ///
 /// Provides Hints
+///
 
 var Hints = null;
 
@@ -17,7 +18,12 @@ var Hints = null;
 
     function add_hints(parameters) {
 	set_hinting_parameters(parameters);
-	place_hints();
+	if (option_value('+', 1) > 0) {
+	    place_hints();
+	} else {
+	    console.log("not adding hints: " + options_to_string());
+	    remove_hints();
+	}
     }
 
     function refresh_hints() {
@@ -50,6 +56,18 @@ var Hints = null;
 	    reset_option("i");
 	    reset_option("o");
 	    reset_option("h");
+	}
+	// +/- are special cases:
+	if (option_name == '-') {
+	    options_.set('+', [0]);
+	    return;
+	} else if (option_name == '+') {
+	    if (arguments.length > 0) {
+		options_.set('+', arguments);
+	    } else {
+		options_.set('+', [option_value('+',0) + 1]);
+	    }
+	    return;
 	}
 	// syntax for long option names & reseting options:
 	if (option_name == 'X') {
