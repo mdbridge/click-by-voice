@@ -157,8 +157,8 @@ var Hints = null;
     //
 
     function get_effective_hints(user_hints, url) {
-	var without_comments = config_.replace(/^\s*#.*\n/gm, "");
-	var stanzas = without_comments.split(/\n\s*\n+/);
+	var without_comments = config_.replace(/^[ \t]*#.*\n/gm, "");
+	var stanzas = without_comments.split(/\n(\s*\n)+/);
 
 	var config_hints = "";
 	for (const stanza of stanzas) {
