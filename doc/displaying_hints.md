@@ -83,6 +83,10 @@ The following switches are officially supported:
 `i`, `o`, and `h` are mutually exclusive, with the last one present
 winning.
 
+To support (future) multi-letter switches, the following syntax is
+supported:
+  * `X{*flag*}`: turn on flag *flag*
+  * `X{*flag*-}`: turn off flag *flag*
 
 ## Experimental switches
 
