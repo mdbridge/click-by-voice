@@ -71,6 +71,12 @@ clickable or focusable, however unlikely that might be
 Switches can change which elements get hinted in addition to how hints
 are displayed.
 
+### Switch defaults
+
+An [experimental config](./doc/config.md) can be used to give
+per-website defaults for the switches.
+
+
 ### Switches
 
 The following switches are officially supported:
