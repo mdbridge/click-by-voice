@@ -26,8 +26,8 @@ when quip.com:
 
 Very roughly, there are a series of stanzas each of which contains a
 regular expression that is matched against the current URL.  The
-contents of the stanzas that match are concatenated together in order to
-make the default switches.
+contents of the stanzas whose regexes match are concatenated together in
+order to make the default switches.
 
 For the example config, `https://quip.com/product` produces switch
 defaults of `h-` and `https://www.reddit.com/?count=25&after=t3_b7rjf7`

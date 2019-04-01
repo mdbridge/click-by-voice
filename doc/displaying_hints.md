@@ -40,7 +40,10 @@ switching to one of the other modes.
 A show hints command takes the form of a colon followed optionally by
 `once` followed by a _hint level indicator_ (`+`, `++`, or `-`) followed
 by zero more _switches_.  Example commands include `:-`, `:once++`,
-`:+i`, and `:+E{2}!{.jse13}`.
+`:+i`, and `:+E{2}!{.jse13}`.  Alternatively, instead of a hint level
+indicator, `=` can be used (e.g., `:=c`); this uses the hint level
+specified by the switch defaults for the current webpage (see switch
+defaults below).
 
 ### Persistence
 
