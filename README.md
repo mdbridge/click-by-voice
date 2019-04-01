@@ -69,8 +69,9 @@ hints are displayed for a tab, add `once` after the colon; for example,
 does not affect future loads of other tabs.
 
 The hinting system is highly flexible, with these commands taking many
-optional switches.  For details, including how to change startup
-defaults, see [displaying hints in detail](./doc/displaying_hints.md).
+optional switches.  For details, including how to change startup and
+per-webpage defaults, see
+[displaying hints in detail](./doc/displaying_hints.md).
 
 Hint numbers are not shown when printing but will show up when you copy
 from a hinted webpage.
@@ -117,7 +118,7 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues (4/2018)
+## Known issues (3/2019)
 
 ### Selection of elements to hint
 
@@ -135,6 +136,9 @@ more on how this shortcut works, see
   because of event listeners
   * hopefully, `:++` should find most of these.
 * Some invisible elements are still hinted
+* Some elements come into existence only after a mouse hovers over
+  another element; although hinted once they appear, the hover action
+  may be necessary to make them appear.
 
 ### Hint activation
 
@@ -179,6 +183,8 @@ more on how this shortcut works, see
 
 ## News
 
+* 3/2019: New major version 0.20 released
+  * no official changes, but new experimental config feature available
 * 4/2018: New major version 0.19 released.
   * default mode is now hybrid (was inline; use `:+i` to get previous behavior)
   * different basic modes and switching between them is no longer experimental
