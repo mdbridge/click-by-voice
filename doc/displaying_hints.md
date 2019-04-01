@@ -108,7 +108,14 @@ hinted or not hinted:
 
 Priority is in the order above; for example if both `|` and `^`'s
 selectors match an element, it is still hinted unless it is in a subtree
-whose root matches the selector of `!`.
+whose root matches the selector of `!`.  If none of these switches
+apply, the usual Click-by-Voice heuristics are applied to decide if an
+element should be hinted.
+
+The hint level can be changed via the `+` and `-` switches.  The `+`
+flag is best used with an argument: `+{1}` is the normal hint level (as
+produced by `:+`) and `+{2}` the hint everything level.  `-` is the same
+as `+{0}`.
 
 Experimental switches are just that, experimental.  I reserve the right
 to change or remove them without notice.
