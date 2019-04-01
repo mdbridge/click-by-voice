@@ -73,8 +73,8 @@ are displayed.
 
 ### Switch defaults
 
-An [experimental config](./doc/config.md) can be used to give
-per-website defaults for the switches.
+An [experimental config](./config.md) can be used to give per-website
+defaults for the switches.
 
 
 ### Switches
