@@ -11,10 +11,10 @@ saying their hint numbers.
 ## Using Click by Voice manually
 
 Click by Voice provides two keyboard shortcuts suitable for manual use;
-they are bound by default to `{ctrl+shift+space}` (pop up command dialog
-box) and `{ctrl+shift+,}` (blur).  You can
-[rebind these](chrome://extensions/shortcuts) as desired like with any
-Chrome extension.
+they are bound by default to `{ctrl+shift+space}` (*pop up command
+dialog box*) and `{ctrl+shift+,}` (*blur*).  You can rebind these as
+desired like with any Chrome extension by following the link
+chrome://extensions/shortcuts in your Chrome browser.
 
 The blur shortcut removes keyboard focus from an element, returning it
 to the overall webpage.  This can be useful, for example, when you want
