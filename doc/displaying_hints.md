@@ -90,15 +90,25 @@ flag to the value `a.title` (a CSS selector in this case).
 To support (future) multi-letter switches and allow turning switches off
 once turned on, the following syntax is supported:
   * X{*flag*}: turn on flag *flag*
-  * `X{`*flag*`}{`*value*`}`: set flag *flag* to value *value*
-  * `X{`*flag*-`}`: turn off flag *flag*
+  * X{*flag*}{*value*}: set flag *flag* to value *value*
+  * X{*flag*-}: turn off flag *flag*
 
 With the exception of `i`/`o`/`h`, the last value assigned to a switch
 wins.  For example, `ciX{c-}` leaves the `c` switch turned off.
 
 ## Experimental switches
 
-*To be written...*
+The following switches use CSS selectors to specify what should be
+hinted or not hinted:
+
+* !{*selector*}: do not examine any elements in DOM subtrees rooted at
+  elements matching this selector
+* |{*selector*}: hint elements matching CSS selector *selector*
+* ^{*selector*}: do not hint elements matching CSS selector *selector*
+
+Priority is in the order above; for example if both `|` and `^`'s
+selectors match an element, it is still hinted unless it is in a subtree
+whose root matches the selector of `!`.
 
 Experimental switches are just that, experimental.  I reserve the right
 to change or remove them without notice.
