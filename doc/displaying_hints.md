@@ -83,13 +83,13 @@ The following switches are officially supported:
 `i`, `o`, and `h` are mutually exclusive, with the last one present
 winning.
 
-Some switches (currently only experiment ones) allow arguments; you
+Some switches (currently only experimental ones) allow arguments; you
 specify them by using `{}`'s.  For example, `^{a.title}` sets the `^`
 flag to the value `a.title` (a CSS selector in this case).
 
 To support (future) multi-letter switches and allow turning switches off
 once turned on, the following syntax is supported:
-  * `X{`*flag*`}`: turn on flag *flag*
+  * X{*flag*}: turn on flag *flag*
   * `X{`*flag*`}{`*value*`}`: set flag *flag* to value *value*
   * `X{`*flag*-`}`: turn off flag *flag*
 
