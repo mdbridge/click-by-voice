@@ -183,7 +183,7 @@ more on how this shortcut works, see
 
 ## News
 
-* 3/2019: New major version 0.20 released
+* 4/2019: New major version 0.20 released
   * no official changes, but new experimental config feature available
 * 4/2018: New major version 0.19 released.
   * default mode is now hybrid (was inline; use `:+i` to get previous behavior)
