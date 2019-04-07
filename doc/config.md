@@ -19,7 +19,7 @@ when github.com
   # don't hint line numbers
   !{table.js-file-line-container}
   
-when quip.com:
+when quip.com
   # disable CbV because hints confuse quip
   -
 ```
