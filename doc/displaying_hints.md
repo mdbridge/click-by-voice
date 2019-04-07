@@ -40,7 +40,10 @@ switching to one of the other modes.
 A show hints command takes the form of a colon followed optionally by
 `once` followed by a _hint level indicator_ (`+`, `++`, or `-`) followed
 by zero more _switches_.  Example commands include `:-`, `:once++`,
-`:+i`, and `:+E{2}!{.jse13}`.
+`:+i`, and `:+E{2}!{.jse13}`.  Alternatively, instead of a hint level
+indicator, `=` can be used (e.g., `:=c`); this uses the hint level
+specified by the switch defaults for the current webpage (see switch
+defaults below).
 
 ### Persistence
 
@@ -71,6 +74,12 @@ clickable or focusable, however unlikely that might be
 Switches can change which elements get hinted in addition to how hints
 are displayed.
 
+### Switch defaults
+
+An [experimental config](./config.md) can be used to give per-website
+defaults for the switches.
+
+
 ### Switches
 
 The following switches are officially supported:
@@ -83,10 +92,39 @@ The following switches are officially supported:
 `i`, `o`, and `h` are mutually exclusive, with the last one present
 winning.
 
+Some switches (currently only experimental ones) allow arguments; you
+specify them by using `{}`'s.  For example, `^{a.title}` sets the `^`
+flag to the value `a.title` (a CSS selector in this case).
+
+To support (future) multi-letter switches and allow turning switches off
+once turned on, the following syntax is supported:
+  * X{*flag*}: turn on flag *flag*
+  * X{*flag*}{*value*}: set flag *flag* to value *value*
+  * X{*flag*-}: turn off flag *flag*
+
+With the exception of `i`/`o`/`h`, the last value assigned to a switch
+wins.  For example, `ciX{c-}` leaves the `c` switch turned off.
 
 ## Experimental switches
 
-*To be written...*
+The following switches use CSS selectors to specify what should be
+hinted or not hinted:
+
+* !{*selector*}: do not examine any elements in DOM subtrees rooted at
+  elements matching this selector
+* |{*selector*}: hint elements matching CSS selector *selector*
+* ^{*selector*}: do not hint elements matching CSS selector *selector*
+
+Priority is in the order above; for example if both `|` and `^`'s
+selectors match an element, it is still hinted unless it is in a subtree
+whose root matches the selector of `!`.  If none of these switches
+apply, the usual Click-by-Voice heuristics are applied to decide if an
+element should be hinted.
+
+The hint level can be changed via the `+` and `-` switches.  The `+`
+flag is best used with an argument: `+{1}` is the normal hint level (as
+produced by `:+`) and `+{2}` the hint everything level.  `-` is the same
+as `+{0}`.
 
 Experimental switches are just that, experimental.  I reserve the right
 to change or remove them without notice.

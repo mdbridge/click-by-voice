@@ -32,12 +32,16 @@ chrome.commands.onCommand.addListener(function(command) {
 // Performing actions on behalf of the content script
 //
 
-var initial_operation = "+";
+var initial_operation;
+var config;
+
 chrome.storage.sync.get({
-    startingCommand: ':' + initial_operation
+    startingCommand: initial_operation_default,
+    config:          config_default
 }, function(items) {
     // kludge: strip off (hopefully) leading colon:
     initial_operation = items.startingCommand.substring(1);
+    config	      = items.config;
 });
 
 chrome.runtime.onMessage.addListener(
@@ -46,14 +50,18 @@ chrome.runtime.onMessage.addListener(
 	switch (request.action) {
 
 	    /*
-	     * Initial operation 
+	     * Initial operation, config
 	     */
+	case "set_config":
+	    config = request.config;
+	    break;
 	case "set_initial_operation":
 	    initial_operation =  request.initial_operation;
 	    console.log("initial_operation: " + initial_operation);
 	    break;
 	case "get_initial_operation":
-	    sendResponse({initial_operation: initial_operation});
+	    sendResponse({initial_operation: initial_operation,
+			  config: config});
 	    break;
 
 

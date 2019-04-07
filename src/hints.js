@@ -2,11 +2,13 @@
 /// Overall control code for labeling elements with hint tags
 ///
 /// Provides Hints
+///
 
 var Hints = null;
 
 (function() {
 
+    var config_	       = "";
     var next_CBV_hint_ = 0;  // -1 means hints are off
     var options_       = new Map();
 
@@ -15,9 +17,18 @@ var Hints = null;
     // Main exported actions:
     //
 
+    function set_config(config) {
+	config_= config;
+    }
+
     function add_hints(parameters) {
 	set_hinting_parameters(parameters);
-	place_hints();
+	if (option_value('+', 1) > 0) {
+	    place_hints();
+	} else {
+	    console.log("not adding hints: " + options_to_string());
+	    remove_hints();
+	}
     }
 
     function refresh_hints() {
@@ -50,6 +61,18 @@ var Hints = null;
 	    reset_option("i");
 	    reset_option("o");
 	    reset_option("h");
+	}
+	// +/- are special cases:
+	if (option_name == '-') {
+	    options_.set('+', [0]);
+	    return;
+	} else if (option_name == '+') {
+	    if (arguments.length > 0) {
+		options_.set('+', arguments);
+	    } else {
+		options_.set('+', [option_value('+',0) + 1]);
+	    }
+	    return;
 	}
 	// syntax for long option names & reseting options:
 	if (option_name == 'X') {
@@ -94,6 +117,9 @@ var Hints = null;
     }
 
     function parse_option(text) {
+	if (m = text.match(/^\s+(.*)/)) {
+	    text = m[1];
+	}
 	if (m = text.match(/^([^{])\{([^{}]*)\}\{([^{}]*)\}(.*)/)) {
 	    return [m[1], [m[2],m[3]], m[4]];
 	}
@@ -104,8 +130,7 @@ var Hints = null;
     }
     function set_hinting_parameters(value) {
 	options_ = new Map();
-	var default_hints = "h";
-	var text = default_hints + value;
+	var text = get_effective_hints(value, window.location.href);
 	while (text != "") {
 	    // console.log(text);
 	    r = parse_option(text);
@@ -123,6 +148,36 @@ var Hints = null;
 	set_option('c', []);
 	callback();
 	options_ = saved;
+    }
+
+
+
+    //
+    // 
+    //
+
+    function get_effective_hints(user_hints, url) {
+	var without_comments = config_.replace(/^[ \t]*#.*\n/gm, "");
+	var stanzas = without_comments.split(/\n(\s*\n)+/);
+
+	var config_hints = "";
+	for (const stanza of stanzas) {
+	    var match;
+	    if (match = stanza.match(/^when\s+(.+?)\s*\n((?:.|\n)*)/)) {
+		var regex = match[1];
+		var options = match[2].replace(/^\s+/gm,'').replace(/\s+$/gm, '').replace(/\n/gm,'');
+		// console.log(regex, '=>' , options);
+		if (new RegExp(regex).test(url)) {
+		    // console.log("match!");
+		    config_hints = config_hints + options
+		}
+	    } else {
+		console.log("bad stanza:", stanza);
+	    }
+	}
+
+	var default_hints = "h";
+	return default_hints + config_hints + user_hints;
     }
 
 
@@ -167,6 +222,8 @@ var Hints = null;
 
 
     Hints = {
+	set_config	   : set_config,
+
 	add_hints	   : add_hints,
 	refresh_hints	   : refresh_hints,
 	remove_hints	   : remove_hints,

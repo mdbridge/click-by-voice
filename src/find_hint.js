@@ -27,7 +27,7 @@ var FindHint = null;
 	    return false;
 
 	// don't hint invisible elements (their children may be another matter)
-	if (css(element, "visibility") == "hidden" && !Hints.option("+")) 
+	if (css(element, "visibility") == "hidden" && Hints.option_value("+",0)<2) 
 	    return false;
 
 
@@ -106,7 +106,7 @@ var FindHint = null;
 	}
 
 
-	if (!Hints.option("+"))
+	if (Hints.option_value("+",0)<2)
 	    return false;
 
 	//
