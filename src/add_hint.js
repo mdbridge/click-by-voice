@@ -163,6 +163,8 @@ var AddHint = null;
 
     function compute_displacement(element) {
 	var displacement = parseInt(Hints.option_value('E', '0'));
+	var displacement_right = parseInt(Hints.option_value('displaceX', displacement));
+	var displacement_up    = parseInt(Hints.option_value('displaceY', displacement));
 	var extra_displacement_right = 0;
 	if (Hints.option("?") && element.is("input")) {
 	    var padding = CSS_number(element,"padding-right");
@@ -172,14 +174,22 @@ var AddHint = null;
 		extra_displacement_right = -padding + 5;
 	}
 
+	var use_displacement = false;
 	if (element.is('a, code, b, i, strong, em, abbr, input[type="checkbox"], input[type="radio"]') && element.children().length == 0) {
-	    return {up: displacement, right: displacement+extra_displacement_right};
+	    use_displacement = true;
 	}
 	if (Hints.option('f')) {
-	    return {up: displacement, right: displacement+extra_displacement_right};
+	    use_displacement = true;
+	}
+	if (Hints.option('alwaysDisplace')) {
+	    use_displacement = true;
 	}
 
-	return {up: 0, right: extra_displacement_right};
+	if (use_displacement) {
+	    return {up: displacement_up, right: displacement_right+extra_displacement_right};
+	} else {
+	    return {up: 0, right: extra_displacement_right};
+	}
     }
 
 
