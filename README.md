@@ -118,11 +118,11 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues (3/2019)
+## Known issues (8/2020)
 
 ### Selection of elements to hint
 
-* Elements inside of iframes are missed
+* Elements inside of cross-origin iframes are missed
   * iframes themselves are now hinted and can be focused or opened in a
     new tab or window
 * Elements added after a page is first loaded can take a while to get
@@ -183,6 +183,8 @@ more on how this shortcut works, see
 
 ## News
 
+* 8/2020: New major version 0.21 released
+  * Same-origin iframes are now supported
 * 4/2019: New major version 0.20 released
   * no official changes, but new experimental config feature available
 * 4/2018: New major version 0.19 released.

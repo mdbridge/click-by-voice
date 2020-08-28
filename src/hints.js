@@ -43,6 +43,11 @@ var Hints = null;
     function remove_hints() {
 	$("[CBV_hint_element]").remove();
 	$("[CBV_hint_number]").removeAttr("CBV_hint_number");
+	frame = $("iframe");
+	if (frame.length != 0) {
+	    $("[CBV_hint_element]", frame.contents()).remove();
+	    $("[CBV_hint_number]", frame.contents()).removeAttr("CBV_hint_number");
+	}
 
 	next_CBV_hint_ = -1;
     }

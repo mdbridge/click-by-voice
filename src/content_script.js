@@ -24,20 +24,25 @@ function perform_operation(operation, hint_number) {
     }
 }
 
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-	perform_operation(request.operation, request.hint_number);
+if (window == window.top) {
+    // the following only runs outside of any iframes
+
+    chrome.runtime.onMessage.addListener(
+	function(request, sender, sendResponse) {
+	    perform_operation(request.operation, request.hint_number);
+	});
+
+
+    $(document).ready(function() {
+	request("get_initial_operation", {}, function(response) {
+	    Hints.set_config(response.config);
+	    perform_operation(response.initial_operation, "");
+	});
+
+
+	//setTimeout(function() { add_hints(); }, 5000);
+	// This runs even when our tab is in the background:
+	setInterval(Hints.refresh_hints, 3000);
     });
 
-
-$(document).ready(function() {
-    request("get_initial_operation", {}, function(response) {
-	Hints.set_config(response.config);
-	perform_operation(response.initial_operation, "");
-    });
-
-
-    //setTimeout(function() { add_hints(); }, 5000);
-    // This runs even when our tab is in the background:
-    setInterval(Hints.refresh_hints, 3000);
-});
+}

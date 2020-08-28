@@ -24,15 +24,19 @@ var DomWalk = null;
 	    each_displaying_helper($(this), pre_callback, post_callback, exclusion);
 	});
 
-	// // <<<>>>
-	// if (element.is("iframe")) {
-	// 	try {
-	// 	    var sub_body = $('body', element.contents());
-	// 	    each_displaying_helper(sub_body, pre_callback, post_callback);
-	// 	} catch (e) {
-	// 	    console.log("iframe access failure: " + e);
-	// 	}
-	// }
+	if (element.is("iframe")) {
+	    try {
+		// var sub_body = $('body', element.contents());
+		// each_displaying_helper(sub_body, pre_callback, post_callback);
+
+		// some popover ads are after <body> element
+		$("html", element.contents()).children().filter(":not(head)").each(function (index) {
+		    each_displaying_helper($(this), pre_callback, post_callback, exclusion);
+		});
+	    } catch (e) {
+		console.log("iframe access failure: " + e);
+	    }
+	}
 
 	if (post_callback)
 	    post_callback(element);
