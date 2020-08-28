@@ -7,10 +7,7 @@ chrome.commands.onCommand.addListener(function(command) {
 
     if (command == "blur") {
 	console.log('Bluring...');
-	// this doesn't work on chrome://... pages due to permission limitations:
-	chrome.tabs.executeScript({
-	    code: 'document.activeElement.blur()'
-	});
+	doUserCommand(":blur", false);
 
     } else if (command == "execute_command_from_clipboard") {
 	var clipboard	 = getClipboard();

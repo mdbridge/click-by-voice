@@ -3,6 +3,11 @@
 ///
 
 function perform_operation(operation, hint_number) {
+    if (operation == "blur") {
+	document.activeElement.blur();
+	return;
+    }
+
     // handle legacy show hints commands, rewriting them to use =:
     if (/^(\+|-)/.test(operation)) {
 	operation = '=' + operation;
