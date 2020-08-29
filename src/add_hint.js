@@ -97,6 +97,11 @@ var AddHint = null;
 	    // if we are not in a different stacking context, this should
 	    // put us on top of it.
 	    var zindex = css(element, "z-index", 0);
+	    if (Hints.option("zindex")) {
+		min_zindex = Hints.option_value("zindex");
+		if (zindex < min_zindex || zindex == "auto")
+		    zindex = min_zindex;
+	    }
 	    if (zindex > 0)
 		set_important(inner, "z-index", zindex+1);
 
