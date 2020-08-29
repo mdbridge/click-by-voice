@@ -250,7 +250,7 @@ var AddHint = null;
 		var target_offset = element.offset();
 		if (show_at_end) {
 		    target_offset.left += element.outerWidth() 
-    		        -   inner.outerWidth();
+    		                        - inner.outerWidth();
 		}
 		target_offset.top  -= displacement.up;
 		target_offset.left += displacement.right;
@@ -264,15 +264,6 @@ var AddHint = null;
     //
     // 
     //
-
-
-
-
-
-
-
-
-
 
 
     function visual_contents(element) {

@@ -196,13 +196,20 @@ var Hints = null;
 	if (next_CBV_hint_ < 0)
 	    next_CBV_hint_ = 0;
 
-
+	var start_hint = next_CBV_hint_;
 	var start = performance.now();
+
+	// DomWalk.each_displaying(
+	//     function (element) {},
+	//     function (element) {},
+	//     "");
+	// console.log("  just DomWalk time:   " + (performance.now()-start) + " ms");
+	// start = performance.now();
+
 	// FindHint.each_hintable(function(element) {});
 	// console.log("  just FindHint.each_hintable time:   " + (performance.now()-start) + " ms");
 	// start = performance.now();
 	
-
 	var delayed_work = [];
 	FindHint.each_hintable(function(element) {
 	    if (element.is("[CBV_hint_number]"))
@@ -218,10 +225,11 @@ var Hints = null;
 
 	delayed_work.map(function (o) { o(); });
 
-
-	// console.log("total hints assigned: " + next_CBV_hint_ 
-	// 		+ "    (" + delayed_work.length + " overlays added)");
-	// console.log("  " + (performance.now()-start) + " ms");
+	if (Hints.option("timing")) {
+	    console.log(`${next_CBV_hint_-start_hint}(${delayed_work.length}) + ${start_hint}` +
+			` -> ${next_CBV_hint_} hints` +
+			` in ${performance.now()-start} ms`);
+	}
     }
 
 
