@@ -195,7 +195,7 @@ var AddHint = null;
 
     function add_overlay_hint(element, hint_number) {
 	var hint_tag    = build_hint(element, hint_number, true);
-	var inner	    = hint_tag.children().first();
+	var inner	= hint_tag.children().first();
 	var show_at_end = !Hints.option("s");
 
 	// hard coding reddit entire story link: <<<>>>
@@ -207,14 +207,21 @@ var AddHint = null;
 	// needs to be before we insert the hint tag <<<>>>
 	var displacement = compute_displacement(element);
 
+	var container = element;
+	if (Hints.option("exclude")) {
+	    while (container.is(Hints.option_value("exclude"))) {
+		container = container.parent();
+	    }
+	}
+
 	if (Hints.option("f")) {
 	    $("body").after(hint_tag);
-	} else if (element.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {
+
+	} else if (container.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {
 	    // temporary kludge for Gmail: <<<>>>
-	    var current = element;
-	    while (current.is("table, tr, td, th, colgroup, tbody, thead, tfoot"))
-		current = current.parent();
-	    insert_element(current, hint_tag, true, false);
+	    while (container.is("table, tr, td, th, colgroup, tbody, thead, tfoot"))
+		container = container.parent();
+	    insert_element(container, hint_tag, true, false);
 
 	} else {
 	    //
@@ -223,10 +230,10 @@ var AddHint = null;
 	    // the element because after the element has caused the inserted
 	    // span to wrap to the next line box, adding space.
 	    //
-	    if (can_put_span_inside(element))
-		insert_element(element, hint_tag, true, true);
+	    if (can_put_span_inside(container))
+		insert_element(container, hint_tag, true, true);
 	    else 
-		insert_element(element, hint_tag, span_before_okay(element), false);
+		insert_element(container, hint_tag, span_before_okay(container), false);
 	}
 
 
@@ -342,6 +349,10 @@ var AddHint = null;
 
     // returns false iff unable to safely add hint
     function add_inline_hint_inside(element, hint_number) {
+	if (Hints.option("exclude") && element.is(Hints.option_value("exclude"))) {
+	    return false;
+	}
+
 	var current = element;
 	for (;;) {
 	    if (!can_put_span_inside(current))
