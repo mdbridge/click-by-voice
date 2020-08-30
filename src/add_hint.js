@@ -244,19 +244,32 @@ var AddHint = null;
 
 	// move overlay into place at end after all inline hints have been
 	// inserted so their insertion doesn't mess up the overlay's position:
-	return () => {
+	return (function (self) {
+	    if (!element[0].isConnected) {
+		// console.log(`disconnecting: ${hint_number}:`);
+		// console.log(element[0]);
+		$(`[CBV_hint_tag='${hint_number}']`).remove();
+		$(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
+		return null;
+	    }
 	    try { 
 		// this fails for XML files...
 		var target_offset = element.offset();
+		var inner_offset = inner.offset();
 		if (show_at_end) {
 		    target_offset.left += element.outerWidth() 
-    		                        - inner.outerWidth();
+    		        - inner.outerWidth();
 		}
 		target_offset.top  -= displacement.up;
 		target_offset.left += displacement.right;
-		inner.offset(target_offset);
+		if (inner_offset.left != target_offset.left ||
+		    inner_offset.top != target_offset.top) {
+		    inner.offset(target_offset);
+		}
+		return self;
 	    } catch (e) {}
-	};
+	    return null;
+	});
     }
 
 

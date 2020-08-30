@@ -118,7 +118,7 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues (8/2020)
+## Known issues (8/30/2020)
 
 ### Selection of elements to hint
 
@@ -164,6 +164,9 @@ more on how this shortcut works, see
 * Webpages changing an element after the initial page load can make that
   element's hint disappear
   * usually refreshing hints will make the hint reappear
+* When a webpage removes then re-creates an element, it will get a new
+  hint; when done repeatedly, this causes the element's hint number to
+  keep increasing
 
 ### Other issues
 
@@ -185,6 +188,9 @@ more on how this shortcut works, see
 
 * 8/2020: New major version 0.21 released
   * Same-origin iframes are now supported
+  * as of 0.21.4, click-by-voice periodically checks and updates overlay
+    positioning if needed; this includes removing the overlay if the
+	underlying element is no longer connected/present
 * 4/2019: New major version 0.20 released
   * no official changes, but new experimental config feature available
 * 4/2018: New major version 0.19 released.

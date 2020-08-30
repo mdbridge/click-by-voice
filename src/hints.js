@@ -190,6 +190,8 @@ var Hints = null;
     // 
     //
 
+    var delayed_work = [];
+
     function place_hints() {
 	console.log("adding hints: " + options_to_string());
 
@@ -209,26 +211,38 @@ var Hints = null;
 	// FindHint.each_hintable(function(element) {});
 	// console.log("  just FindHint.each_hintable time:   " + (performance.now()-start) + " ms");
 	// start = performance.now();
-	
-	var delayed_work = [];
+
+	var new_delayed_work = [];
 	FindHint.each_hintable(function(element) {
 	    if (element.is("[CBV_hint_number]"))
 		return;
-	    element.attr("CBV_hint_number", next_CBV_hint_);
 
+	    element.attr("CBV_hint_number", next_CBV_hint_);
 	    var delayed = AddHint.add_hint(element, next_CBV_hint_);
 	    if (delayed)
-		delayed_work.push(delayed);
+		new_delayed_work.push(delayed);
 
 	    next_CBV_hint_ += 1;
 	});
 
-	delayed_work.map(function (o) { o(); });
+	var work = delayed_work.concat(new_delayed_work);
+	delayed_work = [];
+
+	var delayed_work_start = performance.now();
+	var removed_delayed_amount = 0;
+	work.map(function (o) {
+	    var continuation = o(o);
+	    if (continuation)
+		delayed_work.push(continuation);
+	    else
+		removed_delayed_amount++;
+	});
 
 	if (Hints.option("timing")) {
-	    console.log(`${next_CBV_hint_-start_hint}(${delayed_work.length}) + ${start_hint}` +
-			` -> ${next_CBV_hint_} hints` +
-			` in ${performance.now()-start} ms`);
+	    console.log(`+${next_CBV_hint_-start_hint}(${new_delayed_work.length})` +
+			` -> ${next_CBV_hint_} hints (${removed_delayed_amount} d)` +
+			` in ${(performance.now()-start).toFixed(1)} ms` +
+		       ` (${(performance.now()-delayed_work_start).toFixed(2)} ms)`);
 	}
     }
 
