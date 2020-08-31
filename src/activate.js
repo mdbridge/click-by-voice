@@ -109,7 +109,7 @@ var Activate = null;
 	    break;
 	}
 
-	if (element.css("cursor") == "pointer")
+	if (css(element, "cursor", null) == "pointer")
 	    return true;
 
 	return false;
