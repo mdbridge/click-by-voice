@@ -246,29 +246,65 @@ var AddHint = null;
 	// inserted so their insertion doesn't mess up the overlay's position:
 	return (function (self) {
 	    if (!element[0].isConnected) {
-		// console.log(`disconnecting: ${hint_number}:`);
-		// console.log(element[0]);
-		$(`[CBV_hint_tag='${hint_number}']`).remove();
-		$(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
-		return null;
+		return [null, () => {
+		    // console.log(`disconnecting: ${hint_number}:`);
+		    // console.log(element[0]);
+		    $(`[CBV_hint_tag='${hint_number}']`).remove();
+		    $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
+		}];
+	    }
+	    if (!inner[0].isConnected) {
+		return [null, () => {
+		    console.log(`lost hint for ${hint_number}`);
+		    // TODO: automatically reconnect at bottom of body? <<<>>>
+		    // do we need to preserve outer as well then?
+		    $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
+		}];
 	    }
 	    try { 
 		// this fails for XML files...
 		var target_offset = element.offset();
 		var inner_offset = inner.offset();
+		var element_hidden = (target_offset.top == 0 && target_offset.left == 0);
+		var inner_hidden = (inner_offset.top == 0 && inner_offset.left == 0);
 		if (show_at_end) {
 		    target_offset.left += element.outerWidth() 
     		        - inner.outerWidth();
 		}
 		target_offset.top  -= displacement.up;
 		target_offset.left += displacement.right;
-		if (inner_offset.left != target_offset.left ||
-		    inner_offset.top != target_offset.top) {
-		    inner.offset(target_offset);
+
+		if (element_hidden) {
+		    if (inner_hidden) {
+			return [self, null];
+		    }
+		    return [self, () => {
+			// console.log(`hiding hint for hidden element ${hint_number}`);
+			inner.attr("CBV_hidden", "true"); 
+		    }];
 		}
-		return self;
+		if (inner_hidden) {
+		    // TODO: what if hidden attribute already removed?
+		    return [self, () => {
+			// console.log(`unhiding hint for unhidden element ${hint_number}`);
+			inner.removeAttr("CBV_hidden"); 
+			inner.offset(target_offset);
+		    }];
+		}
+
+		if (Math.abs(inner_offset.left - target_offset.left) > 0.5 ||
+		    Math.abs(inner_offset.top - target_offset.top) > 0.5) {
+		    return [self, () => {
+			// console.log(`repositioning overlay for ${hint_number}`);
+			// console.log(`  ${inner_offset.top} x ${inner_offset.left}` + 
+			// 	    ` -> ${target_offset.top} x ${target_offset.left}`);
+			inner.offset(target_offset);
+		    }];
+		}
+		return [self, null];
 	    } catch (e) {}
-	    return null;
+	    // } catch (e) { console.log("exception:'s " + e); }
+	    return [null, null];
 	});
     }
 

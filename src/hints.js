@@ -190,7 +190,7 @@ var Hints = null;
     // 
     //
 
-    var delayed_work = [];
+    var daemons = [];
 
     function place_hints() {
 	console.log("adding hints: " + options_to_string());
@@ -212,37 +212,45 @@ var Hints = null;
 	// console.log("  just FindHint.each_hintable time:   " + (performance.now()-start) + " ms");
 	// start = performance.now();
 
-	var new_delayed_work = [];
+	var new_daemons = [];
 	FindHint.each_hintable(function(element) {
 	    if (element.is("[CBV_hint_number]"))
 		return;
 
 	    element.attr("CBV_hint_number", next_CBV_hint_);
-	    var delayed = AddHint.add_hint(element, next_CBV_hint_);
-	    if (delayed)
-		new_delayed_work.push(delayed);
+	    var daemon = AddHint.add_hint(element, next_CBV_hint_);
+	    if (daemon)
+		new_daemons.push(daemon);
 
 	    next_CBV_hint_ += 1;
 	});
 
-	var work = delayed_work.concat(new_delayed_work);
-	delayed_work = [];
+	var daemons_to_run = daemons.concat(new_daemons);
+	daemons = [];
 
-	var delayed_work_start = performance.now();
-	var removed_delayed_amount = 0;
-	work.map(function (o) {
-	    var continuation = o(o);
-	    if (continuation)
-		delayed_work.push(continuation);
-	    else
-		removed_delayed_amount++;
+	var daemons_start = performance.now();
+	var delayed_work = [];
+	daemons_to_run.map(function (daemon) {
+	    var [new_daemon, delayed] = daemon(daemon);
+	    if (delayed)
+		delayed_work.push(delayed);
+	    if (new_daemon)
+		daemons.push(new_daemon);
 	});
 
+	var delayed_work_start = performance.now();
+	delayed_work.map(function (w) { w(); });
+
 	if (Hints.option("timing")) {
-	    console.log(`+${next_CBV_hint_-start_hint}(${new_delayed_work.length})` +
-			` -> ${next_CBV_hint_} hints (${removed_delayed_amount} d)` +
+	    var main_time = daemons_start - start;
+	    var daemons_time = delayed_work_start - daemons_start;
+	    var delayed_time = performance.now() - delayed_work_start;
+	    console.log(`+${next_CBV_hint_-start_hint}(${new_daemons.length})` +
+			` -> ${next_CBV_hint_} hints (${daemons_to_run.length-daemons.length} d)` +
 			` in ${(performance.now()-start).toFixed(1)} ms` +
-		       ` (${(performance.now()-delayed_work_start).toFixed(2)} ms)`);
+			` (${main_time.toFixed(2)} ms;` +
+			` ${daemons_time.toFixed(2)} ms;` +
+			` ${delayed_time.toFixed(2)} ms)`);
 	}
     }
 

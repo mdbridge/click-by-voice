@@ -13,6 +13,10 @@
 	float:    none	  !important;
     }
 
+    [CBV_hint_element][CBV_hidden]:not(#CBV_override):not(#CBVISayOverride) {
+	display: none  !important;
+    }
+
     [CBV_add_text]:not(#CBV_override):not(#CBVISayOverride) {
 	font-family: arial, sans-serif !important;
 	text-shadow: none	       !important;
