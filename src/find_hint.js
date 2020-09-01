@@ -48,10 +48,18 @@ var FindHint = null;
 	//   Quora has placeholder links with click handlers so allow a's
 	//   w/o hrefs...
 	//
-	if (element.is("a, button, select, textarea, keygen, iframe"))
+	var element_tag = element[0].nodeName.toLowerCase();
+	switch (element_tag) {
+	    case "a":
+	    case "button":
+	    case "select":
+	    case "textarea":
+	    case "keygen":
+	    case "iframe":
 	    return true;
+	}
 
-	if (element.is("input")) {
+	if (element_tag == "input") {
 	    var input_type = element.attr("type");
 	    if (input_type)
 		input_type = input_type.toLowerCase();
@@ -117,15 +125,15 @@ var FindHint = null;
 	if (element.is("[tabindex]")) 
 	    return true;
 
-	if (element.is("li")) 
+	if (element_tag == "li") 
 	    return true;
 
 	// innermost div/span/img's are tempting click targets
-	if (element.is("div, span, img")) {
+	switch (element_tag) {
+	case "div": case "span": case "img":
 	    if (clickable_space(element) && element.children().length == 0)
 		return true;
 	}
-
 
 	return false;
     }

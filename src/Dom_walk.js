@@ -24,7 +24,8 @@ var DomWalk = null;
 	    each_displaying_helper($(this), pre_callback, post_callback, exclusion);
 	});
 
-	if (element.is("iframe")) {
+	var element_tag = element[0].nodeName.toLowerCase();
+	if (element_tag == "iframe") {
 	    try {
 		// var sub_body = $('body', element.contents());
 		// each_displaying_helper(sub_body, pre_callback, post_callback);
