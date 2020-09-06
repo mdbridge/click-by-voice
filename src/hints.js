@@ -214,7 +214,7 @@ var Hints = null;
 
 	var new_daemons = [];
 	FindHint.each_hintable(function(element) {
-	    if (element.is("[CBV_hint_number]"))
+	    if (element[0].hasAttribute("CBV_hint_number"))
 		return;
 
 	    element.attr("CBV_hint_number", next_CBV_hint_);

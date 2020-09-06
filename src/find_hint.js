@@ -73,9 +73,9 @@ var FindHint = null;
 	//
 	// HTML elements directly made clickable or focusable
 	//
-	if (element.is("[onclick]")) 
+	if (element[0].hasAttribute("onclick")) 
 	    return true;
-	if (element.is("[tabindex]") && element.attr("tabindex") >= 0)
+	if (element[0].hasAttribute("tabindex") && element.attr("tabindex") >= 0)
 	    return true;
 
 
@@ -122,7 +122,7 @@ var FindHint = null;
 	//
 
 	// this is *everything* focusable:
-	if (element.is("[tabindex]")) 
+	if (element[0].hasAttribute("tabindex")) 
 	    return true;
 
 	if (element_tag == "li") 
