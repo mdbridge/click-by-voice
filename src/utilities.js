@@ -36,5 +36,5 @@ function css(element, property_name, default_value) {
 //
 
 function CBV_inserted_element(element) {
-    return element.attr("CBV_hint_element") == "true";
+    return element[0].getAttribute("CBV_hint_element") == "true";
 }

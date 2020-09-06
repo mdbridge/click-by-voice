@@ -37,12 +37,13 @@ var FindHint = null;
 	    return true;
 
 	    case "input":
-	    var input_type = element.attr("type");
+	    var input_type = element[0].getAttribute("type");
 	    if (input_type)
 		input_type = input_type.toLowerCase();
 	    if (input_type != "hidden" 
 		// not sure false is actually kosher; spec says otherwise <<<>>>
-		&& (element.attr("disabled")=="false" || element.attr("disabled")===undefined))
+		&& (element[0].getAttribute("disabled")=="false" 
+		    || element[0].getAttribute("disabled")===null))
 		return true;
 	    break;
 	}
@@ -53,7 +54,7 @@ var FindHint = null;
 	//
 	if (element[0].hasAttribute("onclick")) 
 	    return true;
-	if (element[0].hasAttribute("tabindex") && element.attr("tabindex") >= 0)
+	if (element[0].hasAttribute("tabindex") && element[0].getAttribute("tabindex") >= 0)
 	    return true;
 
 
@@ -62,7 +63,7 @@ var FindHint = null;
 	// focusable via tabindex=-1
 	//
 	if (!Hints.option("A")) {
-	    var role = element.attr("role");
+	    var role = element[0].getAttribute("role");
 	    switch (role) {
 	    case "button":
 	    case "checkbox":
@@ -153,7 +154,7 @@ var FindHint = null;
 	    }, function (element, styles) {
 		if (Hints.option('$') && !Hints.option("C"))
 		    return;
-		if (element.attr("CBV_hint_number"))
+		if (element[0].getAttribute("CBV_hint_number"))
 		    return;
 
 		if (styles.cursor != "pointer") {
@@ -162,14 +163,14 @@ var FindHint = null;
 		if (styles.visibility == "hidden") {
 		    return;  // visibility blocks cursor: pointer
 		}
-		if (window.getComputedStyle(element[0].parentNode).cursor=="pointer")
-		// if (element.parent().css("cursor")=="pointer")
+		const parent = element[0].parentNode;
+		if (window.getComputedStyle(parent).cursor=="pointer")
 		    return;
 
 		if (!clickable_space(element))
 		    return;
 
-		if (element.parent().attr("CBV_hint_number"))
+		if (parent.getAttribute("CBV_hint_number"))
 		    return;
 
 		if (element.has("[CBV_hint_number]").length != 0)
