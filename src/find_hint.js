@@ -21,26 +21,9 @@ var FindHint = null;
     }
 
 
-    function hintable(element) {
-	// for timing how much hintable costs:
-	if (Hints.option("N"))
-	    return false;
-
-	// don't hint invisible elements (their children may be another matter)
-	if (css(element, "visibility") == "hidden" && Hints.option_value("+",0)<2) 
-	    return false;
-
-
-	//
-	// Experiments:
-	//
+    function fast_hintable(element) {
 	if (Hints.option('$'))
 	    return element.is(Hints.option_value('$'));
-	if (Hints.option('|') && element.is(Hints.option_value('|')))
-	    return true;
-	if (Hints.option('^') && element.is(Hints.option_value('^')))
-	    return false;
-
 
 	//
 	// Standard clickable or focusable HTML elements
@@ -57,9 +40,8 @@ var FindHint = null;
 	    case "keygen":
 	    case "iframe":
 	    return true;
-	}
 
-	if (element_tag == "input") {
+	    case "input":
 	    var input_type = element.attr("type");
 	    if (input_type)
 		input_type = input_type.toLowerCase();
@@ -67,6 +49,7 @@ var FindHint = null;
 		// not sure false is actually kosher; spec says otherwise <<<>>>
 		&& (element.attr("disabled")=="false" || element.attr("disabled")===undefined))
 		return true;
+	    break;
 	}
 
 
@@ -108,8 +91,8 @@ var FindHint = null;
 
 
 	// hard coding XML file buttons: <<<>>>
-	if (/\.xml/.test(window.location.href)) {
-	    if (element.is("span.button.collapse-button, span.button.expand-button"))
+	if (/\.xml/i.test(window.location.href)) {
+	    if (element.is("span.folder-button.open, span.folder-button.fold"))
 		return true;
 	}
 
@@ -136,8 +119,32 @@ var FindHint = null;
 	}
 
 	return false;
+
     }
 
+    function hintable(element) {
+	// for timing how much hintable costs:
+	if (Hints.option("N"))
+	    return false;
+
+	if (fast_hintable(element)) {
+	    // don't hint invisible elements (their children may be another matter)
+	    if (css(element, "visibility") == "hidden" && Hints.option_value("+",0)<2) 
+		return false;
+
+	    if (Hints.option('^') && element.is(Hints.option_value('^')))
+		return false;
+	    return true;
+	} else {
+	    if (Hints.option('|') && element.is(Hints.option_value('|'))) {
+		// don't hint invisible elements (their children may be another matter)
+		if (css(element, "visibility") == "hidden" && Hints.option_value("+",0)<2) 
+		    return false;
+		return true;
+	    }
+	    return false;
+	}
+    }
 
     // Enumerate each element that we should hint:
     function each_hintable(callback) {
