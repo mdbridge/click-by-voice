@@ -154,7 +154,11 @@ var FindHint = null;
 	    }, function (element, styles) {
 		if (Hints.option('$') && !Hints.option("C"))
 		    return;
+
+		const parent = element[0].parentNode;
 		if (element[0].getAttribute("CBV_hint_number"))
+		    return;
+		if (parent.getAttribute("CBV_hint_number"))
 		    return;
 
 		if (styles.cursor != "pointer") {
@@ -163,14 +167,10 @@ var FindHint = null;
 		if (styles.visibility == "hidden") {
 		    return;  // visibility blocks cursor: pointer
 		}
-		const parent = element[0].parentNode;
 		if (window.getComputedStyle(parent).cursor=="pointer")
 		    return;
 
 		if (!clickable_space(element))
-		    return;
-
-		if (parent.getAttribute("CBV_hint_number"))
 		    return;
 
 		if (element.has("[CBV_hint_number]").length != 0)
