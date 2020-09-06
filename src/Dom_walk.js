@@ -11,14 +11,16 @@ var DomWalk = null;
 	if (CBV_inserted_element(element))
     	    return;
 
-	if (css(element, "display") == "none")
+	styles = window.getComputedStyle(element[0]);
+	if (styles.display == "none") {
 	    return;
+	}
 
 	if (exclusion && element.is(exclusion))
 	    return;
 
 	if (pre_callback)
-	    pre_callback(element);
+	    pre_callback(element, styles);
 
 	element.children().each(function(index) {
 	    each_displaying_helper($(this), pre_callback, post_callback, exclusion);
@@ -40,7 +42,7 @@ var DomWalk = null;
 	}
 
 	if (post_callback)
-	    post_callback(element);
+	    post_callback(element, styles);
     }
 
 

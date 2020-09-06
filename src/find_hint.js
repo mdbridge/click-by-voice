@@ -10,13 +10,8 @@ var FindHint = null;
 
     // does element occupy enough space to be easily clickable?
     function clickable_space(element) {
-	try {
-	    // Jquery gives errors for these if they are auto due to
-	    // no CSS (e.g., XML files):
-	    if (element.outerHeight(true)<8 
-		|| element.outerWidth(true)<8)
-		return false;
-	} catch (e) {}
+	if (element[0].offsetHeight<8 || element[0].offsetWidth<8)
+	    return false;
 	return true;
     }
 
@@ -122,14 +117,14 @@ var FindHint = null;
 
     }
 
-    function hintable(element) {
+    function hintable(element, styles) {
 	// for timing how much hintable costs:
 	if (Hints.option("N"))
 	    return false;
 
 	if (fast_hintable(element)) {
 	    // don't hint invisible elements (their children may be another matter)
-	    if (css(element, "visibility") == "hidden" && Hints.option_value("+",0)<2) 
+	    if (styles.visibility == "hidden" && Hints.option_value("+",0)<2) 
 		return false;
 
 	    if (Hints.option('^') && element.is(Hints.option_value('^')))
@@ -138,7 +133,7 @@ var FindHint = null;
 	} else {
 	    if (Hints.option('|') && element.is(Hints.option_value('|'))) {
 		// don't hint invisible elements (their children may be another matter)
-		if (css(element, "visibility") == "hidden" && Hints.option_value("+",0)<2) 
+		if (styles.visibility == "hidden" && Hints.option_value("+",0)<2) 
 		    return false;
 		return true;
 	    }
@@ -150,22 +145,25 @@ var FindHint = null;
     function each_hintable(callback) {
 	DomWalk.each_displaying(
 	    // pre-order traversal:
-	    function (element) {
-		if (hintable(element))
+	    function (element, styles) {
+		if (hintable(element, styles))
 		    callback(element);
 
 		// post-order traversal:
-	    }, function (element) {
+	    }, function (element, styles) {
 		if (Hints.option('$') && !Hints.option("C"))
 		    return;
 		if (element.attr("CBV_hint_number"))
 		    return;
 
-		if (css(element, "cursor") != "pointer")
-		    return;  // XML webpages return here
-		if (element.css("visibility") == "hidden") 
+		if (styles.cursor != "pointer") {
+		    return;
+		}
+		if (styles.visibility == "hidden") {
 		    return;  // visibility blocks cursor: pointer
-		if (element.parent().css("cursor")=="pointer")
+		}
+		if (window.getComputedStyle(element[0].parentNode).cursor=="pointer")
+		// if (element.parent().css("cursor")=="pointer")
 		    return;
 
 		if (!clickable_space(element))

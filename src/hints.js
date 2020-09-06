@@ -202,8 +202,8 @@ var Hints = null;
 	var start = performance.now();
 
 	// DomWalk.each_displaying(
-	//     function (element) {},
-	//     function (element) {},
+	//     function (element, styles) {},
+	//     function (element, styles) {},
 	//     "");
 	// console.log("  just DomWalk time:   " + (performance.now()-start) + " ms");
 	// start = performance.now();
