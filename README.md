@@ -118,7 +118,7 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues (8/30/2020)
+## Known issues (9/6/2020)
 
 ### Selection of elements to hint
 
@@ -149,6 +149,9 @@ more on how this shortcut works, see
   * e.g., the generated mouse events do not include coordinates and
     hover does not simulate moving the mouse over all the parent
     elements to the target element
+* Chrome clipboard bugs:
+  * using !!! without following text (e.g., wanted an empty clipboard afterwards) leaves the command in the clipboard because there is no way to empty the clipboard in Chrome extensions
+  * using !!! with thousands of lines can hang the browser for quite a long time
 
 ### Hint display
 
