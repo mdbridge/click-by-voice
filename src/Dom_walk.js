@@ -3,7 +3,7 @@
 ///
 /// Provides DomWalk
 
-var DomWalk = null;
+let DomWalk = null;
 
 (function() {
 
@@ -11,7 +11,7 @@ var DomWalk = null;
 	if (CBV_inserted_element(element))
     	    return;
 
-	styles = window.getComputedStyle(element[0]);
+	const styles = window.getComputedStyle(element[0]);
 	if (styles.display == "none") {
 	    return;
 	}
@@ -26,7 +26,7 @@ var DomWalk = null;
 	    each_displaying_helper($(this), pre_callback, post_callback, exclusion);
 	});
 
-	var element_tag = element[0].nodeName.toLowerCase();
+	const element_tag = element[0].nodeName.toLowerCase();
 	if (element_tag == "iframe") {
 	    try {
 		// var sub_body = $('body', element.contents());

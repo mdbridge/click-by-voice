@@ -3,14 +3,14 @@
 ///
 /// Provides AddHint
 
-var AddHint = null;
+let AddHint = null;
 
 (function() {
 
 
     // place me <<<>>>
     function CSS_number(element, property_name) {
-	var value = css(element, property_name, "none");
+	const value = css(element, property_name, "none");
 	//console.log(property_name + " -> " + value);
 	if (value == "none")
 	    return 0;
@@ -61,7 +61,7 @@ var AddHint = null;
     //
 
     function build_base_element() {
-	var element = $("<span></span>");
+	const element = $("<span></span>");
 	// mark our inserted elements so we can distinguish them:
 	element.attr("CBV_hint_element", "true"); 
 	return element;
@@ -76,13 +76,13 @@ var AddHint = null;
     }
 
     function build_hint(element, hint_number, use_overlay) {
-	var outer = build_base_element();
+	const outer = build_base_element();
 	outer.attr("CBV_hint_tag", hint_number);
 
 	if (use_overlay) {
 	    outer.attr("CBV_outer_overlay", "true");
 
-	    var inner = build_base_element();
+	    const inner = build_base_element();
 	    outer.append(inner);
 
 	    inner.attr("CBV_inner_overlay", "true");
@@ -96,9 +96,9 @@ var AddHint = null;
 	    // beat hinted element's z-index by at least one;
 	    // if we are not in a different stacking context, this should
 	    // put us on top of it.
-	    var zindex = css(element, "z-index", 0);
+	    let zindex = css(element, "z-index", 0);
 	    if (Hints.option("zindex")) {
-		min_zindex = Hints.option_value("zindex");
+		const min_zindex = Hints.option_value("zindex");
 		if (zindex < min_zindex || zindex == "auto")
 		    zindex = min_zindex;
 	    }
@@ -167,19 +167,19 @@ var AddHint = null;
     //
 
     function compute_displacement(element) {
-	var displacement = parseInt(Hints.option_value('E', '0'));
-	var displacement_right = parseInt(Hints.option_value('displaceX', displacement));
-	var displacement_up    = parseInt(Hints.option_value('displaceY', displacement));
-	var extra_displacement_right = 0;
+	const displacement = parseInt(Hints.option_value('E', '0'));
+	const displacement_right = parseInt(Hints.option_value('displaceX', displacement));
+	const displacement_up    = parseInt(Hints.option_value('displaceY', displacement));
+	let extra_displacement_right = 0;
 	if (Hints.option("?") && element.is("input")) {
-	    var padding = CSS_number(element,"padding-right");
+	    const padding = CSS_number(element,"padding-right");
 	    // too large padding mean something's probably being
 	    // positioned there absolutely so don't put overlay there
 	    if (padding > 10)
 		extra_displacement_right = -padding + 5;
 	}
 
-	var use_displacement = false;
+	let use_displacement = false;
 	if (element.is('a, code, b, i, strong, em, abbr, input[type="checkbox"], input[type="radio"]') && element.children().length == 0) {
 	    use_displacement = true;
 	}
@@ -199,9 +199,9 @@ var AddHint = null;
 
 
     function add_overlay_hint(element, hint_number) {
-	var hint_tag    = build_hint(element, hint_number, true);
-	var inner	= hint_tag.children().first();
-	var show_at_end = !Hints.option("s");
+	const hint_tag    = build_hint(element, hint_number, true);
+	const inner	= hint_tag.children().first();
+	let show_at_end = !Hints.option("s");
 
 	// hard coding reddit entire story link: <<<>>>
 	if (/\.reddit\.com/.test(window.location.href)) {
@@ -210,9 +210,9 @@ var AddHint = null;
 	}
 
 	// needs to be before we insert the hint tag <<<>>>
-	var displacement = compute_displacement(element);
+	const displacement = compute_displacement(element);
 
-	var container = element;
+	let container = element;
 	if (Hints.option("exclude")) {
 	    while (container.is(Hints.option_value("exclude"))) {
 		container = container.parent();
@@ -263,10 +263,10 @@ var AddHint = null;
 	    }
 	    try { 
 		// this fails for XML files...
-		var target_offset = element.offset();
-		var inner_offset = inner.offset();
-		var element_hidden = (target_offset.top == 0 && target_offset.left == 0);
-		var inner_hidden = (inner_offset.top == 0 && inner_offset.left == 0);
+		let target_offset = element.offset();
+		const inner_offset = inner.offset();
+		const element_hidden = (target_offset.top == 0 && target_offset.left == 0);
+		const inner_hidden = (inner_offset.top == 0 && inner_offset.left == 0);
 		if (show_at_end) {
 		    target_offset.left += element.outerWidth() 
     		        - inner.outerWidth();
@@ -319,10 +319,10 @@ var AddHint = null;
 	if (element.is("iframe"))
 	    return [];
 	
-	var indent = css(element, "text-indent");
+	const indent = css(element, "text-indent");
 	if (indent && /^-999/.test(indent))
 	    return [];
-	var font_size = css(element, "font-size");
+	const font_size = css(element, "font-size");
 	if (font_size && /^0[^0-9]/.test(font_size))
             return [];
 
@@ -350,11 +350,11 @@ var AddHint = null;
     function get_text_overflow_ellipisis_clip(element) {
 	for (;;) {
 	    if (css(element, "text-overflow", "clip") != "clip") {
-		var clip = {right: element[0].getBoundingClientRect().right};
+		let clip = {right: element[0].getBoundingClientRect().right};
 
 		clip.right  -= CSS_number(element,"border-right-width") - 
 		    CSS_number(element,"padding-right");
-		var slop = CSS_number(element,"max-width") - element.width();
+		const slop = CSS_number(element,"max-width") - element.width();
 		if (slop>0)
 		    clip.right += slop;
 
@@ -376,7 +376,7 @@ var AddHint = null;
 
 
     function ellipsis_clipping_possible(element) {
-	var clip = get_text_overflow_ellipisis_clip(element);
+	const clip = get_text_overflow_ellipisis_clip(element);
 	if (!clip)
 	    return false;
 
@@ -398,15 +398,15 @@ var AddHint = null;
 	    return false;
 	}
 
-	var current = element;
+	let current = element;
 	for (;;) {
 	    if (!can_put_span_inside(current))
 		return false;
 
-	    var inside = visual_contents(current);
+	    const inside = visual_contents(current);
 	    if (inside.length == 0)
 		return false;
-	    var last_inside = inside.last();
+	    const last_inside = inside.last();
 
 	    if (last_inside[0].nodeType == Node.ELEMENT_NODE
 		&& last_inside.is("div, span, i, b, strong, em, code, font, abbr")) {
@@ -422,7 +422,7 @@ var AddHint = null;
 	    if (css(current, "display") == "flex")
 		return false;
 
-	    var put_before = false;
+	    let put_before = false;
 	    if (!Hints.option(".") && ellipsis_clipping_possible(current)) {
 		if (!Hints.option(">"))
 		    put_before = true;
@@ -430,8 +430,8 @@ var AddHint = null;
 		    return false;
 	    }
 
-	    //var hint_tag = build_hint(element, hint_number, false);
-	    var hint_tag = build_hint(current, hint_number, false);
+	    //const hint_tag = build_hint(element, hint_number, false);
+	    const hint_tag = build_hint(current, hint_number, false);
 	    insert_element(current, hint_tag, put_before, true);
 	    return true;
 	}
@@ -440,7 +440,7 @@ var AddHint = null;
 
     // this is often unsafe; prefer add_inline_hint_inside
     function add_inline_hint_outside(element, hint_number) {
-	var hint_tag = build_hint(element, hint_number, false);
+	const hint_tag = build_hint(element, hint_number, false);
 	insert_element(element, hint_tag, false, false);
     }
 
@@ -449,7 +449,7 @@ var AddHint = null;
     function add_hint(element, hint_number) {
 	if (Hints.option("#")) {
 	    if (element.is("a") || element.is("button")) {
-		var hint_tag = build_hint(element, hint_number, false);
+		const hint_tag = build_hint(element, hint_number, false);
 		insert_element(element, hint_tag, false, true);
 		return null;
 	    }

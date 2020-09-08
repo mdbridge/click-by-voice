@@ -3,7 +3,7 @@
 ///
 /// Provides FindHint
 
-var FindHint = null;
+let FindHint = null;
 
 (function() {
 
@@ -26,7 +26,7 @@ var FindHint = null;
 	//   Quora has placeholder links with click handlers so allow a's
 	//   w/o hrefs...
 	//
-	var element_tag = element[0].nodeName.toLowerCase();
+	const element_tag = element[0].nodeName.toLowerCase();
 	switch (element_tag) {
 	    case "a":
 	    case "button":
@@ -37,7 +37,7 @@ var FindHint = null;
 	    return true;
 
 	    case "input":
-	    var input_type = element[0].getAttribute("type");
+	    let input_type = element[0].getAttribute("type");
 	    if (input_type)
 		input_type = input_type.toLowerCase();
 	    if (input_type != "hidden" 
@@ -63,7 +63,7 @@ var FindHint = null;
 	// focusable via tabindex=-1
 	//
 	if (!Hints.option("A")) {
-	    var role = element[0].getAttribute("role");
+	    const role = element[0].getAttribute("role");
 	    switch (role) {
 	    case "button":
 	    case "checkbox":
