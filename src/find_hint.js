@@ -128,8 +128,12 @@ let FindHint = null;
 	    if (styles.visibility == "hidden" && Hints.option_value("+",0)<2) 
 		return false;
 
-	    if (Hints.option('^') && element.is(Hints.option_value('^')))
+	    if (Hints.option('^') && element.is(Hints.option_value('^'))) {
+		if (Hints.option('|') && element.is(Hints.option_value('|'))) {
+		    return true;
+		}
 		return false;
+	    }
 	    return true;
 	} else {
 	    if (Hints.option('|') && element.is(Hints.option_value('|'))) {
