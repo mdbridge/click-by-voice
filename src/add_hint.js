@@ -254,10 +254,15 @@ let AddHint = null;
 		}];
 	    }
 	    if (!inner[0].isConnected) {
+		if (Hints.option("keep_hints")) {
+		    // some webpages seem to temporarily disconnect then reconnect hints
+		    return [self, null];
+		}
 		return [null, () => {
-		    console.log(`lost hint for ${hint_number}`);
+		    console.log(`lost hint for ${hint_number}; removing...`);
 		    // TODO: automatically reconnect at bottom of body? <<<>>>
 		    // do we need to preserve outer as well then?
+		    $(`[CBV_hint_tag='${hint_number}']`).remove();
 		    $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
 		}];
 	    }
