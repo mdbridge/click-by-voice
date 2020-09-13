@@ -148,11 +148,21 @@ let FindHint = null;
 
     // Enumerate each element that we should hint:
     function each_hintable(callback) {
+	let has_hinted_element = new WeakMap();
+	function set_hinted(element) {
+	    let e = element[0];
+	    do {
+		has_hinted_element.set(e, true);
+		e = e.parentNode;
+	    } while (e);
+	}
 	DomWalk.each_displaying(
 	    // pre-order traversal:
 	    function (element, styles) {
-		if (hintable(element, styles))
+		if (hintable(element, styles)) {
+		    set_hinted(element);
 		    callback(element);
+		}
 
 		// post-order traversal:
 	    }, function (element, styles) {
@@ -177,12 +187,13 @@ let FindHint = null;
 		if (!clickable_space(element))
 		    return;
 
-		if (element.has("[CBV_hint_number]").length != 0)
+		if (has_hinted_element.has(element[0]))
 		    return;
 
 		if (Hints.option('^') && element.is(Hints.option_value('^')))
 		    return false;
 
+		set_hinted(element);
 		if (Hints.option("C"))
 		    Hints.with_high_contrast(
 			function () { callback(element); });
