@@ -38,3 +38,12 @@ function css(element, property_name, default_value) {
 function CBV_inserted_element(element) {
     return element[0].getAttribute("CBV_hint_element") == "true";
 }
+
+
+
+function time(start, end) {
+    if (!end) {
+	end = performance.now();
+    }
+    return `${(end - start).toFixed(1)} ms`;
+}
