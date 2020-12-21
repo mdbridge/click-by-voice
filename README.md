@@ -189,6 +189,9 @@ more on how this shortcut works, see
 
 ## News
 
+* 12/2020: New major version 0.22 released
+  * major performance improvements; perceived lag of using CBV should be
+    greatly reduced as well as CPU usage
 * 8/2020: New major version 0.21 released
   * Same-origin iframes are now supported
   * as of 0.21.4, click-by-voice periodically checks and updates overlay
