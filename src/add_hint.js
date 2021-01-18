@@ -291,55 +291,58 @@ let AddHint = null;
 	    }
 	    future_sensing(daemon);
 
-	    try { 
-		// this fails for XML files...
-		let target_offset    = element.offset();
-		const inner_offset   = inner.offset();
-		const element_hidden = (target_offset.top == 0 && target_offset.left == 0);
-		const inner_hidden   = (inner_offset.top == 0 && inner_offset.left == 0);
-		if (show_at_end) {
-		    target_offset.left += element.outerWidth() 
-    		        - inner.outerWidth();
-		}
-		target_offset.top  -= displacement.up;
-		target_offset.left += displacement.right;
+	    const target_box     = element[0].getBoundingClientRect();
+	    const inner_box	 = inner[0]  .getBoundingClientRect();
+	    const element_hidden = (target_box.top == 0 && target_box.left == 0);
+	    const inner_hidden   = (inner_box .top == 0 && inner_box .left == 0);
+	    let target_top  = target_box.top;
+	    let target_left = target_box.left;
+	    if (show_at_end) {
+		target_left += target_box.width - inner_box.width;
+	    }
+	    target_top  -= displacement.up;
+	    target_left += displacement.right;
 
-		if (element_hidden) {
-		    if (inner_hidden) {
-			return;
-		    }
-		    mutating(() => {
-			// console.log(`hiding hint for hidden element ${hint_number}`);
-			inner.attr("CBV_hidden", "true"); 
-		    });
-		    return;
-		}
+	    if (element_hidden) {
 		if (inner_hidden) {
-		    // TODO: what if hidden attribute already removed?
-		    mutating(() => {
-			// console.log(`unhiding hint for unhidden element ${hint_number}`);
-			inner.removeAttr("CBV_hidden"); 
-			inner.offset(target_offset);
-		    });
 		    return;
 		}
+		mutating(() => {
+		    // console.log(`hiding hint for hidden element ${hint_number}`);
+		    inner.attr("CBV_hidden", "true"); 
+		});
+		return;
+	    }
+	    if (inner_hidden) {
+		// TODO: what if hidden attribute already removed?
+		const style = inner[0].style;
+		if (style == undefined) return;  // XML case...
+		let inner_top  = parseFloat(style.top);
+		let inner_left = parseFloat(style.left);
+		mutating(() => {
+		    // console.log(`unhiding hint for unhidden element ${hint_number}`);
+		    inner.removeAttr("CBV_hidden"); 
+		    inner[0].style.top	= `${inner_top + target_top - inner_box.top}px`;
+		    inner[0].style.left = `${inner_left + target_left - inner_box.left}px`;
+		});
+		return;
+	    }
 
-		if (Math.abs(inner_offset.left - target_offset.left) > 0.5 ||
-		    Math.abs(inner_offset.top - target_offset.top) > 0.5) {
-		    let inner_top = parseFloat(inner[0].style.top);
-		    let inner_left = parseFloat(inner[0].style.left);
-		    mutating(() => {
-			// console.log(`repositioning overlay for ${hint_number}`);
-			// console.log(`  ${inner_offset.top} x ${inner_offset.left}` + 
-			// 	    ` -> ${target_offset.top} x ${target_offset.left}`);
+	    if (Math.abs(inner_box.left - target_left) > 0.5 ||
+		Math.abs(inner_box.top - target_top) > 0.5) {
+		const style = inner[0].style;
+		if (style == undefined) return;  // XML case...
+		let inner_top  = parseFloat(style.top);
+		let inner_left = parseFloat(style.left);
+		mutating(() => {
+		    // console.log(`(re)positioning overlay for ${hint_number}`);
+		    // console.log(`  ${inner_box.top} x ${inner_box.left}` + 
+		    // 		` -> ${target_top} x ${target_left}`);
 
-			//inner.offset(target_offset);
-			inner[0].style.top = `${inner_top + target_offset.top - inner_offset.top}px`;
-			inner[0].style.left = `${inner_left + target_offset.left - inner_offset.left}px`;
-		    });
-		}
-	    } catch (e) {}
-	    // } catch (e) { console.log("exception:'s " + e); }
+		    inner[0].style.top	= `${inner_top + target_top - inner_box.top}px`;
+		    inner[0].style.left = `${inner_left + target_left - inner_box.left}px`;
+		});
+	    }
 	};
 	return daemon;
     }
