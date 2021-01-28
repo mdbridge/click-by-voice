@@ -40,14 +40,13 @@ var Hints = null;
 	    place_hints();
     }
 
-    function remove_hints() {
+    function remove_hints(from=document) {
 	AddHint.clear_work();
-	$("[CBV_hint_element]").remove();
-	$("[CBV_hint_number]").removeAttr("CBV_hint_number");
-	frame = $("iframe");
+	$("[CBV_hint_element]", from).remove();
+	$("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
+	frame = $("iframe, frame", from);
 	if (frame.length != 0) {
-	    $("[CBV_hint_element]", frame.contents()).remove();
-	    $("[CBV_hint_number]", frame.contents()).removeAttr("CBV_hint_number");
+	    remove_hints(frame.contents());
 	}
 
 	next_CBV_hint_ = -1;
