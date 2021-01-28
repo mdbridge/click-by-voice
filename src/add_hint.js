@@ -195,7 +195,7 @@ let AddHint = null;
 	if (element.is("select, option, textarea")) 
 	    return false;
 
-	if (element.is("iframe")) 
+	if (element.is("iframe, frame"))
 	    // iframe contents are displayed only if browser doesn't support iframe's
 	    return false;
 
@@ -424,7 +424,7 @@ let AddHint = null;
 
 
     function visual_contents(element) {
-	if (element.is("iframe"))
+	if (element.is("iframe, frame"))
 	    return [];
 	
 	const indent = css(element, "text-indent");

@@ -34,6 +34,7 @@ let FindHint = null;
 	    case "textarea":
 	    case "keygen":
 	    case "iframe":
+	    case "frame":
 	    return true;
 
 	    case "input":

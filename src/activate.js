@@ -133,7 +133,7 @@ var Activate = null;
     }
 
     function href(element) {
-	if (element.is("iframe"))
+	if (element.is("iframe, frame"))
 	    return element[0].src;
 	if (element.attr("href"))
 	    return element[0].href;
