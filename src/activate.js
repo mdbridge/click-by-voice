@@ -322,31 +322,36 @@ var Activate = null;
 	}, 250);
     }
 
+    // Finds a hint element on the page, or in a nested frame.
     function find_hint(hint, ...contents) {
-	var element;
-	var match = hint.match(/^\$\{(.*)\}("(.*)")?$/);
-	if (match) {
-	    element = $(match[1], ...contents);
-	    if (match[3]) {
-		target = match[3].toLowerCase();
-		element = element.filter(function(index, e) {
-		    return e.textContent.toLowerCase().includes(target);
-		});
-	    }
-	    element = element.first();
-	} else
-	    element = $("[CBV_hint_number='" + hint + "']", ...contents);
-	return element;
+        var element;
+        var match = hint.match(/^\$\{(.*)\}("(.*)")?$/);
+        if (match) {
+            element = $(match[1], ...contents);
+            if (match[3]) {
+                target = match[3].toLowerCase();
+                element = element.filter(function(index, e) {
+                    return e.textContent.toLowerCase().includes(target);
+                });
+            }
+            element = element.first();
+        } else {
+            element = $("[CBV_hint_number='" + hint + "']", ...contents);
+        }
+
+        // if the hint was not found, search recursively in any iframes
+        if (element.length == 0) {
+            var frames = $("iframe, frame", ...contents);
+            if (frames.length != 0) {
+                return find_hint(hint, frames.contents());
+            }
+        }
+
+        return element;
     }
 
     function goto_hint(hint, operation) {
 	var element = find_hint(hint);
-	if (element.length == 0) {
-	    frame = $("iframe");
-	    if (frame.length != 0) {
-		element = find_hint(hint, frame.contents());
-	    }
-	}
 	if (element.length == 0) {
 	    console.log("goto_hint: unable to find hint: " + hint);
 	    return;
