@@ -170,6 +170,10 @@ let AddHint = null;
 	    if (zindex > 0)
 		set_important(inner, "z-index", zindex+1);
 
+	} else if (Hints.option("new_hints")) {
+	    outer.attr("CBV_outer_inline2", "true");
+	    if (Hints.option("c"))
+		outer.attr("CBV_high_contrast", "true");
 	} else {
 	    outer.attr("CBV_outer_inline", "true");
 	    add_text(outer, hint_number);
