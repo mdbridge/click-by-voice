@@ -88,6 +88,7 @@
 	padding:        0px 2px 0px 2px !important;
 	border-style:   none		!important;
 	margin: 	0px		!important;
+	pointer-events: none		!important;
     }
 
     [CBV_inner_overlay][CBV_high_contrast]:not(#CBV_override):not(#CBVISayOverride) {
