@@ -27,7 +27,7 @@
     }
 
 
-    [CBV_outer_inline2]:not(#CBV_override):not(#CBVISayOverride) {
+    [CBV_outer_inline]:not(#CBV_override):not(#CBVISayOverride) {
 	position: 	static	       !important;
 	/* vertical-align: super       !important; */
 	vertical-align: baseline       !important;
@@ -42,7 +42,7 @@
 	border-width:  0px	       !important;
 	margin-left:   0px	       !important;
     }
-    [CBV_outer_inline2]:not(#CBV_override):not(#CBVISayOverride)::after {
+    [CBV_outer_inline]:not(#CBV_override):not(#CBVISayOverride)::after {
 	content:       attr(CBV_hint_tag) !important;
 	padding:       0px 2px 0px 2px !important;
 	border-style:  solid	       !important;
@@ -57,33 +57,10 @@
 	text-align:  left	       !important;
 	word-break:  normal	       !important;  /* prevent breaking of hint numbers */
     }
-    [CBV_outer_inline2][CBV_high_contrast]:not(#CBV_override):not(#CBVISayOverride)::after {
+    [CBV_outer_inline][CBV_high_contrast]:not(#CBV_override):not(#CBVISayOverride)::after {
 	color:            black  !important;
 	background-color: yellow !important;
     }
-
-
-    [CBV_outer_inline]:not(#CBV_override):not(#CBVISayOverride) {
-	position: 	static	       !important;
-	/* vertical-align: super       !important; */
-	vertical-align: baseline       !important;
-	/* in case we are a child of a flex box: */
-	align-self:     flex-start     !important;
-
-	/* max-width:     20px	       !important; */
-	/* max-height:    10px	       !important; */
-	padding:       0px 2px 0px 2px !important;
-	border-style:  solid	       !important;
-	border-radius: 2px	       !important;
-	border-width:  1px	       !important;
-	margin-left:   2px	       !important;
-    }
-
-    [CBV_outer_inline][CBV_high_contrast]:not(#CBV_override):not(#CBVISayOverride) {
-	color:            black  !important;
-	background-color: yellow !important;
-    }
-
 
 
     [CBV_outer_overlay]:not(#CBV_override):not(#CBVISayOverride) {
