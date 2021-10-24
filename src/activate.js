@@ -133,7 +133,7 @@ var Activate = null;
     }
 
     function href(element) {
-	if (element.is("iframe"))
+	if (element.is("iframe, frame"))
 	    return element[0].src;
 	if (element.attr("href"))
 	    return element[0].href;
@@ -148,7 +148,7 @@ var Activate = null;
 	switch (operation) {
 	    // Focusing:
 	case "f":
-	    // this also works for iframes
+	    // this also works for [i]frames
 	    element[0].focus();
 	    break;
 
@@ -314,7 +314,7 @@ var Activate = null;
 	    setTimeout(function() {
 		element.removeClass("CBV_highlight_class");
 		// sometimes elements get cloned so do this globally also...
-		// TODO: do we need to make this work inside of iframes also? <<<>>>
+		// TODO: do we need to make this work inside of [i]frames also? <<<>>>
 		$(".CBV_highlight_class").removeClass("CBV_highlight_class");
 	    }, 500);
 
@@ -322,6 +322,7 @@ var Activate = null;
 	}, 250);
     }
 
+    // Find a hinted element in the page, or in a nested [i]frame
     function find_hint(hint, ...contents) {
 	var element;
 	var match = hint.match(/^\$\{(.*)\}("(.*)")?$/);
@@ -334,19 +335,23 @@ var Activate = null;
 		});
 	    }
 	    element = element.first();
-	} else
+	} else {
 	    element = $("[CBV_hint_number='" + hint + "']", ...contents);
+	}
+
+        // if the hint was not found, search recursively in any [i]frames
+        if (element.length == 0) {
+            var frames = $("iframe, frame", ...contents);
+            if (frames.length != 0) {
+                return find_hint(hint, frames.contents());
+            }
+        }
+
 	return element;
     }
 
     function goto_hint(hint, operation) {
 	var element = find_hint(hint);
-	if (element.length == 0) {
-	    frame = $("iframe");
-	    if (frame.length != 0) {
-		element = find_hint(hint, frame.contents());
-	    }
-	}
 	if (element.length == 0) {
 	    console.log("goto_hint: unable to find hint: " + hint);
 	    return;

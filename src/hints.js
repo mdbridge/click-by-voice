@@ -42,17 +42,17 @@ var Hints = null;
 
     function remove_hints() {
 	AddHint.clear_work();
-	$("[CBV_hint_element]").remove();
-	$("[CBV_hint_number]").removeAttr("CBV_hint_number");
-	frame = $("iframe");
-	if (frame.length != 0) {
-	    $("[CBV_hint_element]", frame.contents()).remove();
-	    $("[CBV_hint_number]", frame.contents()).removeAttr("CBV_hint_number");
-	}
-
+	remove_hints_from(document)
 	next_CBV_hint_ = -1;
     }
-
+    function remove_hints_from(from) {
+	$("[CBV_hint_element]", from).remove();
+	$("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
+	frame = $("iframe, frame", from);
+	if (frame.length != 0) {
+	    remove_hints_from(frame.contents());
+	}
+    }
 
     //
     // Parameters for hinting:

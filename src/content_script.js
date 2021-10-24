@@ -49,7 +49,7 @@ function perform_operation(operation, hint_number) {
 }
 
 if (window == window.top) {
-    // the following only runs outside of any iframes
+    // the following only runs outside of any [i]frames
 
     chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {

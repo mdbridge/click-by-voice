@@ -27,7 +27,7 @@ let DomWalk = null;
 	});
 
 	const element_tag = element[0].nodeName.toLowerCase();
-	if (element_tag == "iframe") {
+	if (element_tag == "iframe" || element_tag == "frame") {
 	    try {
 		// var sub_body = $('body', element.contents());
 		// each_displaying_helper(sub_body, pre_callback, post_callback);
@@ -37,7 +37,7 @@ let DomWalk = null;
 		    each_displaying_helper($(this), pre_callback, post_callback, exclusion);
 		});
 	    } catch (e) {
-		console.log("iframe access failure: " + e);
+		console.log("[i]frame access failure: " + e);
 	    }
 	}
 
