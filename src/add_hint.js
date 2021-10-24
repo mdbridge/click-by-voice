@@ -159,8 +159,15 @@ let AddHint = null;
 	    const inner = build_base_element();
 	    outer.append(inner);
 
-	    inner.attr("CBV_inner_overlay", "true");
-	    add_text(inner, hint_number);
+	    if (Hints.option("new_hints")) {
+		inner.attr("CBV_inner_overlay2", "true");
+		inner.attr("CBV_hint_tag", hint_number);
+		if (Hints.option("c"))
+		    inner.attr("CBV_high_contrast", "true");
+	    } else {
+		inner.attr("CBV_inner_overlay", "true");
+		add_text(inner, hint_number);
+	    }
 
 	    // IMPORTANT: need to have top, left set so offset(-[,-])
 	    //            works correctly on this element:

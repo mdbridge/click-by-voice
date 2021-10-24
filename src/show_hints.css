@@ -17,15 +17,6 @@
 	display: none  !important;
     }
 
-    [CBV_add_text]:not(#CBV_override):not(#CBVISayOverride) {
-	font-family: arial, sans-serif !important;
-	text-shadow: none	       !important;
-	font-size:   x-small	       !important;
-	line-height: 130%	       !important;
-	text-align:  left	       !important;
-	word-break:  normal	       !important;  /* prevent breaking of hint numbers */
-    }
-
 
     [CBV_outer_inline]:not(#CBV_override):not(#CBVISayOverride) {
 	position: 	static	       !important;
@@ -64,9 +55,77 @@
 
 
     [CBV_outer_overlay]:not(#CBV_override):not(#CBVISayOverride) {
+	/* display: block is forced by position below */
 	position:   relative !important;
 	text-align: left     !important;
     }
+
+
+    [CBV_inner_overlay2]:not(#CBV_override):not(#CBVISayOverride) {
+	/* display: block is forced by position below */
+	position: absolute !important;
+	/*
+	 * Put us above any website simple overlays (e.g.,
+         * notification count over Facebook icons) and website
+         * elements marked relative lacking z-index.
+         *
+         * Drawback: we also appear above custom tooltips like Google
+         * News video previews
+	 */
+	z-index:  1        !important;
+
+	right: 	  auto	   !important;
+	bottom:   auto	   !important;
+	/* these are mostly for XML; elsewhere overridden by inline style */
+	/* not important because jquery offset does not use important <<<>>> */
+	top:  0;
+	left: 0;
+
+	width:          auto		!important;
+	height:         auto		!important;
+
+	padding:        0px 0px 0px 0px !important;
+	border-style:   none		!important;
+	border-width:   0px 	        !important;
+	margin:         0px		!important;
+	pointer-events: none		!important;
+    }
+    [CBV_inner_overlay2]:not(#CBV_override):not(#CBVISayOverride)::after {
+	/* if we use display: inline, space is taken up around us
+           because our outer node is display: block */
+	display:  block  !important;
+
+	height:         auto		   !important;
+	vertical-align: top		   !important;
+
+	padding:        0px 2px 0px 2px	   !important;
+	border-style:   none		   !important;
+	border-width:   0px		   !important;
+	margin:         0px		   !important;
+	pointer-events: none		   !important;
+
+	content:        attr(CBV_hint_tag) !important;
+	font-family:    arial, sans-serif  !important;
+	text-shadow:    none		   !important;
+	font-size:      x-small		   !important;
+	line-height:    130%		   !important;
+	text-indent: 	0px		   !important;
+	text-align:     left		   !important;
+	word-break:     normal		   !important;  /* prevent breaking of hint numbers */
+
+    }
+    [CBV_inner_overlay2][CBV_high_contrast]:not(#CBV_override):not(#CBVISayOverride)::after {
+	color:            red    !important;
+	background-color: white	 !important;
+	font-weight:      bold	 !important;
+
+    }
+    [CBV_inner_overlay2]:not([CBV_high_contrast]):not(#CBV_override):not(#CBVISayOverride)::after {
+	color:            purple !important;
+	background-color: rgba(255,255,255,0.5)	 !important;
+	font-weight:      bold	 !important;
+    }
+
 
     [CBV_inner_overlay]:not(#CBV_override):not(#CBVISayOverride) {
 	position: absolute !important;
@@ -114,6 +173,15 @@
 	/* background-color: white	 !important; */
 	background-color: rgba(255,255,255,0.5)	 !important;
 	font-weight:      bold	 !important;
+    }
+
+    [CBV_add_text]:not(#CBV_override):not(#CBVISayOverride) {
+	font-family: arial, sans-serif !important;
+	text-shadow: none	       !important;
+	font-size:   x-small	       !important;
+	line-height: 130%	       !important;
+	text-align:  left	       !important;
+	word-break:  normal	       !important;  /* prevent breaking of hint numbers */
     }
 
 
