@@ -73,8 +73,8 @@ optional switches.  For details, including how to change startup and
 per-webpage defaults, see
 [displaying hints in detail](./doc/displaying_hints.md).
 
-Hint numbers are not shown when printing but will show up when you copy
-from a hinted webpage.
+Hint numbers are not shown when printing and should not show up when you
+copy from a hinted webpage.
 
 
 ## Using Click by Voice with voice commands
@@ -118,11 +118,12 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues (9/6/2020)
+## Known issues (11/24/2021)
 
 ### Selection of elements to hint
 
 * Elements inside of cross-origin iframes are missed
+  * same-origin [i]frames should work fine now
   * iframes themselves are now hinted and can be focused or opened in a
     new tab or window
 * Elements added after a page is first loaded can take a while to get
@@ -189,6 +190,11 @@ more on how this shortcut works, see
 
 ## News
 
+* 11/2021: New version 0.22.4 released
+  * nested same-origin [i]frames now work properly courtesy of Quinn Tucker
+  * the hints no longer appear as text in the DOM
+    * this means they should no longer be copied when you cut-and-paste a region containing them
+	* may also reduce interference with applications that inspect their DOM
 * 12/2020: New major version 0.22 released
   * major performance improvements; perceived lag of using CBV should be
     greatly reduced as well as CPU usage
