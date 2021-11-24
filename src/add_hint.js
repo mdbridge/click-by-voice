@@ -128,14 +128,6 @@ let AddHint = null;
 	return element;
     }
 
-    function add_text(element, text) {
-	element.attr("CBV_add_text", "true");  // activate style rules
-	if (Hints.option("c"))
-	    element.attr("CBV_high_contrast", "true");
-	element.append(text);
-	return element;
-    }
-
     function compute_z_index(element) {
 	// beat hinted element's z-index by at least one;
 	// if we are not in a different stacking context, this should
@@ -159,15 +151,10 @@ let AddHint = null;
 	    const inner = build_base_element();
 	    outer.append(inner);
 
-	    if (Hints.option("new_hints")) {
-		inner.attr("CBV_inner_overlay2", "true");
-		inner.attr("CBV_hint_tag", hint_number);
-		if (Hints.option("c"))
-		    inner.attr("CBV_high_contrast", "true");
-	    } else {
-		inner.attr("CBV_inner_overlay", "true");
-		add_text(inner, hint_number);
-	    }
+	    inner.attr("CBV_inner_overlay2", "true");
+	    inner.attr("CBV_hint_tag", hint_number);
+	    if (Hints.option("c"))
+		inner.attr("CBV_high_contrast", "true");
 
 	    // IMPORTANT: need to have top, left set so offset(-[,-])
 	    //            works correctly on this element:
