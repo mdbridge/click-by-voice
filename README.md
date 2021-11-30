@@ -190,7 +190,7 @@ more on how this shortcut works, see
 
 ## News
 
-* 11/2021: New version 0.22.4 released
+* 11/2021: New version 0.23.4 released
   * nested same-origin [i]frames now work properly courtesy of Quinn Tucker
   * the hints no longer appear as text in the DOM
     * this means they should no longer be copied when you cut-and-paste a region containing them
