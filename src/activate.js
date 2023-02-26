@@ -7,7 +7,6 @@ var Activate = null;
 
 (function() {
 
-
     //
     // Working with points
     //
@@ -34,40 +33,41 @@ var Activate = null;
 	return {x: x, y: y};
     }
 
+    // Convert viewpoint point to screen coordinates relative to inner
+    // top-left corner of browser (aka, just inside window borders)
+    // 
+    // This is accurate to within +/- 1 after rounding so long as
+    // there isn't any UI stuff like a downloads bar at the bottom of the
+    // browser.
+    function clientToRelativeScreen(clientX, clientY, externalZoom, isMaximized) {
+	var zoom = window.devicePixelRatio / externalZoom;
+	var borderSize = 8;
+	if (isMaximized) {
+	    borderSize = 0;
+	}			
+	// Unfortunately this includes any space at the bottom of the
+	// browser like a downloads section.
+	var browserHeader = window.outerHeight - borderSize*2 - window.innerHeight*zoom;
+	//console.log("browserHeader: "+ browserHeader);
 
-    // convert viewpoint point to screen coordinates relative to window
+	var screenX = clientX*zoom;
+	var screenY = clientY*zoom + browserHeader;
+	return {x: screenX, y: screenY};
+    }	
+
+    // Convert viewpoint point to screen coordinates relative to window
     // and place in clipboard
-    function output_viewport_point(point) {
-	var zoom = window.devicePixelRatio;
+    function output_viewport_point(point, externalZoom, isMaximized) {
+	var screenPoint = clientToRelativeScreen(point.x, point.y, externalZoom, isMaximized);
+	var answer = screenPoint.x + "," + screenPoint.y;
+
+	console.log("********************************************************************************");
+	console.log("input client point: " + point.x + " , " + point.y);
+	console.log("assumed externalZoom: " + externalZoom);
+	var zoom = window.devicePixelRatio / externalZoom;
 	console.log("zoom: " + zoom);
-
-	// console.log(window.screenX);
-	// console.log(window.screenY);
-	// x -= window.screenX - 8;
-	// y -= window.screenY - 8;
-
-	console.log(window.outerHeight);
-	console.log(window.innerHeight);
-	var delta = window.outerHeight - window.innerHeight*zoom;
-	// I believe this is the height of the browser chrome at the top
-	console.log("delta: " + delta);
-
-	var x = point.x*zoom + 0;
-	var y = point.y*zoom + delta;
-
-	if (window.outerWidth == window.screen.width) {
-	    console.log("maximized");
-	    // window actually starts at -8, -8:
-	    x += 8;
-	    y += 8;
-	} else {
-	    // still have side border, but not top one
-	    x += 8; // maybe should be 7?
-	    y -= 8;
-	}
-
-	var answer = Math.floor(x) + "," + Math.floor(y);
-	console.log(answer);
+	console.log("isMaximized: " + isMaximized);
+	console.log("output screen point: " +answer);
 
 	act("copy_to_clipboard", {text: answer});
     }
@@ -145,6 +145,12 @@ var Activate = null;
     var last_hover = null;
 
     function silently_activate(element, operation) {
+	// It is impossible to measure this from inside the browser so
+	// we are just assuming it's 1.0, which means that the
+	// physical-move-the-mouse commands will only work on monitors
+	// with no DPI scaling.
+	const externalZoom = 1.0;
+
 	switch (operation) {
 	    // Focusing:
 	case "f":
@@ -215,11 +221,17 @@ var Activate = null;
 	    break;
 
 	    // Moving the physical mouse:
-	case "X":
-	    output_viewport_point(point_to_click(element));
+	case "Xm":
+	    output_viewport_point(point_to_click(element), externalZoom, true);
 	    break;
-	case "XX":
-	    output_viewport_point(top_right_point(element));
+	case "XXm":
+	    output_viewport_point(top_right_point(element), externalZoom, true);
+	    break;
+	case "Xn":
+	    output_viewport_point(point_to_click(element), externalZoom, false);
+	    break;
+	case "XXn":
+	    output_viewport_point(top_right_point(element), externalZoom, false);
 	    break;
 
 
