@@ -1,3 +1,7 @@
-var initial_operation_default = ":+";
+//
+// Default values for initial operation and click-by-voice configuration
+//
 
-var config_default = "";
+export const initial_operation_default = ":+";
+
+export const config_default = "";

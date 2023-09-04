@@ -1,8 +1,13 @@
+import * as clipboard	 from './background_clipboard.js';
+import * as defaults	 from './defaults.js';
+import { doUserCommand } from './background-utilities.js';
+
+
 //
-// Shortcut keyboard commands except for browser action
+// Shortcut keyboard commands except for _execute_action
 //
 
-chrome.commands.onCommand.addListener(function(command) {
+chrome.commands.onCommand.addListener(async function(command) {
     console.log('Keyboard shortcut name:', command);
 
     if (command == "blur") {
@@ -10,13 +15,13 @@ chrome.commands.onCommand.addListener(function(command) {
 	doUserCommand(":blur", false);
 
     } else if (command == "execute_command_from_clipboard") {
-	var clipboard	 = getClipboard();
-	var command_text = clipboard;
-	var match	 = clipboard.match(/^(.*?)!!!([\s\S]*)/m);
+	var input	 = await clipboard.getClipboard();
+	var command_text = input;
+	var match	 = input.match(/^(.*?)!!!([\s\S]*)/m);
 	if (match) {
 	    command_text = match[1];
-	    clipboard    = match[2];
-	    copyTextToClipboard(clipboard);
+	    input        = match[2];
+	    await clipboard.putClipboard(input);
 	}
 	console.log('Cmd: "' + command_text + '"');
 	doUserCommand(command_text, false);
@@ -33,8 +38,8 @@ var initial_operation;
 var config;
 
 chrome.storage.sync.get({
-    startingCommand: initial_operation_default,
-    config:          config_default
+    startingCommand: defaults.initial_operation_default,
+    config:          defaults.config_default
 }, function(items) {
     // kludge: strip off (hopefully) leading colon:
     initial_operation = items.startingCommand.substring(1);
@@ -79,7 +84,7 @@ chrome.runtime.onMessage.addListener(
 	     * Copying text to the clipboard
 	     */
 	case "copy_to_clipboard":
-	    copyTextToClipboard(request.text);
+	    clipboard.putClipboard(request.text);
 	    break;
 
 

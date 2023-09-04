@@ -30,7 +30,6 @@ function css(element, property_name, default_value) {
 
 
 
-
 //
 // <<<>>>
 //

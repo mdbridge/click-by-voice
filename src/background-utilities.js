@@ -2,7 +2,7 @@
 // Handling commands
 //
 
-function doUserCommand(command_text, close_window) {
+export function doUserCommand(command_text, close_window) {
     // optional operation field is :<suffix> at end
     var hint_number = command_text;
     var operation   = "";
@@ -26,32 +26,4 @@ function doUserCommand(command_text, close_window) {
 	    window.close();
 	}
     });
-}
-
-
-
-//
-// Accessing the clipboard
-//
-
-function getClipboard() {
-    var pasteTarget = document.createElement("div");
-    pasteTarget.contentEditable = true;
-    var actElem = document.activeElement.appendChild(pasteTarget).parentNode;
-    pasteTarget.focus();
-    document.execCommand("paste");
-    var paste = pasteTarget.innerText;
-    actElem.removeChild(pasteTarget);
-    return paste;
-};
-
-
-function copyTextToClipboard(text) {
-    //console.log("copying: " + text);
-    var copyFrom = $('<textarea/>');
-    copyFrom.text(text);
-    $('body').append(copyFrom);
-    copyFrom.select();
-    document.execCommand('copy');
-    copyFrom.remove();
 }
