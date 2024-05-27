@@ -1,6 +1,6 @@
-import * as clipboard	 from './background_clipboard.js';
-import * as defaults	 from './defaults.js';
-import { doUserCommand } from './background-utilities.js';
+import * as clipboard	   from './background_clipboard.js';
+import { doUserCommand }   from './background-utilities.js';
+import * as option_storage from './option_storage.js';
 
 
 //
@@ -11,7 +11,7 @@ chrome.commands.onCommand.addListener(async function(command) {
     console.log('Keyboard shortcut name:', command);
 
     if (command == "blur") {
-	console.log('Bluring...');
+        console.log('Bluring...');
 	doUserCommand(":blur", false);
 
     } else if (command == "execute_command_from_clipboard") {
@@ -34,61 +34,66 @@ chrome.commands.onCommand.addListener(async function(command) {
 // Performing actions on behalf of the content script
 //
 
-var initial_operation;
-var config;
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    // In order to keep the connection open long enough for the
+    // response to be received, we need to return true from the callback.
+    // (Otherwise, the service worker may go away before the
+    // content script is able to read the response.  :-( )  This cannot
+    // be done using an async callback, so we need to do a bit of
+    // kludging.  For simplicity, we just always return a response.
+    (async () => {
+	try {
+	    switch (request.action) {
 
-chrome.storage.sync.get({
-    startingCommand: defaults.initial_operation_default,
-    config:          defaults.config_default
-}, function(items) {
-    // kludge: strip off (hopefully) leading colon:
-    initial_operation = items.startingCommand.substring(1);
-    config	      = items.config;
-});
+		/*
+		 * Accessing extension option storage
+		 */
+            case "get_per_session_options":
+		let options = await option_storage.getPerSessionOptions();
+		sendResponse(options);
+		break;
+            case "set_initial_operation":
+		let setOptions = await option_storage.getPerSessionOptions();
+		setOptions.startingCommand = request.initial_operation;
+		await option_storage.putPerSessionOptions(setOptions);
+		console.log("initial_operation is now: " + request.initial_operation);
+		sendResponse({ status: "success" });
+		break;
 
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-	console.log(request);
-	switch (request.action) {
+		/*
+		 * Opening URLs in a new tab/window
+		 */
+            case "create_tab":
+		chrome.tabs.create({
+		    url: request.URL,
+		    active: request.active,
+		    // open new tab immediately to right of current one:
+		    index: sender.tab.index + 1
+		}, () => sendResponse({ status: "tab created" }));
+		break;
+            case "create_window":
+		chrome.windows.create({ url: request.URL }, 
+				      () => sendResponse({ status: "window created" }));
+		break;
 
-	    /*
-	     * Initial operation, config
-	     */
-	case "set_config":
-	    config = request.config;
-	    break;
-	case "set_initial_operation":
-	    initial_operation =  request.initial_operation;
-	    console.log("initial_operation: " + initial_operation);
-	    break;
-	case "get_initial_operation":
-	    sendResponse({initial_operation: initial_operation,
-			  config: config});
-	    break;
+		/*
+		 * Copying text to the clipboard
+		 */
+            case "copy_to_clipboard":
+		clipboard.putClipboard(request.text);
+		sendResponse({ status: "text copied" });
+		break;
 
-
-	    /*
-	     * Opening URLs in a new tab/window
-	     */
-	case "create_tab":
-	    chrome.tabs.create({url: request.URL, active: request.active,
-				// open new tab immediately to right of current one:
-				index: sender.tab.index+1});
-	    break;
-	case "create_window":
-	    chrome.windows.create({url: request.URL});
-	    break;
-
-
-	    /*
-	     * Copying text to the clipboard
-	     */
-	case "copy_to_clipboard":
-	    clipboard.putClipboard(request.text);
-	    break;
-
-
-	default:
-	    console.log("unknown action: " + request.action);
+            default:
+		console.log("unknown action: " + request.action);
+		sendResponse({ error: "unknown action" });
+	    }
+	} catch (error) {
+	    console.error(error);
+	    sendResponse({ error: error.message });
 	}
-  });
+  })();
+
+  // Return true to indicate that the response is sent asynchronously
+  return true;
+});

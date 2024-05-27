@@ -8,19 +8,62 @@
 // achieve this using an offscreen document.
 //
 
-let initialized = false;
-async function createOffscreenDocument() {
-    if (!initialized) {
-	console.log('Creating offscreen document...');
-	await chrome.offscreen.createDocument({
-	    url: 'background_clipboard_offscreen.html',
-	    reasons: [chrome.offscreen.Reason.CLIPBOARD],
-	    justification: 'Reading and writing text from/to the clipboard'
+let creating; // A global promise to avoid concurrency issues
+async function setupOffscreenDocument(path) {
+    // Check all windows controlled by the service worker to see if one
+    // of them is the offscreen document with the given path
+    const offscreenUrl = chrome.runtime.getURL(path);
+    const existingContexts = await chrome.runtime.getContexts({
+	contextTypes: ['OFFSCREEN_DOCUMENT'],
+	documentUrls: [offscreenUrl]
+    });
+
+    if (existingContexts.length > 0) {
+	return;
+    }
+
+    // create offscreen document
+    if (creating) {
+	await creating;
+    } else {
+	creating = chrome.offscreen.createDocument({
+	    url: path,
+	    reasons: ['CLIPBOARD'],
+	    justification: 'Reading and writing text from/to the clipboard',
 	});
-	console.log('Done creating offscreen document...');
-	initialized = true;
-    }   
+	await creating;
+	creating = null;
+    }
 }
+
+async function createOffscreenDocument() {
+    await setupOffscreenDocument('background_clipboard_offscreen.html');
+    // console.log('Creating offscreen document...');
+    // 	await chrome.offscreen.createDocument({
+    // 	    url: 'background_clipboard_offscreen.html',
+    // 	    reasons: [chrome.offscreen.Reason.CLIPBOARD],
+    // 	    justification: 'Reading and writing text from/to the clipboard'
+    // 	});
+    // 	console.log('Done creating offscreen document...');
+    // 	initialized = true;
+    // }   
+}
+
+
+
+// let initialized = false;
+// async function createOffscreenDocument() {
+//     if (!initialized) {
+// 	console.log('Creating offscreen document...');
+// 	await chrome.offscreen.createDocument({
+// 	    url: 'background_clipboard_offscreen.html',
+// 	    reasons: [chrome.offscreen.Reason.CLIPBOARD],
+// 	    justification: 'Reading and writing text from/to the clipboard'
+// 	});
+// 	console.log('Done creating offscreen document...');
+// 	initialized = true;
+//     }   
+// }
 
 
 export async function getClipboard() {

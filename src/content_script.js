@@ -33,7 +33,7 @@ function perform_operation(operation, hint_number) {
     }
 
     if (operation.startsWith("=")) {
-	act("set_initial_operation", {initial_operation: operation});
+	act("set_initial_operation", {initial_operation: ":" + operation});
 	Hints.remove_hints();
 	Hints.add_hints(operation.substr(1));
 	major_happened();
@@ -57,9 +57,15 @@ if (window == window.top) {
 	});
 
     $(document).ready(function() {
-	request("get_initial_operation", {}, function(response) {
+console.log("preparing to ask");
+	chrome.runtime.sendMessage({action: "get_per_session_options"}, function(response) {
+console.log(response);
+    if (chrome.runtime.lastError) {
+      console.error(chrome.runtime.lastError);
+    }
 	    Hints.set_config(response.config);
-	    perform_operation(response.initial_operation, "");
+	    // kludge: strip off (hopefully) leading colon:
+	    perform_operation(response.startingCommand.substring(1), "");
 	});
 
 	// try and let initial operation above do 1st hint placement,
