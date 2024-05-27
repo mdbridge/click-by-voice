@@ -1,4 +1,12 @@
 //
+// JavaScript to implement background_clipboard_offscreen.html page.
+//
+// That is an offscreen document used to implement clipboard access
+// for the service worker; see background_clipboard.js for how it is used.
+//
+
+
+//
 // Dispatch according to background_clipboard function desired
 //
 
@@ -15,10 +23,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         putClipboard(message.value);
         break;
     default:
-        console.warn(`Unexpected message type received: '${message.type}'.`);
+        console.error(`Unexpected message type received: '${message.type}'.`);
     }
 });
-
 
 
 //
@@ -30,8 +37,7 @@ function getClipboard() {
     pasteTarget.contentEditable = true;
     pasteTarget.focus();
     document.execCommand("paste");
-    var paste = pasteTarget.value;
-    return paste;
+    return pasteTarget.value;
 };
 
 function putClipboard(text) {

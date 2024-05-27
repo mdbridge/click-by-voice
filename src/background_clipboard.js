@@ -1,5 +1,5 @@
 //
-// Routines for accessing the clipboard from the background service worker
+// Routines for accessing the clipboard from the background service worker.
 //
 
 
@@ -11,7 +11,7 @@
 let creating; // A global promise to avoid concurrency issues
 async function setupOffscreenDocument(path) {
     // Check all windows controlled by the service worker to see if one
-    // of them is the offscreen document with the given path
+    // of them is the offscreen document with the given path.
     const offscreenUrl = chrome.runtime.getURL(path);
     const existingContexts = await chrome.runtime.getContexts({
         contextTypes: ['OFFSCREEN_DOCUMENT'],
@@ -38,33 +38,12 @@ async function setupOffscreenDocument(path) {
 
 async function createOffscreenDocument() {
     await setupOffscreenDocument('background_clipboard_offscreen.html');
-    // console.log('Creating offscreen document...');
-    //  await chrome.offscreen.createDocument({
-    //      url: 'background_clipboard_offscreen.html',
-    //      reasons: [chrome.offscreen.Reason.CLIPBOARD],
-    //      justification: 'Reading and writing text from/to the clipboard'
-    //  });
-    //  console.log('Done creating offscreen document...');
-    //  initialized = true;
-    // }   
 }
 
 
-
-// let initialized = false;
-// async function createOffscreenDocument() {
-//     if (!initialized) {
-//      console.log('Creating offscreen document...');
-//      await chrome.offscreen.createDocument({
-//          url: 'background_clipboard_offscreen.html',
-//          reasons: [chrome.offscreen.Reason.CLIPBOARD],
-//          justification: 'Reading and writing text from/to the clipboard'
-//      });
-//      console.log('Done creating offscreen document...');
-//      initialized = true;
-//     }   
-// }
-
+//
+// The actual routines using the offscreen document.
+//
 
 export async function getClipboard() {
     await createOffscreenDocument();
@@ -74,7 +53,6 @@ export async function getClipboard() {
     });
     return response.value;
 };
-
 
 export async function putClipboard(text) {
     await createOffscreenDocument();
