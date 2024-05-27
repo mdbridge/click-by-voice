@@ -10,7 +10,7 @@
 //
 
 export async function getSavedOptions() {
-    return await chrome.storage.sync.get({
+    return chrome.storage.sync.get({
         startingCommand: ":+",
         config:          ""
     });
@@ -27,7 +27,7 @@ export async function putSavedOptions(options) {
 
 export async function getPerSessionOptions() {
     const saved_options = await getSavedOptions();
-    return await chrome.storage.session.get(saved_options);
+    return chrome.storage.session.get(saved_options);
 }
 
 export async function putPerSessionOptions(options) {
