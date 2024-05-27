@@ -11,7 +11,7 @@
 
 export async function getSavedOptions() {
     return await chrome.storage.sync.get({
-	startingCommand: ":+",
+        startingCommand: ":+",
         config:          ""
     });
 }

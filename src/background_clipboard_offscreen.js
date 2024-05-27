@@ -4,18 +4,18 @@
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.target !== 'background_clipboard_offscreen') {
-	return;
+        return;
     }
 
     switch (message.type) {
     case 'getClipboard':
-    	sendResponse({value: getClipboard()});
-	break;
+        sendResponse({value: getClipboard()});
+        break;
     case 'putClipboard':
-	putClipboard(message.value);
-	break;
+        putClipboard(message.value);
+        break;
     default:
-	console.warn(`Unexpected message type received: '${message.type}'.`);
+        console.warn(`Unexpected message type received: '${message.type}'.`);
     }
 });
 

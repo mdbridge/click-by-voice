@@ -21,10 +21,10 @@ function request(action, arguments, callback) {
 // omitting default_value gives a default of undefined
 function css(element, property_name, default_value) {
     try {
-	return element.css(property_name);
+        return element.css(property_name);
     } catch (e) {
-	// the jQuery method .css throws an exception on XML elements
-	return default_value;
+        // the jQuery method .css throws an exception on XML elements
+        return default_value;
     }
 }
 
@@ -42,7 +42,7 @@ function CBV_inserted_element(element) {
 
 function time(start, end) {
     if (!end) {
-	end = performance.now();
+        end = performance.now();
     }
     return `${(end - start).toFixed(1)} ms`;
 }

@@ -14,38 +14,38 @@ async function setupOffscreenDocument(path) {
     // of them is the offscreen document with the given path
     const offscreenUrl = chrome.runtime.getURL(path);
     const existingContexts = await chrome.runtime.getContexts({
-	contextTypes: ['OFFSCREEN_DOCUMENT'],
-	documentUrls: [offscreenUrl]
+        contextTypes: ['OFFSCREEN_DOCUMENT'],
+        documentUrls: [offscreenUrl]
     });
 
     if (existingContexts.length > 0) {
-	return;
+        return;
     }
 
     // create offscreen document
     if (creating) {
-	await creating;
+        await creating;
     } else {
-	creating = chrome.offscreen.createDocument({
-	    url: path,
-	    reasons: ['CLIPBOARD'],
-	    justification: 'Reading and writing text from/to the clipboard',
-	});
-	await creating;
-	creating = null;
+        creating = chrome.offscreen.createDocument({
+            url: path,
+            reasons: ['CLIPBOARD'],
+            justification: 'Reading and writing text from/to the clipboard',
+        });
+        await creating;
+        creating = null;
     }
 }
 
 async function createOffscreenDocument() {
     await setupOffscreenDocument('background_clipboard_offscreen.html');
     // console.log('Creating offscreen document...');
-    // 	await chrome.offscreen.createDocument({
-    // 	    url: 'background_clipboard_offscreen.html',
-    // 	    reasons: [chrome.offscreen.Reason.CLIPBOARD],
-    // 	    justification: 'Reading and writing text from/to the clipboard'
-    // 	});
-    // 	console.log('Done creating offscreen document...');
-    // 	initialized = true;
+    //  await chrome.offscreen.createDocument({
+    //      url: 'background_clipboard_offscreen.html',
+    //      reasons: [chrome.offscreen.Reason.CLIPBOARD],
+    //      justification: 'Reading and writing text from/to the clipboard'
+    //  });
+    //  console.log('Done creating offscreen document...');
+    //  initialized = true;
     // }   
 }
 
@@ -54,14 +54,14 @@ async function createOffscreenDocument() {
 // let initialized = false;
 // async function createOffscreenDocument() {
 //     if (!initialized) {
-// 	console.log('Creating offscreen document...');
-// 	await chrome.offscreen.createDocument({
-// 	    url: 'background_clipboard_offscreen.html',
-// 	    reasons: [chrome.offscreen.Reason.CLIPBOARD],
-// 	    justification: 'Reading and writing text from/to the clipboard'
-// 	});
-// 	console.log('Done creating offscreen document...');
-// 	initialized = true;
+//      console.log('Creating offscreen document...');
+//      await chrome.offscreen.createDocument({
+//          url: 'background_clipboard_offscreen.html',
+//          reasons: [chrome.offscreen.Reason.CLIPBOARD],
+//          justification: 'Reading and writing text from/to the clipboard'
+//      });
+//      console.log('Done creating offscreen document...');
+//      initialized = true;
 //     }   
 // }
 
@@ -69,8 +69,8 @@ async function createOffscreenDocument() {
 export async function getClipboard() {
     await createOffscreenDocument();
     let response = await chrome.runtime.sendMessage({
-	type: 'getClipboard',
-	target: 'background_clipboard_offscreen'
+        type: 'getClipboard',
+        target: 'background_clipboard_offscreen'
     });
     return response.value;
 };
@@ -79,8 +79,8 @@ export async function getClipboard() {
 export async function putClipboard(text) {
     await createOffscreenDocument();
     await chrome.runtime.sendMessage({
-	type: 'putClipboard',
-	target: 'background_clipboard_offscreen',
-	value: text
+        type: 'putClipboard',
+        target: 'background_clipboard_offscreen',
+        value: text
     });
 };
