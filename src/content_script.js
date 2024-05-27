@@ -57,12 +57,10 @@ if (window == window.top) {
         });
 
     $(document).ready(function() {
-console.log("preparing to ask");
         chrome.runtime.sendMessage({action: "get_per_session_options"}, function(response) {
-console.log(response);
-    if (chrome.runtime.lastError) {
-      console.error(chrome.runtime.lastError);
-    }
+            if (chrome.runtime.lastError) {
+                console.error(chrome.runtime.lastError);
+            }
             Hints.set_config(response.config);
             // kludge: strip off (hopefully) leading colon:
             perform_operation(response.startingCommand.substring(1), "");
