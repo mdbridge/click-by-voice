@@ -49,13 +49,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                  * Accessing extension option storage
                  */
             case "get_per_session_options":
-                let options = await option_storage.getPerSessionOptions();
+                let options = await option_storage.get_per_session_options();
                 sendResponse(options);
                 break;
             case "set_initial_operation":
-                let setOptions = await option_storage.getPerSessionOptions();
+                let setOptions = await option_storage.get_per_session_options();
                 setOptions.startingCommand = request.initial_operation;
-                await option_storage.putPerSessionOptions(setOptions);
+                await option_storage.put_per_session_options(setOptions);
                 console.log("initial_operation is now: " + request.initial_operation);
                 sendResponse({ status: "success" });
                 break;

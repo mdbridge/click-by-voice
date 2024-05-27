@@ -5,12 +5,12 @@ import * as option_storage from './option_storage.js';
 async function save_options() {
     var command = document.getElementById('command').value;
     var config  = document.getElementById('config').value;
-    await option_storage.putSavedOptions({
+    await option_storage.put_saved_options({
         startingCommand: command,
         config:          config,
     });
-    var current_starting_command = (await option_storage.getPerSessionOptions()).startingCommand;
-    await option_storage.putPerSessionOptions({
+    var current_starting_command = (await option_storage.get_per_session_options()).startingCommand;
+    await option_storage.put_per_session_options({
         startingCommand: current_starting_command,
         config:          config,
     });
@@ -24,7 +24,7 @@ async function save_options() {
 
 // Restores shown options using the preferences stored in chrome.storage.sync.
 async function restore_options() {
-    let saved_options = await option_storage.getSavedOptions();
+    let saved_options = await option_storage.get_saved_options();
     document.getElementById('command').value = saved_options.startingCommand;
     document.getElementById('config').value  = saved_options.config;
 }
