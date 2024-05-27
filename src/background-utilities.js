@@ -1,28 +1,27 @@
 //
-// Handling commands
+// Handling commands by sending the command to the content script of the current active tab.
+// Assumes we are either the service worker or the pop-up window's JavaScript.
 //
 
-export function doUserCommand(command_text, close_window) {
+export function do_user_command(command_text, close_window) {
     // optional operation field is :<suffix> at end
-    var hint_number = command_text;
-    var operation   = "";
-    var match       = command_text.match(/^((?:[^:\{]|\{[^\}]*\})*):(.*)$/);
+    let hint_number = command_text;
+    let operation   = "";
+    // Allow :'s inside 1 level of balanced {}'s to not count as the before operation separator:
+    const match = command_text.match(/^((?:[^:\{]|\{[^\}]*\})*):(.*)$/);
     if (match) {
         hint_number = match[1];
         operation   = match[2];
     }
 
-    // send hint number and operation to content_script.js for current tab:
+    // Send hint number and operation to content_script.js for current tab:
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        // chrome.tabs.update(tabs[0].id, {selected: true});
-        // chrome.tabs.update(tabs[0].id, {highlighted: true});
-        // chrome.tabs.update(tabs[0].id, {active: true});
         chrome.tabs.sendMessage(tabs[0].id, 
                                 {hint_number: hint_number,
                                  operation:   operation});
         if (close_window) {
-            // closing the pop up window ends its JavaScript execution
-            // so need to do it only after all done here
+            // Closing the pop up window ends its JavaScript execution
+            // so need to do it only after all done here.
             window.close();
         }
     });

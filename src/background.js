@@ -1,5 +1,12 @@
+//
+// Main file for extension service worker.
+//
+// Note that console messages from the service worker show up in the
+// console for the service worker, not the webpage.
+//
+
 import * as clipboard      from './background_clipboard.js';
-import { doUserCommand }   from './background-utilities.js';
+import { do_user_command } from './background-utilities.js';
 import * as option_storage from './option_storage.js';
 
 
@@ -8,26 +15,24 @@ import * as option_storage from './option_storage.js';
 //
 
 chrome.commands.onCommand.addListener(async function(command) {
-    console.log('Keyboard shortcut name:', command);
-
     if (command == "blur") {
-        console.log('Bluring...');
-        doUserCommand(":blur", false);
+        console.log('CBV: Bluring...');
+        do_user_command(":blur", false);
 
     } else if (command == "execute_command_from_clipboard") {
-        var input        = await clipboard.getClipboard();
-        var command_text = input;
-        var match        = input.match(/^(.*?)!!!([\s\S]*)/m);
+        const input        = await clipboard.getClipboard();
+        let   command_text = input;
+        const match        = input.match(/^(.*?)!!!([\s\S]*)/m);
         if (match) {
             command_text = match[1];
-            input        = match[2];
-            await clipboard.putClipboard(input);
+            await clipboard.putClipboard(match[2]);
         }
-        console.log('Cmd: "' + command_text + '"');
-        doUserCommand(command_text, false);
-    };
+        console.log(`CBV Command: "${command_text}"`);
+        do_user_command(command_text, false);
+    } else {
+        console.error(`Unexpected keyboard shortcut name received by CBV: ${command}`);
+    }
 });
-
 
 
 //
@@ -49,7 +54,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                  * Accessing extension option storage
                  */
             case "get_per_session_options":
-                let options = await option_storage.get_per_session_options();
+                const options = await option_storage.get_per_session_options();
                 sendResponse(options);
                 break;
             case "set_initial_operation":
@@ -80,7 +85,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                  * Copying text to the clipboard
                  */
             case "copy_to_clipboard":
-                clipboard.putClipboard(request.text);
+                await clipboard.putClipboard(request.text);
                 sendResponse({ status: "text copied" });
                 break;
 
