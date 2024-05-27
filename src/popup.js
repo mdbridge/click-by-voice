@@ -2,7 +2,7 @@
 // JavaScript to implement popup.html page, which is the pop up for manually entering hints.
 //
 
-import { do_user_command } from './background-utilities.js';
+import { do_user_command } from './background_utilities.js';
 
 
 $(document).ready(function() {
