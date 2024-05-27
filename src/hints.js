@@ -163,22 +163,31 @@ var Hints = null;
     //
 
     function get_effective_hints(user_hints, url) {
-        var without_comments = config_.replace(/^[ \t]*#.*\n/gm, "");
-        var stanzas = without_comments.split(/\n(?:\s*\n)+/);
+        // Config stanzas are separated by one or more blank lines:
+        const without_trailing_whitespace = config_.replace(/[ \t]+$/gm, "");
+        const stanzas                     = without_trailing_whitespace.split(/\n\n+/);
 
-        var config_hints = "";
-        for (const stanza of stanzas) {
-            var match;
-            if (match = stanza.match(/^when\s+(.+?)\s*\n((?:.|\n)*)/)) {
-                var regex = match[1];
-                var options = match[2].replace(/^\s+/gm,'').replace(/\s+$/gm, '').replace(/\n/gm,'');
-                // console.log(regex, '=>' , options);
+        let config_hints = "";
+        for (let stanza of stanzas) {
+            // Comments are # at beginning of line (possibly indented) to end of line:
+            // (CSS selectors can contain #'s)
+            stanza = stanza.replace(/^[ \t]*#.*$/gm, "");
+            // Remove any blank lines inside the stanza that result from removing comments:
+            stanza = stanza.replace(/^\n/gm, "");
+
+            let match;
+            if (match = stanza.match(/^when +(.+?) *\n((?:.|\n)*)/)) {
+                const regex = match[1];
+                // Remove obviously unnecessary whitespace at beginning and end of lines, newlines:
+                // (CSS selectors can contain spaces; we do not allow them to span lines)
+                const options = match[2].replace(/^\s+/gm,'').replace(/\s+$/gm, '').replace(/\n/gm,'');
+                // console.log(`${regex} => ${options}`);
                 if (new RegExp(regex).test(url)) {
                     // console.log("match!");
-                    config_hints = config_hints + options
+                    config_hints += options
                 }
-            } else {
-                console.log("bad stanza:", stanza);
+            } else if (stanza != '') {
+                console.error("Bad click-by-voice config stanza:\n", stanza);
             }
         }
 
