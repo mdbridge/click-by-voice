@@ -3,20 +3,27 @@
   <head>
     <title>Click-by-Voice Extension Options</title>
     <style>
-      body: { padding: 10px; }
+      body { padding: 10px; }
+      #status { padding: 10px; }
     </style>
   </head>
 
   <body>
-    Startup show numbers command:
-    <input type="text" id="command" value=":+">
+    <div id="show_numbers_command_area">
+      Startup show numbers command:
+      <input type="text" id="command" value=":+">
+    </div>
 
     <br>
-    Click-by-voice config:
-    <textarea name="config" id="config" rows="20" cols="80"></textarea>
 
+    <div id="config_area">
+      Click-by-Voice config:
+      <textarea name="config" id="config" rows="20" cols="80"></textarea>
+    </div>
+      
     <div id="status"></div>
-    <button id="save">Save</button>
+
+    <button id="save">Save options</button>
 
     <script type="module" src="options.js"></script>
   </body>
