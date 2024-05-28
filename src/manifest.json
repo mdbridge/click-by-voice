@@ -1,43 +1,38 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
 
     "name": "Click by Voice",
-    "version": "0.23.4",
+    "version": "0.3",
     "description": "This Chrome browser extension provides support for activating links and other HTML elements using voice commands.",
-
-    "short_name": "CbV", 
-    "homepage_url": "https://github.com/mdbridge/click-by-voice",
-    "icons": { 
-        // The favicon for an extension's pages. The 16x16 icon is
-        // also displayed in the experimental extension infobar
-        // feature.
-        "16": "images/icon_16.png",
-        // for extensions management page (chrome://extensions)
-        "48": "images/icon_48.png",
-        // used during installation and by the chrome Web store
-        "128": "images/icon_128.png" 
-    },
 
     "permissions": [
 	"clipboardRead",
 	"clipboardWrite", // not required but polite
-	"storage"
+	"storage",
+	"offscreen"       // needed for clipboard access from background service worker
     ],
 
+    // icons for elsewhere than the toolbar (e.g., chrome://extensions, chrome web store)
+    "icons": { 
+        "16": "images/icon_16.png",
+        "48": "images/icon_48.png",
+        "128": "images/icon_128.png" 
+    },
 
-    // browser action: ask for a hint number to activate via a pop up
-    "browser_action": {
-        "default_title": "Click by Voice",
+    // display popup.html when extension icon clicked or on _execute_action action:
+    "action": {
+        "default_popup": "popup.html",
         "default_icon": {
-            //"19": "images/icon_19.png",  // default size
-            "38": "images/icon_38.png"     // resized down automatically to 19 X 19
-        },
-        //      "default_icon": "images/icon_19.png",
-        "default_popup": "popup.html" 
+	    // 16 pixels looks too small
+            "38":  "images/icon_38.png",  // resized down automatically to 19 X 19
+            "48":  "images/icon_48.png",
+            "128": "images/icon_128.png"
+        }
     },
 
     "commands": {
-        "_execute_browser_action": {
+        // ask for a hint number to activate via a pop up
+        "_execute_action": {
             "suggested_key": {
                 "default": "Ctrl+Shift+Space"
             },
@@ -60,27 +55,28 @@
 
     "content_scripts": [
         {
-	    "all_frames" : true,  // inject CSS into all frames
-            "matches": ["http://*/*", "https://*/*", "file://*/*"],
+            "matches": ["<all_urls>"],
+            "js": [
+                "jquery-3.7.1.min.js",
+                "utilities.js",
+                "Dom_walk.js",
+                "activate.js",
+                "add_hint.js",
+                "find_hint.js",
+                "hints.js",
+                "content_script.js"
+            ],
             "css": ["show_hints.css"],
-            "js": ["jquery-3.0.0.min.js", "utilities.js", 
-		   "Dom_walk.js",
-		   "activate.js",
-		   "add_hint.js",
-		   "find_hint.js", 
-		   "hints.js", 
-		   "content_script.js"]
+            "all_frames": true     // Inject CSS into all frames to ensure hints are displayed everywhere
         }
     ],
 
     "background": {
-        "scripts": ["jquery-3.0.0.min.js", "defaults.js", "background-utilities.js", "background.js"]
-        //"page": "popup.html",
-        //"persistent": false  // need to stay persistent to make browser action fast
+        "service_worker": "background.js",
+	"type": "module"
     },
 
     "options_ui": {
-	"page": "options.html",
-	"chrome_style": true
+	"page": "options.html"
     }
 }
