@@ -98,7 +98,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     (async () => {
         try {
             const response = await handle_content_script_message(request, sender);
-            console.log("Handled content script message:", request, "-->", response);
+            // console.log("Handled content script message:", request, "-->", response);
             sendResponse(response);
         } catch (error) {
             console.error(`Error while handling content script message ${request}: ${error}`);
