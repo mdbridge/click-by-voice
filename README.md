@@ -190,6 +190,8 @@ more on how this shortcut works, see
 
 ## News
 
+* 6/2024: New major version 0.30 released
+  * switched to using manifest version 3
 * 11/2021: New version 0.23.4 released
   * nested same-origin [i]frames now work properly courtesy of Quinn Tucker
   * the hints no longer appear as text in the DOM
