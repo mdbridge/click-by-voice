@@ -7,6 +7,9 @@ to activate these elements using the hint numbers.  This allows creating
 voice commands (via other software) that lets users activate links by
 saying their hint numbers.
 
+Like many Chrome browser extensions, this extension can also be used
+with the Microsoft Edge browser.
+
 
 ## Using Click by Voice manually
 
