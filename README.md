@@ -220,5 +220,5 @@ more on how this shortcut works, see
 ## Other
 
 Please address questions and issues to <a
-href="http://www.knowbrainer.com/forums/forum/messageview.cfm?catid=25&threadid=30711">this
+href="https://forums.knowbrainer.com/forum/third-party-command-utilities-vocola-unimacro-voicepower-python/3793-thread-for-issues-with-click-by-voice">this
 KnowBrainer thread</a>.
