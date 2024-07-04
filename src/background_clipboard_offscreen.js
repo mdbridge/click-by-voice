@@ -35,6 +35,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 function getClipboard() {
     const pasteTarget = document.querySelector('#text');
     pasteTarget.contentEditable = true;
+    pasteTarget.value = "";
     pasteTarget.focus();
     document.execCommand("paste");
     return pasteTarget.value;
