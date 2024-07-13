@@ -191,6 +191,8 @@ more on how this shortcut works, see
        number 12.
   * Also affected are many Google docs/mail sites
     * e.g., <a href="https://github.com/mdbridge/click-by-voice/issues/8">Gmail</a>
+  * When used with Microsoft edge, the extension options dialog box is
+    too small and appears with scrollbars
 
 
 ## News
