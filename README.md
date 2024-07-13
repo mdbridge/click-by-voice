@@ -121,7 +121,7 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues (11/24/2021)
+## Known issues (7/12/2024)
 
 ### Selection of elements to hint
 
@@ -189,6 +189,8 @@ more on how this shortcut works, see
        use a prefix of the link name; e.g., say `click submit` or `click
        submit form twelve` for a link named `Submit Form` with hint
        number 12.
+  * Also affected are many Google docs/mail sites
+    * e.g., <a href="https://github.com/mdbridge/click-by-voice/issues/8">Gmail</a>
 
 
 ## News
