@@ -42,6 +42,7 @@ var Hints = null;
 
     function remove_hints() {
         AddHint.clear_work();
+        Hint.discard_hints();
         remove_hints_from(document)
         next_CBV_hint_ = -1;
     }

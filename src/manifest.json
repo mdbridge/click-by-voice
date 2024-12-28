@@ -2,7 +2,7 @@
     "manifest_version": 3,
 
     "name": "Click by Voice",
-    "version": "0.30.2",
+    "version": "0.31.0",
     "description": "This Chrome browser extension provides support for activating links and other HTML elements using voice commands.",
 
     "permissions": [
@@ -63,6 +63,7 @@
                 "activate.js",
                 "add_hint.js",
                 "find_hint.js",
+                "hint.js",
                 "hints.js",
                 "content_script.js"
             ],
