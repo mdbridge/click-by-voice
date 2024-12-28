@@ -142,9 +142,9 @@ var Activate = null;
 
 
 
-    var last_hover = null;
+    let last_hover = null;
 
-    function silently_activate(element, operation) {
+    function silently_activate($element, hint_if_known, operation) {
         // It is impossible to measure this from inside the browser so
         // we are just assuming it's 1.0, which means that the
         // physical-move-the-mouse commands will only work on monitors
@@ -155,36 +155,36 @@ var Activate = null;
             // Focusing:
         case "f":
             // this also works for [i]frames
-            element[0].focus();
+            $element[0].focus();
             break;
 
             // Clicking:
         case "c":
             // quora.com needs the mouseover event for clicking 'comments':
-            dispatch_mouse_events(element, ['mouseover', 'mousedown']);
-            element[0].focus();
+            dispatch_mouse_events($element, ['mouseover', 'mousedown']);
+            $element[0].focus();
             // we are not simulating leaving the mouse hovering over the element here <<<>>>
-            dispatch_mouse_events(element, ['mouseup', 'click', 'mouseout']);
+            dispatch_mouse_events($element, ['mouseup', 'click', 'mouseout']);
             break;
 
             // Following or copying explicit links:
         case "t":
-            if (href(element))
+            if (href($element))
                 // change focus to new tab
-                act("create_tab", {URL: href(element), active: true});
+                act("create_tab", {URL: href($element), active: true});
             break;
         case "b":
-            if (href(element))
+            if (href($element))
                 // do not change focus to new tab
-                act("create_tab", {URL: href(element), active: false});
+                act("create_tab", {URL: href($element), active: false});
             break;
         case "w":
-            if (href(element))
-                act("create_window", {URL: href(element)});
+            if (href($element))
+                act("create_window", {URL: href($element)});
             break;
         case "k":
-            if (href(element))
-                act("copy_to_clipboard", {text: href(element)});
+            if (href($element))
+                act("copy_to_clipboard", {text: href($element)});
             break;
 
             // Hovering:
@@ -193,16 +193,16 @@ var Activate = null;
                 dispatch_mouse_events(last_hover, ['mouseout', 'mouseleave']);
             }
             // hover same element means unhover
-            if (last_hover==null || last_hover[0] !== element[0]) {
-                dispatch_mouse_events(element, ['mouseover', 'mouseenter']);
-                last_hover = element;
+            if (last_hover==null || last_hover[0] !== $element[0]) {
+                dispatch_mouse_events($element, ['mouseover', 'mouseenter']);
+                last_hover = $element;
             } else
                 last_hover = null;
             break;
 
             // Copying element text:
         case "s":
-            var clone = element.clone();
+            var clone = $element.clone();
             clone.find("[CBV_hint_element]").remove();
             console.log(clone[0]);
             var text = clone[0].textContent;
@@ -215,46 +215,50 @@ var Activate = null;
             // Debug information:
         case "D":
             console.log("");
+            if (hint_if_known) {
+                Hint.dump_hint(hint_if_known);
+                console.log("");
+            }
             console.log("Element information:");
-            console.log(element[0].getBoundingClientRect());
-            console.log(element[0]);
+            console.log($element[0].getBoundingClientRect());
+            console.log($element[0]);
             break;
 
             // Moving the physical mouse:
         case "Xm":
-            output_viewport_point(point_to_click(element), externalZoom, true);
+            output_viewport_point(point_to_click($element), externalZoom, true);
             break;
         case "XXm":
-            output_viewport_point(top_right_point(element), externalZoom, true);
+            output_viewport_point(top_right_point($element), externalZoom, true);
             break;
         case "Xn":
-            output_viewport_point(point_to_click(element), externalZoom, false);
+            output_viewport_point(point_to_click($element), externalZoom, false);
             break;
         case "XXn":
-            output_viewport_point(top_right_point(element), externalZoom, false);
+            output_viewport_point(top_right_point($element), externalZoom, false);
             break;
 
 
             // experimental:
         case "R":
-            dispatch_mouse_events(element, ['mouseover', 'contextmenu']);
+            dispatch_mouse_events($element, ['mouseover', 'contextmenu']);
             break;
 
         case ">":
-            dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseout']);
+            dispatch_mouse_events($element, ['mouseover', 'mousedown', 'mouseout']);
             break;
         case "<":
-            dispatch_mouse_events(element, ['mouseover', 'mouseup', 'click', 'mouseout']);
+            dispatch_mouse_events($element, ['mouseover', 'mouseup', 'click', 'mouseout']);
             break;
 
         case "K":
-            element[0].remove();
+            $element[0].remove();
             break;
         case "V":
-            element.css("visibility", "hidden");
+            $element.css("visibility", "hidden");
             break;
        case "ZAP":
-           element.value = "fill";
+           $element.value = "fill";
            break;
 
 
@@ -262,26 +266,26 @@ var Activate = null;
 
             // old versions for comparison purposes; depreciated
         case "C":
-            element[0].click();
+            $element[0].click();
             break;
         case "CC":
-            dispatch_mouse_events(element, ['mouseover', 'mousedown', 'mouseup', 
+            dispatch_mouse_events($element, ['mouseover', 'mousedown', 'mouseup', 
                                             'click']);
             break;
         case "DC":
-            if (element.children().length>0)
-                element = element.children().first();
-            element[0].click();
+            if ($element.children().length>0)
+                $element = $element.children().first();
+            $element[0].click();
             break;
 
         case "TT":
-            element.attr("tabindex", "0");
-            element.siblings().attr("tabindex", "-1");
+            $element.attr("tabindex", "0");
+            $element.siblings().attr("tabindex", "-1");
             break;
 
         case "FF":
-            element[0].focusin();
-            element[0].focus();
+            $element[0].focusin();
+            $element[0].focus();
             break;
 
         case "INSPECT":
@@ -305,32 +309,32 @@ var Activate = null;
     }
 
 
-    function activate(element, operation) {
-        if (operation=="c" && element.is("div, span")) {
-            var parent = element;
-            var max_area = 0;
-            parent.children().each(function(index) {
+    function activate($element, hint_if_known, operation) {
+        if (operation=="c" && $element.is("div, span")) {
+            const $parent = $element;
+            let max_area = 0;
+            $parent.children().each(function(index) {
                 if (//!disabled_or_hidden($(this)) &&  // <<<>>>
                     area($(this))>max_area) {
                     max_area = area($(this));
-                    element = $(this);
+                    $element = $(this);
                 }
             });
-            console.log(parent[0] + " -> " + element[0]);
+            console.log($parent[0] + " -> " + $element[0]);
         }
 
 
-        element.addClass("CBV_highlight_class");
+        $element.addClass("CBV_highlight_class");
 
         setTimeout(function() {
             setTimeout(function() {
-                element.removeClass("CBV_highlight_class");
+                $element.removeClass("CBV_highlight_class");
                 // sometimes elements get cloned so do this globally also...
                 // TODO: do we need to make this work inside of [i]frames also? <<<>>>
                 $(".CBV_highlight_class").removeClass("CBV_highlight_class");
             }, 500);
 
-            silently_activate(element, operation);
+            silently_activate($element, hint_if_known, operation);
         }, 250);
     }
 
@@ -376,7 +380,6 @@ var Activate = null;
 
     function goto_hint_descriptor(hint_descriptor, operation) {
         const lookup = find_hint_descriptor(hint_descriptor);
-        console.log(lookup);
         const $element = lookup.$element;
         if (!$element) {
             console.log("goto_hint_descriptor: unable to find hint descriptor: " + hint_descriptor);
@@ -392,7 +395,7 @@ var Activate = null;
             console.log("defaulting to: " + operation);
         }
 
-        activate($element, operation);
+        activate($element, lookup.hint_if_known, operation);
     }
 
 

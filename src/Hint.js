@@ -18,6 +18,13 @@ let Hint = null;
         // console.log(hint);
     }
 
+    // Dump hint information to console
+    function dump_hint(hint) {
+        console.log(`Hint information for hint number ${hint.hint_number}:`);
+        console.log(hint);
+        console.log(hint.hinted_element);
+    }
+
     function locate_hint(hint_number) {
         return hint_number_to_hint[hint_number];
     }
@@ -29,6 +36,7 @@ let Hint = null;
 
     Hint = {
         make_hint: make_hint,
+        dump_hint: dump_hint,
         locate_hint: locate_hint,
         discard_hints: discard_hints
     };
