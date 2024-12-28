@@ -18,7 +18,7 @@ function maybe_refresh() {
 }
 
 
-function perform_operation(operation, hint_number) {
+function perform_operation(operation, hint_descriptor) {
     if (operation == "blur") {
         document.activeElement.blur();
         return;
@@ -42,7 +42,7 @@ function perform_operation(operation, hint_number) {
         Hints.add_hints(operation.substr(5));
         major_happened();
     } else {
-        Activate.goto_hint(hint_number, operation);
+        Activate.goto_hint_descriptor(hint_descriptor, operation);
         next_major_refresh = new Date().getTime() + 
             parseInt(Hints.option_value("refresh_after_activate", 500));
     }
@@ -53,7 +53,7 @@ if (window == window.top) {
 
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
-            perform_operation(request.operation, request.hint_number);
+            perform_operation(request.operation, request.hint_descriptor);
         });
 
     $(document).ready(function() {

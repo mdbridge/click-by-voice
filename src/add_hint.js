@@ -460,7 +460,7 @@ let AddHint = null;
                 const slop = CSS_number(element,"max-width") - element.width();
                 if (slop>0)
                     clip.right += slop;
-
+
                 if (slop>0)
                     clip.top = -slop;
                 // if (slop>0)
@@ -555,6 +555,7 @@ let AddHint = null;
 
 
     function add_hint(element, hint_number) {
+        Hint.make_hint(hint_number, element);
         sensing(() => {
             if (Hints.option("o")) {
                 add_overlay_hint(element, hint_number);

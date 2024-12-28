@@ -334,53 +334,67 @@ var Activate = null;
         }, 250);
     }
 
-    // Find a hinted element in the page, or in a nested [i]frame
-    function find_hint(hint, ...contents) {
-        var element;
-        var match = hint.match(/^\$\{(.*)\}("(.*)")?$/);
+    // Locate an element described by a hint descriptor in the page, or in a nested [i]frame.
+    // Returns object with optional fields $element, hint_if_known.
+    function find_hint_descriptor(hint_descriptor, ...contents) {
+        const match = hint_descriptor.match(/^\$\{(.*)\}("(.*)")?$/);
         if (match) {
-            element = $(match[1], ...contents);
+            // ${CSS selector} or ${CSS selector}"text"
+            let $element = $(match[1], ...contents);
             if (match[3]) {
                 target = match[3].toLowerCase();
-                element = element.filter(function(index, e) {
+                $element = $element.filter(function(index, e) {
                     return e.textContent.toLowerCase().includes(target);
                 });
             }
-            element = element.first();
-        } else {
-            element = $("[CBV_hint_number='" + hint + "']", ...contents);
-        }
-
-        // if the hint was not found, search recursively in any [i]frames
-        if (element.length == 0) {
-            var frames = $("iframe, frame", ...contents);
-            if (frames.length != 0) {
-                return find_hint(hint, frames.contents());
+            $element = $element.first();
+            if ($element.length > 0) {
+                return { $element: $element };
             }
+        } else {
+            // hint_number
+            hint = Hint.locate_hint(hint_descriptor);
+            if (!hint) {
+                return {};
+            }
+            const element = hint.hinted_element;
+            if (!element) {
+                console.log(`The element with hint ${hint.hint_number} longer exists`);
+                return {};
+            }
+            return { $element: $(element), hint_if_known: hint };
         }
 
-        return element;
+        // If the hint_descriptor was not found, search recursively in any [i]frames.
+        const $frames = $("iframe, frame", ...contents);
+        if ($frames.length > 0) {
+            return find_hint_descriptor(hint_descriptor, $frames.contents());
+        }
+
+        return {};
     }
 
-    function goto_hint(hint, operation) {
-        var element = find_hint(hint);
-        if (element.length == 0) {
-            console.log("goto_hint: unable to find hint: " + hint);
+    function goto_hint_descriptor(hint_descriptor, operation) {
+        const lookup = find_hint_descriptor(hint_descriptor);
+        console.log(lookup);
+        const $element = lookup.$element;
+        if (!$element) {
+            console.log("goto_hint_descriptor: unable to find hint descriptor: " + hint_descriptor);
             return;
         }
 
         if (operation == "") {
-            if (wants_click(element))
+            if (wants_click($element))
                 operation = "c";
             else
                 operation = "f";
-            console.log(element[0]);
+            console.log($element[0]);
             console.log("defaulting to: " + operation);
         }
 
-        activate(element, operation);
+        activate($element, operation);
     }
 
 
-    Activate = {goto_hint: goto_hint};
+    Activate = {goto_hint_descriptor: goto_hint_descriptor};
 })();
