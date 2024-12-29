@@ -361,9 +361,8 @@ var Activate = null;
             if (!hint) {
                 return {};
             }
-            const element = hint.hinted_element;
+            const element = Hint.get_hinted_element(hint);
             if (!element) {
-                console.log(`The element with hint ${hint.hint_number} longer exists`);
                 return {};
             }
             return { $element: $(element), hint_if_known: hint };

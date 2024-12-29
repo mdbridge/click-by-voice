@@ -18,13 +18,6 @@ let Hint = null;
         // console.log(hint);
     }
 
-    // Dump hint information to console
-    function dump_hint(hint) {
-        console.log(`Hint information for hint number ${hint.hint_number}:`);
-        console.log(hint);
-        console.log(hint.hinted_element);
-    }
-
     function locate_hint(hint_number) {
         return hint_number_to_hint[hint_number];
     }
@@ -34,10 +27,33 @@ let Hint = null;
     }
 
 
+    // Dump hint information to console.
+    function dump_hint(hint) {
+        console.log(`Hint information for hint number ${hint.hint_number}:`);
+        console.log(hint);
+        console.log(hint.hinted_element);
+    }
+
+    function get_hinted_element(hint) {
+        const element = hint.hinted_element;
+        if (!element) {
+            console.log(`The element with hint ${hint.hint_number} longer exists`);
+            return undefined;
+        }
+        if (!element.isConnected) {
+            console.log(`The element with hint ${hint.hint_number} is no longer connected`);
+            return undefined;
+        }
+        return element;
+    }
+
+
     Hint = {
         make_hint: make_hint,
-        dump_hint: dump_hint,
         locate_hint: locate_hint,
-        discard_hints: discard_hints
+        discard_hints: discard_hints,
+
+        dump_hint: dump_hint,
+        get_hinted_element: get_hinted_element
     };
 })();
