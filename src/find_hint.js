@@ -149,11 +149,11 @@ let FindHint = null;
 
     // Enumerate each element that we should hint:
     function each_hintable(callback) {
-        let has_hinted_element = new WeakMap();
+        let has_hinted_element = new WeakSet();
         function set_hinted($element) {
             let e = $element[0];
             do {
-                has_hinted_element.set(e, true);
+                has_hinted_element.add(e);
                 e = e.parentNode;
             } while (e);
         }
