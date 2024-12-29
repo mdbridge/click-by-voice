@@ -8,6 +8,7 @@ let Hint = null;
 (function() {
 
     let hint_number_to_hint = {};
+    let hinted_elements     = new WeakSet();
 
     function make_hint(hint_number, hinted_element) {
         let hint = {
@@ -15,14 +16,20 @@ let Hint = null;
             hinted_element: new WeakRef(hinted_element)
         };
         hint_number_to_hint[hint_number] = hint;
+        hinted_elements.add(hinted_element);
     }
 
     function locate_hint(hint_number) {
         return hint_number_to_hint[hint_number];
     }
 
+    function is_hinted_element(element) {
+        return hinted_elements.has(element);
+    }
+
     function discard_hints() {
         hint_number_to_hint = {};
+        hinted_elements     = new WeakSet();
     }
 
 
@@ -55,6 +62,7 @@ let Hint = null;
     Hint = {
         make_hint: make_hint,
         locate_hint: locate_hint,
+        is_hinted_element: is_hinted_element,
         discard_hints: discard_hints,
 
         dump_hint: dump_hint,

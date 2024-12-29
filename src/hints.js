@@ -49,9 +49,9 @@ var Hints = null;
     function remove_hints_from(from) {
         $("[CBV_hint_element]", from).remove();
         $("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
-        frame = $("iframe, frame", from);
-        if (frame.length != 0) {
-            remove_hints_from(frame.contents());
+        $frame = $("iframe, frame", from);
+        if ($frame.length != 0) {
+            remove_hints_from($frame.contents());
         }
     }
 
@@ -208,7 +208,7 @@ var Hints = null;
             next_CBV_hint_ = 0;
 
         var start_hint = next_CBV_hint_;
-        var start = performance.now();
+        var start      = performance.now();
 
         // DomWalk.each_displaying(
         //     function (element, styles) {},
@@ -221,11 +221,11 @@ var Hints = null;
         // console.log("  just FindHint.each_hintable time:   " + (performance.now()-start) + " ms");
         // start = performance.now();
 
-        FindHint.each_hintable(function(element) {
-            if (element[0].hasAttribute("CBV_hint_number"))
+        FindHint.each_hintable(function($element) {
+            if (Hint.is_hinted_element($element[0]))
                 return;
 
-            AddHint.add_hint(element, next_CBV_hint_);
+            AddHint.add_hint($element, next_CBV_hint_);
             next_CBV_hint_ += 1;
         });
         const work_start = performance.now();

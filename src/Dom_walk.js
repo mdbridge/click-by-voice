@@ -7,33 +7,33 @@ let DomWalk = null;
 
 (function() {
 
-    function each_displaying_helper(element, pre_callback, post_callback, exclusion) {
-        if (CBV_inserted_element(element))
+    function each_displaying_helper($element, pre_callback, post_callback, exclusion) {
+        if (CBV_inserted_element($element))
             return;
 
-        const styles = window.getComputedStyle(element[0]);
+        const styles = window.getComputedStyle($element[0]);
         if (styles.display == "none") {
             return;
         }
 
-        if (exclusion && element.is(exclusion))
+        if (exclusion && $element.is(exclusion))
             return;
 
         if (pre_callback)
-            pre_callback(element, styles);
+            pre_callback($element, styles);
 
-        element.children().each(function(index) {
+        $element.children().each(function(index) {
             each_displaying_helper($(this), pre_callback, post_callback, exclusion);
         });
 
-        const element_tag = element[0].nodeName.toLowerCase();
+        const element_tag = $element[0].nodeName.toLowerCase();
         if (element_tag == "iframe" || element_tag == "frame") {
             try {
                 // var sub_body = $('body', element.contents());
                 // each_displaying_helper(sub_body, pre_callback, post_callback);
 
                 // some popover ads are after <body> element
-                $("html", element.contents()).children().filter(":not(head)").each(function (index) {
+                $("html", $element.contents()).children().filter(":not(head)").each(function (index) {
                     each_displaying_helper($(this), pre_callback, post_callback, exclusion);
                 });
             } catch (e) {
@@ -42,7 +42,7 @@ let DomWalk = null;
         }
 
         if (post_callback)
-            post_callback(element, styles);
+            post_callback($element, styles);
     }
 
 

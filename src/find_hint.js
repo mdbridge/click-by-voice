@@ -9,16 +9,16 @@ let FindHint = null;
 
 
     // does element occupy enough space to be easily clickable?
-    function clickable_space(element) {
-        if (element[0].offsetHeight<8 || element[0].offsetWidth<8)
+    function clickable_space($element) {
+        if ($element[0].offsetHeight<8 || $element[0].offsetWidth<8)
             return false;
         return true;
     }
 
 
-    function fast_hintable(element) {
+    function fast_hintable($element) {
         if (Hints.option('$'))
-            return element.is(Hints.option_value('$'));
+            return $element.is(Hints.option_value('$'));
 
         //
         // Standard clickable or focusable HTML elements
@@ -26,7 +26,7 @@ let FindHint = null;
         //   Quora has placeholder links with click handlers so allow a's
         //   w/o hrefs...
         //
-        const element_tag = element[0].nodeName.toLowerCase();
+        const element_tag = $element[0].nodeName.toLowerCase();
         switch (element_tag) {
             case "a":
             case "button":
@@ -38,13 +38,13 @@ let FindHint = null;
             return true;
 
             case "input":
-            let input_type = element[0].getAttribute("type");
+            let input_type = $element[0].getAttribute("type");
             if (input_type)
                 input_type = input_type.toLowerCase();
             if (input_type != "hidden" 
                 // not sure false is actually kosher; spec says otherwise <<<>>>
-                && (element[0].getAttribute("disabled")=="false" 
-                    || element[0].getAttribute("disabled")===null))
+                && ($element[0].getAttribute("disabled")=="false" 
+                    || $element[0].getAttribute("disabled")===null))
                 return true;
             break;
         }
@@ -53,9 +53,9 @@ let FindHint = null;
         //
         // HTML elements directly made clickable or focusable
         //
-        if (element[0].hasAttribute("onclick")) 
+        if ($element[0].hasAttribute("onclick")) 
             return true;
-        if (element[0].hasAttribute("tabindex") && element[0].getAttribute("tabindex") >= 0)
+        if ($element[0].hasAttribute("tabindex") && $element[0].getAttribute("tabindex") >= 0)
             return true;
 
 
@@ -64,7 +64,7 @@ let FindHint = null;
         // focusable via tabindex=-1
         //
         if (!Hints.option("A")) {
-            const role = element[0].getAttribute("role");
+            const role = $element[0].getAttribute("role");
             switch (role) {
             case "button":
             case "checkbox":
@@ -89,7 +89,7 @@ let FindHint = null;
 
         // hard coding XML file buttons: <<<>>>
         if (/\.xml/i.test(window.location.href)) {
-            if (element.is("span.folder-button.open, span.folder-button.fold"))
+            if ($element.is("span.folder-button.open, span.folder-button.fold"))
                 return true;
         }
 
@@ -102,7 +102,7 @@ let FindHint = null;
         //
 
         // this is *everything* focusable:
-        if (element[0].hasAttribute("tabindex")) 
+        if ($element[0].hasAttribute("tabindex")) 
             return true;
 
         if (element_tag == "li") 
@@ -111,7 +111,7 @@ let FindHint = null;
         // innermost div/span/img's are tempting click targets
         switch (element_tag) {
         case "div": case "span": case "img":
-            if (clickable_space(element) && element.children().length == 0)
+            if (clickable_space($element) && $element.children().length == 0)
                 return true;
         }
 
@@ -119,25 +119,25 @@ let FindHint = null;
 
     }
 
-    function hintable(element, styles) {
+    function hintable($element, styles) {
         // for timing how much hintable costs:
         if (Hints.option("N"))
             return false;
 
-        if (fast_hintable(element)) {
+        if (fast_hintable($element)) {
             // don't hint invisible elements (their children may be another matter)
             if (styles.visibility == "hidden" && Hints.option_value("+",0)<2) 
                 return false;
 
-            if (Hints.option('^') && element.is(Hints.option_value('^'))) {
-                if (Hints.option('|') && element.is(Hints.option_value('|'))) {
+            if (Hints.option('^') && $element.is(Hints.option_value('^'))) {
+                if (Hints.option('|') && $element.is(Hints.option_value('|'))) {
                     return true;
                 }
                 return false;
             }
             return true;
         } else {
-            if (Hints.option('|') && element.is(Hints.option_value('|'))) {
+            if (Hints.option('|') && $element.is(Hints.option_value('|'))) {
                 // don't hint invisible elements (their children may be another matter)
                 if (styles.visibility == "hidden" && Hints.option_value("+",0)<2) 
                     return false;
@@ -150,8 +150,8 @@ let FindHint = null;
     // Enumerate each element that we should hint:
     function each_hintable(callback) {
         let has_hinted_element = new WeakMap();
-        function set_hinted(element) {
-            let e = element[0];
+        function set_hinted($element) {
+            let e = $element[0];
             do {
                 has_hinted_element.set(e, true);
                 e = e.parentNode;
@@ -159,21 +159,21 @@ let FindHint = null;
         }
         DomWalk.each_displaying(
             // pre-order traversal:
-            function (element, styles) {
-                if (hintable(element, styles)) {
-                    set_hinted(element);
-                    callback(element);
+            function ($element, styles) {
+                if (hintable($element, styles)) {
+                    set_hinted($element);
+                    callback($element);
                 }
 
                 // post-order traversal:
-            }, function (element, styles) {
+            }, function ($element, styles) {
                 if (Hints.option('$') && !Hints.option("C"))
                     return;
 
-                const parent = element[0].parentNode;
-                if (element[0].getAttribute("CBV_hint_number"))
+                const parent = $element[0].parentNode;
+                if (Hint.is_hinted_element($element[0]))
                     return;
-                if (parent.getAttribute("CBV_hint_number"))
+                if (Hint.is_hinted_element(parent))
                     return;
 
                 if (styles.cursor != "pointer") {
@@ -185,21 +185,21 @@ let FindHint = null;
                 if (window.getComputedStyle(parent).cursor=="pointer")
                     return;
 
-                if (!clickable_space(element))
+                if (!clickable_space($element))
                     return;
 
-                if (has_hinted_element.has(element[0]))
+                if (has_hinted_element.has($element[0]))
                     return;
 
-                if (Hints.option('^') && element.is(Hints.option_value('^')))
+                if (Hints.option('^') && $element.is(Hints.option_value('^')))
                     return false;
 
-                set_hinted(element);
+                set_hinted($element);
                 if (Hints.option("C"))
                     Hints.with_high_contrast(
-                        function () { callback(element); });
+                        function () { callback($element); });
                 else
-                    callback(element);
+                    callback($element);
             },
             Hints.option_value('!') // exclusion
         );
