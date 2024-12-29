@@ -1,5 +1,5 @@
 ///
-/// Activating a hint by number
+/// Activating a hint by hint descriptor (usually a number)
 ///
 /// Provides Activate
 
@@ -12,59 +12,59 @@ var Activate = null;
     //
 
     // return position relative to viewpoint to click
-    function point_to_click(element) {
-        var rectangles = element[0].getClientRects();
-        var rectangle  = rectangles[0];
+    function point_to_click($element) {
+        const rectangles = $element[0].getClientRects();
+        const rectangle  = rectangles[0];
 
-        var x = (rectangle.left + rectangle.right) /2;
-        var y = (rectangle.top  + rectangle.bottom)/2;
+        const x = (rectangle.left + rectangle.right) /2;
+        const y = (rectangle.top  + rectangle.bottom)/2;
 
         return {x: x, y: y};
     }
 
     // return position relative to viewpoint of top right point of element
-    function top_right_point(element) {
-        var rectangles = element[0].getClientRects();
-        var rectangle  = rectangles[0];
+    function top_right_point($element) {
+        const rectangles = $element[0].getClientRects();
+        const rectangle  = rectangles[0];
 
-        var x = rectangle.right;
-        var y = rectangle.top;
+        const x = rectangle.right;
+        const y = rectangle.top;
 
         return {x: x, y: y};
     }
 
     // Convert viewpoint point to screen coordinates relative to inner
-    // top-left corner of browser (aka, just inside window borders)
+    // top-left corner of browser (aka, just inside window borders).
     // 
     // This is accurate to within +/- 1 after rounding so long as
     // there isn't any UI stuff like a downloads bar at the bottom of the
     // browser.
     function clientToRelativeScreen(clientX, clientY, externalZoom, isMaximized) {
-        var zoom = window.devicePixelRatio / externalZoom;
-        var borderSize = 8;
+        const zoom = window.devicePixelRatio / externalZoom;
+        let borderSize = 8;
         if (isMaximized) {
             borderSize = 0;
         }
         // Unfortunately this includes any space at the bottom of the
         // browser like a downloads section.
-        var browserHeader = window.outerHeight - borderSize*2 - window.innerHeight*zoom;
+        const browserHeader = window.outerHeight - borderSize*2 - window.innerHeight*zoom;
         //console.log("browserHeader: "+ browserHeader);
 
-        var screenX = clientX*zoom;
-        var screenY = clientY*zoom + browserHeader;
+        const screenX = clientX*zoom;
+        const screenY = clientY*zoom + browserHeader;
         return {x: screenX, y: screenY};
     }
 
     // Convert viewpoint point to screen coordinates relative to window
     // and place in clipboard
     function output_viewport_point(point, externalZoom, isMaximized) {
-        var screenPoint = clientToRelativeScreen(point.x, point.y, externalZoom, isMaximized);
-        var answer = screenPoint.x + "," + screenPoint.y;
+        const screenPoint = clientToRelativeScreen(point.x, point.y, externalZoom, isMaximized);
+        const answer      = screenPoint.x + "," + screenPoint.y;
 
         console.log("********************************************************************************");
         console.log("input client point: " + point.x + " , " + point.y);
         console.log("assumed externalZoom: " + externalZoom);
-        var zoom = window.devicePixelRatio / externalZoom;
+        const zoom = window.devicePixelRatio / externalZoom;
         console.log("zoom: " + zoom);
         console.log("isMaximized: " + isMaximized);
         console.log("output screen point: " +answer);
@@ -81,27 +81,27 @@ var Activate = null;
 
 
 
-    // apply heuristics to determine if an element should be clicked or
-    // focused
-    function wants_click(element) {
-        if (element.is("button")) {
+    // Apply heuristics to determine if an element should be clicked or
+    // focused.
+    function wants_click($element) {
+        if ($element.is("button")) {
             return true;
-        } else if (element.is("a")) {
+        } else if ($element.is("a")) {
             return true;
-        } else if (element.is(":input")) {
-            if (element.attr("type") == "submit")
+        } else if ($element.is(":input")) {
+            if ($element.attr("type") == "submit")
                 return true;
-            if (element.attr("type") == "checkbox")
+            if ($element.attr("type") == "checkbox")
                 return true;
-            if (element.attr("type") == "radio")
+            if ($element.attr("type") == "radio")
                 return true;
-            if (element.attr("type") == "button")
+            if ($element.attr("type") == "button")
                 return true;
         }
-        if (element.attr("onclick")) {
+        if ($element.attr("onclick")) {
             return true;
         }
-        var role = element.attr("role");
+        const role = $element.attr("role");
         switch (role) {
         case "button":
         case "link":
@@ -109,34 +109,34 @@ var Activate = null;
             break;
         }
 
-        if (css(element, "cursor", null) == "pointer")
+        if (css($element, "cursor", null) == "pointer")
             return true;
 
         return false;
     }
 
-    function dispatch_mouse_events(element, event_names) {
+    function dispatch_mouse_events($element, event_names) {
         event_names.forEach(function(event_name) {
-            var event = document.createEvent('MouseEvents');
+            const event = document.createEvent('MouseEvents');
             event.initMouseEvent(event_name, true, true, window, 1, 0, 0, 0, 0, 
                                  false, false, false, false, 0, null);
-            element[0].dispatchEvent(event);
+            $element[0].dispatchEvent(event);
         });
     }
 
-    function area(element) {
+    function area($element) {
         try {
-            return element.height() * element.width();
+            return $element.height() * $element.width();
         } catch (e) {
             return -1;
         }
     }
 
-    function href(element) {
-        if (element.is("iframe, frame"))
-            return element[0].src;
-        if (element.attr("href"))
-            return element[0].href;
+    function href($element) {
+        if ($element.is("iframe, frame"))
+            return $element[0].src;
+        if ($element.attr("href"))
+            return $element[0].href;
         return undefined;
     }
 
@@ -201,15 +201,15 @@ var Activate = null;
             break;
 
             // Copying element text:
-        case "s":
-            var clone = $element.clone();
+        case "s": {
+            const clone = $element.clone();
             clone.find("[CBV_hint_element]").remove();
             console.log(clone[0]);
-            var text = clone[0].textContent;
+            const text = clone[0].textContent;
             console.log('"' + text + '"');
             act("copy_to_clipboard", {text: text});
             break;
-
+        }
 
 
             // Debug information:
@@ -290,7 +290,7 @@ var Activate = null;
 
         case "INSPECT":
             $('body').click(function (event) {
-                var zoom = window.devicePixelRatio;
+                const zoom = window.devicePixelRatio;
                 console.log(event.originalEvent);
                 console.log("Y: " + (event.screenY - event.clientY));
                 console.log("X: " + (event.screenX - event.clientX));
@@ -315,7 +315,7 @@ var Activate = null;
             let max_area = 0;
             $parent.children().each(function(index) {
                 if (//!disabled_or_hidden($(this)) &&  // <<<>>>
-                    area($(this))>max_area) {
+                    area($(this)) > max_area) {
                     max_area = area($(this));
                     $element = $(this);
                 }
@@ -379,7 +379,7 @@ var Activate = null;
     }
 
     function goto_hint_descriptor(hint_descriptor, operation) {
-        const lookup = find_hint_descriptor(hint_descriptor);
+        const lookup   = find_hint_descriptor(hint_descriptor);
         const $element = lookup.$element;
         if (!$element) {
             console.log("goto_hint_descriptor: unable to find hint descriptor: " + hint_descriptor);
