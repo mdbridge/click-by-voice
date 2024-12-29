@@ -359,6 +359,7 @@ var Activate = null;
             // hint_number
             hint = Hint.locate_hint(hint_descriptor);
             if (!hint) {
+                console.log(`The hint ${hint_descriptor} is not currently in use`);
                 return {};
             }
             const element = Hint.get_hinted_element(hint);

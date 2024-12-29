@@ -11,11 +11,10 @@ let Hint = null;
 
     function make_hint(hint_number, hinted_element) {
         let hint = {
-            hint_number: hint_number,
-            hinted_element: hinted_element
+            hint_number:    hint_number,
+            hinted_element: new WeakRef(hinted_element)
         };
         hint_number_to_hint[hint_number] = hint;
-        // console.log(hint);
     }
 
     function locate_hint(hint_number) {
@@ -31,13 +30,18 @@ let Hint = null;
     function dump_hint(hint) {
         console.log(`Hint information for hint number ${hint.hint_number}:`);
         console.log(hint);
-        console.log(hint.hinted_element);
+        const hinted_element = hint.hinted_element.deref();
+        if (hinted_element) {
+            console.log(hinted_element);
+        } else {
+            console.log("hinted element has been garbage collected");
+        }
     }
 
     function get_hinted_element(hint) {
-        const element = hint.hinted_element;
+        const element = hint.hinted_element.deref();
         if (!element) {
-            console.log(`The element with hint ${hint.hint_number} longer exists`);
+            console.log(`The element that had hint ${hint.hint_number} longer exists`);
             return undefined;
         }
         if (!element.isConnected) {
