@@ -105,8 +105,81 @@ let Hint = null;
         if (!hint.displacement) {
             return;
         }
+
         // It's an overlay hint...
-        return;
+
+        const hint_number  = hint.hint_number;
+        const $element     = $(hinted_element);
+        const $inner       = $(hint.hint_tag).children().first();
+        const show_at_end  = hint.show_at_end;
+        const displacement = hint.displacement;
+
+        if (!$inner[0].isConnected) {
+            if (Hints.option("keep_hints")) {
+                // some webpages seem to temporarily disconnect then reconnect hints
+                return;
+            }
+            Batcher.mutating(() => {
+                console.log(`lost hint for ${hint.hint_number}; removing...`);
+                // TODO: automatically reconnect at bottom of body? <<<>>>
+                // do we need to preserve $outer as well then?
+                _remove_hint(hint);
+            });
+            return;
+        }
+
+        const target_box     = $element[0].getBoundingClientRect();
+        const inner_box      = $inner[0]  .getBoundingClientRect();
+        const element_hidden = (target_box.top == 0 && target_box.left == 0);
+        const inner_hidden   = (inner_box .top == 0 && inner_box .left == 0);
+        let target_top  = target_box.top;
+        let target_left = target_box.left;
+        if (show_at_end) {
+            target_left += target_box.width - inner_box.width;
+        }
+        target_top  -= displacement.up;
+        target_left += displacement.right;
+
+        if (element_hidden) {
+            if (inner_hidden) {
+                return;
+            }
+            Batcher.mutating(() => {
+                console.log(`hiding hint for hidden element ${hint_number}`);
+                $inner.attr("CBV_hidden", "true"); 
+            });
+            return;
+        }
+        if (inner_hidden) {
+            // TODO: what if hidden attribute already removed?
+            const style = $inner[0].style;
+            if (style == undefined) return;  // XML case...
+            let inner_top  = parseFloat(style.top);
+            let inner_left = parseFloat(style.left);
+            Batcher.mutating(() => {
+                console.log(`unhiding hint for unhidden element ${hint_number}`);
+                $inner.removeAttr("CBV_hidden"); 
+                $inner[0].style.top  = `${inner_top  + target_top  - inner_box.top}px`;
+                $inner[0].style.left = `${inner_left + target_left - inner_box.left}px`;
+            });
+            return;
+        }
+
+        if (Math.abs(inner_box.left - target_left) > 0.5 ||
+            Math.abs(inner_box.top  - target_top)  > 0.5) {
+            const style = $inner[0].style;
+            if (style == undefined) return;  // XML case...
+            let inner_top  = parseFloat(style.top);
+            let inner_left = parseFloat(style.left);
+            Batcher.mutating(() => {
+                console.log(`(re)positioning overlay for ${hint_number}`);
+                console.log(`  ${inner_box.top} x ${inner_box.left}` + 
+                         ` -> ${target_top} x ${target_left}`);
+
+                $inner[0].style.top  = `${inner_top + target_top - inner_box.top}px`;
+                $inner[0].style.left = `${inner_left + target_left - inner_box.left}px`;
+            });
+        }
     }
 
     function _remove_hint(hint) {

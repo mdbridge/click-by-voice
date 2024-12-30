@@ -41,7 +41,6 @@ var Hints = null;
     }
 
     function remove_hints() {
-        AddHint.clear_work();
         Hint.discard_hints();
         remove_hints_from(document)
         next_CBV_hint_ = -1;
@@ -229,9 +228,8 @@ var Hints = null;
             next_CBV_hint_ += 1;
         });
         const work_start = performance.now();
-        const result = AddHint.do_work();
         Hint.adjust_hints();
-        Batcher.do_work();
+        const result = Batcher.do_work();
 
         if (Hints.option("timing")) {
             console.log(`+${next_CBV_hint_-start_hint}` +

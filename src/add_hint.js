@@ -22,67 +22,6 @@ let AddHint = null;
     }
 
 
-
-    //
-    // Framework for alternating sensing and mutating the DOM to avoid
-    // extra forced layouts
-    //
-
-    let sensing_work        = [];
-    let mutating_work       = [];
-    let future_sensing_work = [];
-
-    // use these functions to submit work for this or the next cycle
-    function sensing(thunk) {
-        sensing_work.push(thunk);
-    }
-    function mutating(thunk) {
-        mutating_work.push(thunk);
-    }
-    function future_sensing(thunk) {
-        future_sensing_work.push(thunk);
-    }
-
-    // these are separate helping functions so they can be
-    // distinguished in stack traces
-    function run_sensing_stage(work) {
-        const start = performance.now();
-        work.map(function (thunk) {
-            thunk();
-        });
-        return time(start);
-    }
-    function run_mutating_stage(work) {
-        const start = performance.now();
-        work.map(function (thunk) {
-            thunk();
-        });
-        return time(start);
-    }
-
-    // run all work for the current cycle, continuing until no more
-    // work submitted for the current cycle
-    function do_work() {
-        let result = "";
-        while (sensing_work.length + mutating_work.length > 0) {
-            let work = sensing_work; sensing_work = [];
-            result += "; " + run_sensing_stage(work);
-            work = mutating_work; mutating_work = [];
-            result += "; " + run_mutating_stage(work);
-        }
-        sensing_work = future_sensing_work;
-        future_sensing_work = [];
-        return result.substring(2);
-    }
-
-    // cancel any submitted or scheduled work
-    function clear_work() {
-        sensing_work        = [];
-        mutating_work       = [];
-        future_sensing_work = [];
-    }
-
-
     //
     // Generic manipulations of DOM elements
     //
@@ -259,90 +198,6 @@ let AddHint = null;
     }
 
 
-    function overlay_daemon($element, $outer, $inner, hint_number, show_at_end, displacement) {
-        const daemon = function() {
-            if (!$element[0].isConnected) {
-                // mutating(() => {
-                //     // console.log(`disconnecting: ${hint_number}:`);
-                //     // console.log($element[0]);
-                //     $outer.remove();
-                //     $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
-                // });
-                return;
-            }
-            if (!$inner[0].isConnected) {
-                if (Hints.option("keep_hints")) {
-                    // some webpages seem to temporarily disconnect then reconnect hints
-                    future_sensing(daemon);
-                    return;
-                }
-                mutating(() => {
-                    console.log(`lost hint for ${hint_number}; removing...`);
-                    // TODO: automatically reconnect at bottom of body? <<<>>>
-                    // do we need to preserve $outer as well then?
-                    $outer.remove();
-                    $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
-                });
-                return;
-            }
-            future_sensing(daemon);
-
-            const target_box     = $element[0].getBoundingClientRect();
-            const inner_box      = $inner[0]  .getBoundingClientRect();
-            const element_hidden = (target_box.top == 0 && target_box.left == 0);
-            const inner_hidden   = (inner_box .top == 0 && inner_box .left == 0);
-            let target_top  = target_box.top;
-            let target_left = target_box.left;
-            if (show_at_end) {
-                target_left += target_box.width - inner_box.width;
-            }
-            target_top  -= displacement.up;
-            target_left += displacement.right;
-
-            if (element_hidden) {
-                if (inner_hidden) {
-                    return;
-                }
-                mutating(() => {
-                    // console.log(`hiding hint for hidden element ${hint_number}`);
-                    $inner.attr("CBV_hidden", "true"); 
-                });
-                return;
-            }
-            if (inner_hidden) {
-                // TODO: what if hidden attribute already removed?
-                const style = $inner[0].style;
-                if (style == undefined) return;  // XML case...
-                let inner_top  = parseFloat(style.top);
-                let inner_left = parseFloat(style.left);
-                mutating(() => {
-                    // console.log(`unhiding hint for unhidden element ${hint_number}`);
-                    $inner.removeAttr("CBV_hidden"); 
-                    $inner[0].style.top  = `${inner_top  + target_top  - inner_box.top}px`;
-                    $inner[0].style.left = `${inner_left + target_left - inner_box.left}px`;
-                });
-                return;
-            }
-
-            if (Math.abs(inner_box.left - target_left) > 0.5 ||
-                Math.abs(inner_box.top  - target_top)  > 0.5) {
-                const style = $inner[0].style;
-                if (style == undefined) return;  // XML case...
-                let inner_top  = parseFloat(style.top);
-                let inner_left = parseFloat(style.left);
-                mutating(() => {
-                    // console.log(`(re)positioning overlay for ${hint_number}`);
-                    // console.log(`  ${inner_box.top} x ${inner_box.left}` + 
-                    //          ` -> ${target_top} x ${target_left}`);
-
-                    $inner[0].style.top  = `${inner_top + target_top - inner_box.top}px`;
-                    $inner[0].style.left = `${inner_left + target_left - inner_box.left}px`;
-                });
-            }
-        };
-        return daemon;
-    }
-
     function add_overlay_hint($element, hint) {
         let show_at_end = !Hints.option("s");
         // hard coding reddit entire story link: <<<>>>
@@ -395,7 +250,7 @@ let AddHint = null;
 
         const zindex = compute_z_index($element);
 
-        mutating(() => {
+        Batcher.mutating(() => {
             // console.log("added hint " +  hint.hint_number);
             // console.log($element[0]);
 
@@ -406,11 +261,9 @@ let AddHint = null;
 
             // move overlay into place at end after all inline hints have been
             // inserted so their insertion doesn't mess up the overlay's position:
-            const daemon = overlay_daemon($element, $hint_tag, $inner, hint.hint_number, show_at_end, 
-                                          displacement);
             hint.displacement = displacement;
             hint.show_at_end  = show_at_end;
-            sensing(daemon);
+            Batcher.sensing(()=>{ Hint.adjust_hint(hint); });
         });
     }
 
@@ -535,7 +388,7 @@ let AddHint = null;
                     return false;
             }
 
-            mutating(() => {
+            Batcher.mutating(() => {
                 const $hint_tag = $build_hint(hint.hint_number, false, 0);
                 insert_element($current, $hint_tag, put_before, true);
                 Hint.initialize_hint(hint, $hint_tag[0]);
@@ -547,7 +400,7 @@ let AddHint = null;
 
     // this is often unsafe; prefer add_inline_hint_inside
     function add_inline_hint_outside($element, hint) {
-        mutating(() => {
+        Batcher.mutating(() => {
             const $hint_tag = $build_hint(hint.hint_number, false, 0);
             insert_element($element, $hint_tag, false, false);
             Hint.initialize_hint(hint, $hint_tag[0]);
@@ -558,7 +411,7 @@ let AddHint = null;
 
     function add_hint($element, hint_number) {
         const hint = Hint.make_hint(hint_number, $element[0]);
-        sensing(() => {
+        Batcher.sensing(() => {
             if (Hints.option("o")) {
                 add_overlay_hint($element, hint);
                 return;
@@ -586,8 +439,6 @@ let AddHint = null;
 
 
     AddHint = {
-        add_hint:    add_hint,
-        do_work:     do_work,
-        clear_work:  clear_work
+        add_hint: add_hint
     };
 })();
