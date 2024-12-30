@@ -2,7 +2,7 @@
 /// Main routine
 ///
 
-var next_major_refresh = 0;
+let next_major_refresh = 0;
 function major_happened() {
     const major_delay = parseInt(Hints.option_value("refresh", 3000));
     next_major_refresh = new Date().getTime() + major_delay;
