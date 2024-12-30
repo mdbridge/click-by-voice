@@ -48,7 +48,6 @@ var Hints = null;
     }
     function remove_hints_from(from) {
         $("[CBV_hint_element]", from).remove();
-        $("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
         const $frame = $("iframe, frame", from);
         if ($frame.length != 0) {
             remove_hints_from($frame.contents());

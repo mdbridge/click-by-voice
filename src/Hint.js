@@ -15,8 +15,14 @@ let Hint = null;
             hint_number:    hint_number,
             hinted_element: new WeakRef(hinted_element)
         };
+
         hint_number_to_hint[hint_number] = hint;
         hinted_elements.add(hinted_element);
+
+        if (Hints.option("mark_hinted")) {
+            // Optionally for debugging mark the hinted element in the DOM.
+            $(hinted_element).attr("CBV_hint_number", hint_number);
+        }
     }
 
     function locate_hint(hint_number) {
@@ -30,6 +36,14 @@ let Hint = null;
     function discard_hints() {
         hint_number_to_hint = {};
         hinted_elements     = new WeakSet();
+        remove_hint_numbers_from(document);
+    }
+    function remove_hint_numbers_from(from) {
+        $("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
+        const $frame = $("iframe, frame", from);
+        if ($frame.length != 0) {
+            remove_hint_numbers_from($frame.contents());
+        }
     }
 
 
