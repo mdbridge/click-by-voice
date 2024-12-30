@@ -396,7 +396,7 @@ let AddHint = null;
         const zindex = compute_z_index($element);
 
         mutating(() => {
-            $element.attr("CBV_hint_number", hint_number);
+            maybe_mark_hinted_element($element, hint_number);
             // console.log("added hint " +  hint_number);
             // console.log($element[0]);
 
@@ -418,6 +418,12 @@ let AddHint = null;
     // 
     //
 
+
+    function maybe_mark_hinted_element($element, hint_number) {
+        if (Hints.option("mark_hinted")) {
+            $element.attr("CBV_hint_number", hint_number);
+        }
+    }
 
     function $visual_contents($element) {
         if ($element.is("iframe, frame"))
@@ -534,7 +540,7 @@ let AddHint = null;
             }
 
             mutating(() => {
-                $element.attr("CBV_hint_number", hint_number);
+                maybe_mark_hinted_element($element, hint_number);
                 const $hint_tag = $build_hint(hint_number, false, 0);
                 insert_element($current, $hint_tag, put_before, true);
             });
@@ -546,7 +552,7 @@ let AddHint = null;
     // this is often unsafe; prefer add_inline_hint_inside
     function add_inline_hint_outside($element, hint_number) {
         mutating(() => {
-            $element.attr("CBV_hint_number", hint_number);
+            maybe_mark_hinted_element($element, hint_number);
             const $hint_tag = $build_hint(hint_number, false, 0);
             insert_element($element, $hint_tag, false, false);
         });
