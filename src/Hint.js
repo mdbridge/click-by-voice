@@ -7,15 +7,47 @@ let Hint = null;
 
 (function() {
 
-    let hint_number_to_hint = {};
-    let hinted_elements     = new WeakSet();
+    let hint_number_to_hint  = {};
+    let hinted_elements      = new WeakSet();
+
+
+    //
+    // Managing hint numbers
+    //
+
+    let next_hint_number     = 0;
+    let hints_made           = 0;  // reset by discard_hints()
+    let max_hint_number_used = -1; // reset by discard_hints()
+
+    function _discard_hint_numbers() {
+        next_hint_number     = 0;
+        hints_made           = 0;
+        max_hint_number_used = -1;
+    }
+
+    function _allocate_hint_number() {
+        hints_made++;
+        max_hint_number_used = next_hint_number++;
+        return max_hint_number_used;
+    }
+
+    // reset by discard_hints()
+    function get_hints_made() {
+        return hints_made;
+    }
+
+    // reset by discard_hints()
+    function get_max_hint_number_used() {
+        return max_hint_number_used;
+    }
 
 
     //
     // Creating hints
     //
 
-    function make_hint(hint_number, hinted_element) {
+    function make_hint(hinted_element) {
+        const hint_number = _allocate_hint_number();
         let hint = {
             hint_number:    hint_number,
             hinted_element: new WeakRef(hinted_element),
@@ -51,6 +83,7 @@ let Hint = null;
     }
 
     function discard_hints() {
+        _discard_hint_numbers();
         hint_number_to_hint = {};
         hinted_elements     = new WeakSet();
         _remove_hint_numbers_from(document);
@@ -209,16 +242,19 @@ let Hint = null;
 
 
     Hint = {
-        make_hint:           make_hint,
-        initialize_hint:     initialize_hint,
+        get_hints_made:            get_hints_made,
+        get_max_hint_number_used:  get_max_hint_number_used,
 
-        locate_hint:         locate_hint,
-        is_hinted_element:   is_hinted_element,
-        discard_hints:       discard_hints,
+        make_hint:                 make_hint,
+        initialize_hint:           initialize_hint,
 
-        dump_hint:           dump_hint,
-        get_hinted_element:  get_hinted_element,
-        adjust_hint:         adjust_hint,
-        adjust_hints:        adjust_hints
+        locate_hint:               locate_hint,
+        is_hinted_element:         is_hinted_element,
+        discard_hints:             discard_hints,
+
+        dump_hint:                 dump_hint,
+        get_hinted_element:        get_hinted_element,
+        adjust_hint:               adjust_hint,
+        adjust_hints:              adjust_hints
     };
 })();

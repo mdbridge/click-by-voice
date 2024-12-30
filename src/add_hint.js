@@ -404,8 +404,8 @@ let AddHint = null;
 
 
 
-    function add_hint($element, hint_number) {
-        const hint = Hint.make_hint(hint_number, $element[0]);
+    function add_hint($element) {
+        const hint = Hint.make_hint($element[0]);
         Batcher.sensing(() => {
             if (Hints.option("o")) {
                 add_overlay_hint($element, hint);

@@ -8,9 +8,9 @@ var Hints = null;
 
 (function() {
 
-    let config_        = "";
-    let next_CBV_hint_ = 0;  // -1 means hints are off
-    let options_       = new Map();
+    let config_     = "";
+    let hinting_on_ = true;
+    let options_    = new Map();
 
 
     //
@@ -24,6 +24,7 @@ var Hints = null;
     function add_hints(parameters) {
         set_hinting_parameters(parameters);
         if (option_value('+', 1) > 0) {
+            hinting_on_ = true;
             place_hints();
         } else {
             console.log("not adding hints: " + options_to_string());
@@ -36,14 +37,14 @@ var Hints = null;
             console.log("skipping refresh...");
             return;
         }
-        if (next_CBV_hint_ >= 0)
+        if (hinting_on_)
             place_hints();
     }
 
     function remove_hints() {
         Hint.discard_hints();
         remove_hints_from(document)
-        next_CBV_hint_ = -1;
+        hinting_on_ = false;
     }
     function remove_hints_from(from) {
         $("[CBV_hint_element]", from).remove();
@@ -203,11 +204,8 @@ var Hints = null;
     function place_hints() {
         console.log("adding hints: " + options_to_string());
 
-        if (next_CBV_hint_ < 0)
-            next_CBV_hint_ = 0;
-
-        const start_hint = next_CBV_hint_;
-        const start      = performance.now();
+        const starting_hint_count = Hint.get_hints_made();
+        const start               = performance.now();
 
         // DomWalk.each_displaying(
         //     function (element, styles) {},
@@ -223,17 +221,16 @@ var Hints = null;
         FindHint.each_hintable(function($element) {
             if (Hint.is_hinted_element($element[0]))
                 return;
-
-            AddHint.add_hint($element, next_CBV_hint_);
-            next_CBV_hint_ += 1;
+            AddHint.add_hint($element);
         });
         const work_start = performance.now();
         Batcher.sensing( () => { Hint.adjust_hints(); } );
         const result = Batcher.do_work();
 
         if (Hints.option("timing")) {
-            console.log(`+${next_CBV_hint_-start_hint}` +
-                        ` -> ${next_CBV_hint_} hints` +
+            const hints_made      = Hint.get_hints_made() - starting_hint_count;
+            const max_hint_number = Hint.get_max_hint_number_used();
+            console.log(`+${hints_made} -> ${max_hint_number} hints` +
                         ` in ${time(start)}: walk: ${time(start, work_start)}; add/adjust: ${result}`);
 
             // for (let i = 1; i < 10; i++) {
