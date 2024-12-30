@@ -228,13 +228,18 @@ var Hints = null;
             next_CBV_hint_ += 1;
         });
         const work_start = performance.now();
-        Hint.adjust_hints();
+        Batcher.sensing( () => { Hint.adjust_hints(); } );
         const result = Batcher.do_work();
 
         if (Hints.option("timing")) {
             console.log(`+${next_CBV_hint_-start_hint}` +
                         ` -> ${next_CBV_hint_} hints` +
-                        ` in ${time(start)}: ${time(start, work_start)}; ${result}`);
+                        ` in ${time(start)}: walk: ${time(start, work_start)}; add/adjust: ${result}`);
+
+            // for (let i = 1; i < 10; i++) {
+            //     Batcher.sensing( () => { Hint.adjust_hints(); } );
+            //     console.log("again: " +Batcher.do_work());                
+            // }
         }
     }
 

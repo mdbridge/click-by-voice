@@ -94,6 +94,7 @@ let Hint = null;
         return element;
     }
 
+    // precondition: currently in a sensing step
     function adjust_hint(hint) {
         const hinted_element = hint.hinted_element.deref();
         if (!hinted_element || !hinted_element.isConnected) {
@@ -197,6 +198,7 @@ let Hint = null;
     }
 
 
+    // precondition: currently in a sensing step
     function adjust_hints() {
         for (const hint_number in hint_number_to_hint) {
             if (hint_number_to_hint.hasOwnProperty(hint_number)) {
