@@ -10,10 +10,12 @@ let Hint = null;
     let hint_number_to_hint = {};
     let hinted_elements     = new WeakSet();
 
+
     function make_hint(hint_number, hinted_element) {
         let hint = {
             hint_number:    hint_number,
-            hinted_element: new WeakRef(hinted_element)
+            hinted_element: new WeakRef(hinted_element),
+            hint_tag:       undefined
         };
 
         hint_number_to_hint[hint_number] = hint;
@@ -23,8 +25,14 @@ let Hint = null;
             // Optionally for debugging mark the hinted element in the DOM.
             $(hinted_element).attr("CBV_hint_number", hint_number);
         }
+
+        return hint;
     }
 
+    function initialize_hint(hint, hint_tag) {
+        hint.hint_tag = hint_tag;
+    }
+    
     function locate_hint(hint_number) {
         return hint_number_to_hint[hint_number];
     }
@@ -57,6 +65,7 @@ let Hint = null;
         } else {
             console.log("hinted element has been garbage collected");
         }
+        console.log(hint.hint_tag);
     }
 
     function get_hinted_element(hint) {
@@ -75,6 +84,7 @@ let Hint = null;
 
     Hint = {
         make_hint: make_hint,
+        initialize_hint: initialize_hint,
         locate_hint: locate_hint,
         is_hinted_element: is_hinted_element,
         discard_hints: discard_hints,

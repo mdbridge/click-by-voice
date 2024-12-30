@@ -343,7 +343,7 @@ let AddHint = null;
         return daemon;
     }
 
-    function add_overlay_hint($element, hint_number) {
+    function add_overlay_hint($element, hint) {
         let show_at_end = !Hints.option("s");
         // hard coding reddit entire story link: <<<>>>
         if (/\.reddit\.com/.test(window.location.href)) {
@@ -363,7 +363,7 @@ let AddHint = null;
 
         if (Hints.option("exclude")) {
             while ($container.is(Hints.option_value("exclude"))) {
-                $container = container.parent();
+                $container = $container.parent();
             }
         }
 
@@ -396,16 +396,17 @@ let AddHint = null;
         const zindex = compute_z_index($element);
 
         mutating(() => {
-            // console.log("added hint " +  hint_number);
+            // console.log("added hint " +  hint.hint_number);
             // console.log($element[0]);
 
-            const $hint_tag = $build_hint(hint_number, true, zindex);
+            const $hint_tag = $build_hint(hint.hint_number, true, zindex);
             const $inner    = $hint_tag.children().first();
             insert_element($container, $hint_tag, !after, inside);
+            Hint.initialize_hint(hint, $hint_tag[0]);
 
             // move overlay into place at end after all inline hints have been
             // inserted so their insertion doesn't mess up the overlay's position:
-            const daemon = overlay_daemon($element, $hint_tag, $inner, hint_number, show_at_end, 
+            const daemon = overlay_daemon($element, $hint_tag, $inner, hint.hint_number, show_at_end, 
                                           displacement);
             sensing(daemon);
         });
@@ -495,7 +496,7 @@ let AddHint = null;
     //
 
     // returns false iff unable to safely add hint
-    function add_inline_hint_inside($element, hint_number) {
+    function add_inline_hint_inside($element, hint) {
         if (Hints.option("exclude") && $element.is(Hints.option_value("exclude"))) {
             return false;
         }
@@ -533,8 +534,9 @@ let AddHint = null;
             }
 
             mutating(() => {
-                const $hint_tag = $build_hint(hint_number, false, 0);
+                const $hint_tag = $build_hint(hint.hint_number, false, 0);
                 insert_element($current, $hint_tag, put_before, true);
+                Hint.initialize_hint(hint, $hint_tag[0]);
             });
             return true;
         }
@@ -542,38 +544,39 @@ let AddHint = null;
 
 
     // this is often unsafe; prefer add_inline_hint_inside
-    function add_inline_hint_outside($element, hint_number) {
+    function add_inline_hint_outside($element, hint) {
         mutating(() => {
-            const $hint_tag = $build_hint(hint_number, false, 0);
+            const $hint_tag = $build_hint(hint.hint_number, false, 0);
             insert_element($element, $hint_tag, false, false);
+            Hint.initialize_hint(hint, $hint_tag[0]);
         });
     }
 
 
 
     function add_hint($element, hint_number) {
-        Hint.make_hint(hint_number, $element[0]);
+        const hint = Hint.make_hint(hint_number, $element[0]);
         sensing(() => {
             if (Hints.option("o")) {
-                add_overlay_hint($element, hint_number);
+                add_overlay_hint($element, hint);
                 return;
             }
 
             if (Hints.option("h")) {
-                if (!add_inline_hint_inside($element, hint_number)) {
+                if (!add_inline_hint_inside($element, hint)) {
                     // if ($element.is("input[type=checkbox], input[type=radio]")) {
-                    //     add_inline_hint_outside($element, hint_number);
+                    //     add_inline_hint_outside($element, hint);
                     //     return null;
                     // }
-                    return add_overlay_hint($element, hint_number);
+                    return add_overlay_hint($element, hint);
                 }
                 return;
             }
 
             // current fallback is inline
             if (Hints.option("i") || true) {
-                if (!add_inline_hint_inside($element, hint_number))
-                    add_inline_hint_outside($element, hint_number);
+                if (!add_inline_hint_inside($element, hint))
+                    add_inline_hint_outside($element, hint);
                 return;
             }
         });
