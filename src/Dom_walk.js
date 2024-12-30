@@ -29,7 +29,7 @@ let DomWalk = null;
         const element_tag = $element[0].nodeName.toLowerCase();
         if (element_tag == "iframe" || element_tag == "frame") {
             try {
-                // var sub_body = $('body', element.contents());
+                // const sub_body = $('body', element.contents());
                 // each_displaying_helper(sub_body, pre_callback, post_callback);
 
                 // some popover ads are after <body> element
@@ -55,7 +55,7 @@ let DomWalk = null;
     // pre_callback is the preorder traversal, post_callback the
     // post-order traversal
     function each_displaying(pre_callback, post_callback, exclusion) {
-        // var root = $("body");
+        // const root = $("body");
         // each_displaying_helper(root, pre_callback, post_callback);
 
         // some popover ads are after <body> element

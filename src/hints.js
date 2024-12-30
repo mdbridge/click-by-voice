@@ -8,9 +8,9 @@ var Hints = null;
 
 (function() {
 
-    var config_        = "";
-    var next_CBV_hint_ = 0;  // -1 means hints are off
-    var options_       = new Map();
+    let config_        = "";
+    let next_CBV_hint_ = 0;  // -1 means hints are off
+    let options_       = new Map();
 
 
     //
@@ -49,7 +49,7 @@ var Hints = null;
     function remove_hints_from(from) {
         $("[CBV_hint_element]", from).remove();
         $("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
-        $frame = $("iframe, frame", from);
+        const $frame = $("iframe, frame", from);
         if ($frame.length != 0) {
             remove_hints_from($frame.contents());
         }
@@ -111,8 +111,8 @@ var Hints = null;
     }
 
     function options_to_string() {
-        var result = "";
-        var flags = "";
+        let result = "";
+        let flags = "";
         options_.forEach(function(value, key) {
             if (value.length==0 && key.length==1) {
                 flags += key;
@@ -124,6 +124,7 @@ var Hints = null;
     }
 
     function parse_option(text) {
+        let m;
         if (m = text.match(/^\s+(.*)/)) {
             text = m[1];
         }
@@ -137,12 +138,12 @@ var Hints = null;
     }
     function set_hinting_parameters(value) {
         options_ = new Map();
-        var text = get_effective_hints(value, window.location.href);
+        let text = get_effective_hints(value, window.location.href);
         while (text != "") {
             // console.log(text);
-            r = parse_option(text);
-            name = r[0];
-            arguments = r[1];
+            const r = parse_option(text);
+            const name = r[0];
+            const arguments = r[1];
             text = r[2];
             // console.log([name, arguments, text]);
             set_option(name, arguments);
@@ -150,7 +151,7 @@ var Hints = null;
     }
 
     function with_high_contrast(callback) {
-        var saved = options_;
+        const saved = options_;
         options_= new Map(options_);
         set_option('c', []);
         callback();
@@ -192,7 +193,7 @@ var Hints = null;
             }
         }
 
-        var default_hints = "h";
+        const default_hints = "h";
         return default_hints + config_hints + user_hints;
     }
 
@@ -207,8 +208,8 @@ var Hints = null;
         if (next_CBV_hint_ < 0)
             next_CBV_hint_ = 0;
 
-        var start_hint = next_CBV_hint_;
-        var start      = performance.now();
+        const start_hint = next_CBV_hint_;
+        const start      = performance.now();
 
         // DomWalk.each_displaying(
         //     function (element, styles) {},
