@@ -262,12 +262,12 @@ let AddHint = null;
     function overlay_daemon($element, $outer, $inner, hint_number, show_at_end, displacement) {
         const daemon = function() {
             if (!$element[0].isConnected) {
-                mutating(() => {
-                    // console.log(`disconnecting: ${hint_number}:`);
-                    // console.log($element[0]);
-                    $outer.remove();
-                    $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
-                });
+                // mutating(() => {
+                //     // console.log(`disconnecting: ${hint_number}:`);
+                //     // console.log($element[0]);
+                //     $outer.remove();
+                //     $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
+                // });
                 return;
             }
             if (!$inner[0].isConnected) {
@@ -408,6 +408,8 @@ let AddHint = null;
             // inserted so their insertion doesn't mess up the overlay's position:
             const daemon = overlay_daemon($element, $hint_tag, $inner, hint.hint_number, show_at_end, 
                                           displacement);
+            hint.displacement = displacement;
+            hint.show_at_end  = show_at_end;
             sensing(daemon);
         });
     }

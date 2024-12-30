@@ -230,6 +230,8 @@ var Hints = null;
         });
         const work_start = performance.now();
         const result = AddHint.do_work();
+        Hint.adjust_hints();
+        Batcher.do_work();
 
         if (Hints.option("timing")) {
             console.log(`+${next_CBV_hint_-start_hint}` +
