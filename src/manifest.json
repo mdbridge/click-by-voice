@@ -59,6 +59,7 @@
             "js": [
                 "jquery-3.7.1.min.js",
                 "utilities.js",
+                "batching_updates.js",
                 "Dom_walk.js",
                 "activate.js",
                 "add_hint.js",
