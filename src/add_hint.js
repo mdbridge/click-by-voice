@@ -200,11 +200,6 @@ let AddHint = null;
 
     function add_overlay_hint($element, hint) {
         let show_at_end = !Hints.option("s");
-        // hard coding reddit entire story link: <<<>>>
-        if (/\.reddit\.com/.test(window.location.href)) {
-            if ($element.is(".thing"))
-                show_at_end = false;
-        }
 
         // needs to be before we insert the hint tag <<<>>>
         const displacement = compute_displacement($element);
