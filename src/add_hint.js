@@ -583,8 +583,9 @@ let AddHint = null;
     }
 
 
-    AddHint = {add_hint: add_hint,
-               do_work: do_work,
-               clear_work: clear_work
-              };
+    AddHint = {
+        add_hint:    add_hint,
+        do_work:     do_work,
+        clear_work:  clear_work
+    };
 })();

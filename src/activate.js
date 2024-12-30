@@ -399,5 +399,7 @@ var Activate = null;
     }
 
 
-    Activate = {goto_hint_descriptor: goto_hint_descriptor};
+    Activate = {
+        goto_hint_descriptor: goto_hint_descriptor
+    };
 })();

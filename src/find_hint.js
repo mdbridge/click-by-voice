@@ -206,5 +206,7 @@ let FindHint = null;
     }
 
 
-    FindHint = {each_hintable: each_hintable};
+    FindHint = {
+        each_hintable: each_hintable
+    };
 })();

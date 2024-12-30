@@ -83,13 +83,13 @@ let Hint = null;
 
 
     Hint = {
-        make_hint: make_hint,
-        initialize_hint: initialize_hint,
-        locate_hint: locate_hint,
-        is_hinted_element: is_hinted_element,
-        discard_hints: discard_hints,
+        make_hint:           make_hint,
+        initialize_hint:     initialize_hint,
+        locate_hint:         locate_hint,
+        is_hinted_element:   is_hinted_element,
+        discard_hints:       discard_hints,
 
-        dump_hint: dump_hint,
-        get_hinted_element: get_hinted_element
+        dump_hint:           dump_hint,
+        get_hinted_element:  get_hinted_element
     };
 })();

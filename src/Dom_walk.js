@@ -65,5 +65,7 @@ let DomWalk = null;
     }
 
 
-    DomWalk = {each_displaying: each_displaying};
+    DomWalk = {
+        each_displaying: each_displaying
+    };
 })();

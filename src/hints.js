@@ -241,14 +241,14 @@ var Hints = null;
 
 
     Hints = {
-        set_config         : set_config,
+        set_config:          set_config,
 
-        add_hints          : add_hints,
-        refresh_hints      : refresh_hints,
-        remove_hints       : remove_hints,
+        add_hints:           add_hints,
+        refresh_hints:       refresh_hints,
+        remove_hints:        remove_hints,
 
-        option             : option,
-        option_value       : option_value,
-        with_high_contrast : with_high_contrast,
+        option:              option,
+        option_value:        option_value,
+        with_high_contrast:  with_high_contrast,
     };
 })();
