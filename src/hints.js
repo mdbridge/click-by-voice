@@ -230,7 +230,9 @@ var Hints = null;
         if (Hints.option("timing")) {
             const hints_made      = Hint.get_hints_made() - starting_hint_count;
             const max_hint_number = Hint.get_max_hint_number_used();
-            console.log(`+${hints_made} -> ${max_hint_number} hints` +
+            const hints_in_use    = Hint.get_hints_in_use();
+            console.log(`+${hints_made} -> ${hints_in_use} hints` +
+                        ` (number high water ${max_hint_number})` +
                         ` in ${time(start)}: walk: ${time(start, work_start)}; add/adjust: ${result}`);
 
             // for (let i = 1; i < 10; i++) {

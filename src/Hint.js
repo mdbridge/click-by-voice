@@ -7,8 +7,8 @@ let Hint = null;
 
 (function() {
 
-    let hint_number_to_hint  = {};
-    let hinted_elements      = new WeakSet();
+    let hint_number_to_hint = new Map();
+    let hinted_elements     = new WeakSet();
 
 
     //
@@ -18,17 +18,30 @@ let Hint = null;
     let next_hint_number     = 0;
     let hints_made           = 0;  // reset by discard_hints()
     let max_hint_number_used = -1; // reset by discard_hints()
+    let retired_hint_numbers = new Set();
 
     function _discard_hint_numbers() {
         next_hint_number     = 0;
         hints_made           = 0;
         max_hint_number_used = -1;
+        retired_hint_numbers = new Set();
     }
 
     function _allocate_hint_number() {
         hints_made++;
+        if (!Hints.option("avoiding_reuse") && retired_hint_numbers.size > 0) {
+            const first_inserted = retired_hint_numbers.values().next().value;
+            retired_hint_numbers.delete(first_inserted);
+            console.log(`reusing hint number ${first_inserted}`);
+            return first_inserted;
+        }
+
         max_hint_number_used = next_hint_number++;
         return max_hint_number_used;
+    }
+
+    function _discard_hint_number(hint_number) {
+        retired_hint_numbers.add(hint_number);
     }
 
     // reset by discard_hints()
@@ -39,6 +52,10 @@ let Hint = null;
     // reset by discard_hints()
     function get_max_hint_number_used() {
         return max_hint_number_used;
+    }
+
+    function get_hints_in_use() {
+        return hint_number_to_hint.size;
     }
 
 
@@ -54,7 +71,7 @@ let Hint = null;
             hint_tag:       undefined
         };
 
-        hint_number_to_hint[hint_number] = hint;
+        hint_number_to_hint.set(hint_number, hint);
         hinted_elements.add(hinted_element);
 
         if (Hints.option("mark_hinted")) {
@@ -75,7 +92,7 @@ let Hint = null;
     //
     
     function locate_hint(hint_number) {
-        return hint_number_to_hint[hint_number];
+        return hint_number_to_hint.get(Number(hint_number));
     }
 
     function is_hinted_element(element) {
@@ -84,8 +101,8 @@ let Hint = null;
 
     function discard_hints() {
         _discard_hint_numbers();
-        hint_number_to_hint = {};
-        hinted_elements     = new WeakSet();
+        hint_number_to_hint.clear();
+        hinted_elements = new WeakSet();
         _remove_hint_numbers_from(document);
     }
     function _remove_hint_numbers_from(from) {
@@ -222,21 +239,20 @@ let Hint = null;
             console.log(`removing ${hint.hint_number}:`);
             console.log(hinted_element);
             $(hint.hint_tag).remove();
-            delete hint_number_to_hint[hint.hint_number];
+            hint_number_to_hint.delete(hint.hint_number);
             hinted_elements.delete(hinted_element);
             if (Hints.option("mark_hinted")) {
                 $(`[CBV_hint_number='${hint.hint_number}']`).removeAttr("CBV_hint_number");
             }
+            _discard_hint_number(hint.hint_number);
         });
     }
 
 
     // precondition: currently in a sensing step
     function adjust_hints() {
-        for (const hint_number in hint_number_to_hint) {
-            if (hint_number_to_hint.hasOwnProperty(hint_number)) {
-                adjust_hint(hint_number_to_hint[hint_number]);
-            }
+        for (const [hint_number, hint] of hint_number_to_hint) {
+                adjust_hint(hint);
         }
     }
 
@@ -244,6 +260,7 @@ let Hint = null;
     Hint = {
         get_hints_made:            get_hints_made,
         get_max_hint_number_used:  get_max_hint_number_used,
+        get_hints_in_use:          get_hints_in_use,
 
         make_hint:                 make_hint,
         initialize_hint:           initialize_hint,
