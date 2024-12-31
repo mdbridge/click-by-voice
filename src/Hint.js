@@ -11,21 +11,27 @@ let Hint = null;
     //                      that are not currently used.
     // 
     // To allow reuse, release hint_numbers when they are no longer in use.
-    // 
+    // We attempt to use the smallest hint numbers possible.
     class HintNumberGenerator {
-        #next_hint_number     = 0;
-        #hints_made           = 0;
-        #hints_retired        = 0;
-        #max_hint_number_used = -1;
-        #retired_hint_numbers = new Set();
+        #next_hint_number               = 0;
+        #hints_made                     = 0;
+        #hints_retired                  = 0;
+        #max_hint_number_used           = -1;
+
+        #retired_hint_numbers           = [];
+        #is_retired_hint_numbers_sorted = true;
 
         generate() {
             this.#hints_made++;
-            if (!Hints.option("avoiding_reuse") && this.#retired_hint_numbers.size > 0) {
-                const first_inserted = this.#retired_hint_numbers.values().next().value;
-                this.#retired_hint_numbers.delete(first_inserted);
-                Util.vlog(2, `reusing hint number ${first_inserted}`);
-                return first_inserted;
+            if (!Hints.option("avoiding_reuse") && this.#retired_hint_numbers.length > 0) {
+                if (!this.#is_retired_hint_numbers_sorted) {
+                    // Sort on demand so we sort only once per batch of numbers generated.
+                    this.#retired_hint_numbers.sort();
+                    this.#is_retired_hint_numbers_sorted = true;
+                }
+                const number = this.#retired_hint_numbers.shift();
+                Util.vlog(2, `reusing hint number ${number}`);
+                return number;
             }
 
             this.#max_hint_number_used = this.#next_hint_number++;
@@ -34,7 +40,8 @@ let Hint = null;
 
         release(hint_number) {
             this.#hints_retired++;
-            this.#retired_hint_numbers.add(hint_number);
+            this.#retired_hint_numbers.push(hint_number);
+            this.#is_retired_hint_numbers_sorted = false;
         }
 
         get stats() {
