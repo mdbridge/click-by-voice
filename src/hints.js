@@ -34,7 +34,7 @@ var Hints = null;
 
     function refresh_hints() {
         if (document.hidden) {
-            console.log("skipping refresh...");
+            Util.vlog(1, "skipping refresh...");
             return;
         }
         if (hinting_on_)
@@ -202,7 +202,7 @@ var Hints = null;
     //
 
     function place_hints() {
-        console.log("adding hints: " + options_to_string());
+        Util.vlog(1, "adding hints: " + options_to_string());
 
         const starting_hint_count = Hint.get_hints_made();
         const start               = performance.now();
@@ -231,10 +231,10 @@ var Hints = null;
             const hints_made      = Hint.get_hints_made() - starting_hint_count;
             const max_hint_number = Hint.get_max_hint_number_used();
             const hints_in_use    = Hint.get_hints_in_use();
-            console.log(`+${hints_made} -> ${hints_in_use} hints` +
-                        ` (number high water ${max_hint_number})` +
-                        ` in ${Util.time(start)}: walk: ${Util.time(start, work_start)};` +
-                        ` add/adjust: ${result}`);
+            Util.vlog(1, `+${hints_made} -> ${hints_in_use} hints` +
+                      ` (number high water ${max_hint_number})` +
+                      ` in ${Util.time(start)}: walk: ${Util.time(start, work_start)};` +
+                      ` add/adjust: ${result}`);
 
             // for (let i = 1; i < 10; i++) {
             //     Batcher.sensing( () => { Hint.adjust_hints(); } );

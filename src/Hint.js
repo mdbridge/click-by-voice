@@ -32,7 +32,7 @@ let Hint = null;
         if (!Hints.option("avoiding_reuse") && retired_hint_numbers.size > 0) {
             const first_inserted = retired_hint_numbers.values().next().value;
             retired_hint_numbers.delete(first_inserted);
-            console.log(`reusing hint number ${first_inserted}`);
+            Util.vlog(2, `reusing hint number ${first_inserted}`);
             return first_inserted;
         }
 
@@ -148,7 +148,7 @@ let Hint = null;
     function adjust_hint(hint) {
         const hinted_element = hint.hinted_element.deref();
         if (!hinted_element || !hinted_element.isConnected) {
-            console.log(`The element with hint ${hint.hint_number} is no longer connected`);
+            Util.vlog(2, `The element with hint ${hint.hint_number} is no longer connected`);
             _remove_hint(hint);
             return;
         }
@@ -171,7 +171,7 @@ let Hint = null;
                 return;
             }
             Batcher.mutating(() => {
-                console.log(`lost hint for ${hint.hint_number}; removing...`);
+                Util.vlog(2, `lost hint for ${hint.hint_number}; removing...`);
                 // TODO: automatically reconnect at bottom of body? <<<>>>
                 // do we need to preserve $outer as well then?
                 _remove_hint(hint);
@@ -196,7 +196,7 @@ let Hint = null;
                 return;
             }
             Batcher.mutating(() => {
-                console.log(`hiding hint for hidden element ${hint_number}`);
+                Util.vlog(3, `hiding hint for hidden element ${hint_number}`);
                 $inner.attr("CBV_hidden", "true"); 
             });
             return;
@@ -208,7 +208,7 @@ let Hint = null;
             let inner_top  = parseFloat(style.top);
             let inner_left = parseFloat(style.left);
             Batcher.mutating(() => {
-                console.log(`unhiding hint for unhidden element ${hint_number}`);
+                Util.vlog(3, `unhiding hint for unhidden element ${hint_number}`);
                 $inner.removeAttr("CBV_hidden"); 
                 $inner[0].style.top  = `${inner_top  + target_top  - inner_box.top}px`;
                 $inner[0].style.left = `${inner_left + target_left - inner_box.left}px`;
@@ -223,8 +223,8 @@ let Hint = null;
             let inner_top  = parseFloat(style.top);
             let inner_left = parseFloat(style.left);
             Batcher.mutating(() => {
-                console.log(`(re)positioning overlay for ${hint_number}`);
-                console.log(`  ${inner_box.top} x ${inner_box.left}` + 
+                Util.vlog(3, `(re)positioning overlay for ${hint_number}`);
+                Util.vlog(3, `  ${inner_box.top} x ${inner_box.left}` + 
                          ` -> ${target_top} x ${target_left}`);
 
                 $inner[0].style.top  = `${inner_top + target_top - inner_box.top}px`;
@@ -236,8 +236,8 @@ let Hint = null;
     function _remove_hint(hint) {
         Batcher.mutating(() => {
             const hinted_element = hint.hinted_element.deref();
-            console.log(`removing ${hint.hint_number}:`);
-            console.log(hinted_element);
+            Util.vlog(2, `removing ${hint.hint_number}:`);
+            Util.vlog(2, hinted_element);
             $(hint.hint_tag).remove();
             hint_number_to_hint.delete(hint.hint_number);
             hinted_elements.delete(hinted_element);

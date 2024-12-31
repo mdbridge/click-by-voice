@@ -7,6 +7,14 @@ let Util = null;
 
 (function() {
 
+    function vlog(level, ...arguments) {
+        const verbose_level = Hints.option_value("verbose", 0);
+        if (verbose_level && level <= Number(verbose_level)) {
+            console.log(...arguments);
+        }
+    }
+
+
     function time(start, end) {
         if (!end) {
             end = performance.now();
@@ -15,16 +23,9 @@ let Util = null;
     }
 
 
-
-
-
-
-
-
-
-
     Util = {
-        time: time
+        time: time,
+        vlog: vlog
     };
 })();
 
