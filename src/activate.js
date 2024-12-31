@@ -61,13 +61,13 @@ var Activate = null;
         const screenPoint = clientToRelativeScreen(point.x, point.y, externalZoom, isMaximized);
         const answer      = screenPoint.x + "," + screenPoint.y;
 
-        console.log("********************************************************************************");
-        console.log("input client point: " + point.x + " , " + point.y);
-        console.log("assumed externalZoom: " + externalZoom);
+        Util.vlog(1, "********************************************************************************");
+        Util.vlog(1, "input client point: " + point.x + " , " + point.y);
+        Util.vlog(1, "assumed externalZoom: " + externalZoom);
         const zoom = window.devicePixelRatio / externalZoom;
-        console.log("zoom: " + zoom);
-        console.log("isMaximized: " + isMaximized);
-        console.log("output screen point: " +answer);
+        Util.vlog(1, "zoom: " + zoom);
+        Util.vlog(1, "isMaximized: " + isMaximized);
+        Util.vlog(1, "output screen point: " +answer);
 
         act("copy_to_clipboard", {text: answer});
     }
@@ -204,9 +204,9 @@ var Activate = null;
         case "s": {
             const clone = $element.clone();
             clone.find("[CBV_hint_element]").remove();
-            console.log(clone[0]);
+            Util.vlog(1, clone[0]);
             const text = clone[0].textContent;
-            console.log('"' + text + '"');
+            Util.vlog(1, '"' + text + '"');
             act("copy_to_clipboard", {text: text});
             break;
         }
@@ -292,11 +292,11 @@ var Activate = null;
             $('body').click(function (event) {
                 const zoom = window.devicePixelRatio;
                 console.log(event.originalEvent);
-                console.log("Y: " + (event.screenY - event.clientY));
-                console.log("X: " + (event.screenX - event.clientX));
-                console.log("WY: " + (event.screenY - window.screenY - event.clientY));
-                console.log("WX: " + (event.screenX - window.screenX - event.clientX));
-                console.log("X ratio: " + ( event.clientX / event.screenX));
+                console.log("Y: "              + (event.screenY - event.clientY));
+                console.log("X: "              + (event.screenX - event.clientX));
+                console.log("WY: "             + (event.screenY - window.screenY - event.clientY));
+                console.log("WX: "             + (event.screenX - window.screenX - event.clientX));
+                console.log("X ratio: "        + ( event.clientX / event.screenX));
 
                 console.log("measured Delta: " + (event.screenY - window.screenY - event.clientY*zoom));
             });
@@ -304,7 +304,7 @@ var Activate = null;
 
 
         default:
-            console.log("unknown activate operation: " + operation);
+            Util.vlog(0, "unknown activate operation: " + operation);
         }
     }
 
@@ -320,7 +320,7 @@ var Activate = null;
                     $element = $(this);
                 }
             });
-            console.log($parent[0] + " -> " + $element[0]);
+            Util.vlog(1, $parent[1] + " -> " + $element[0]);
         }
 
 
@@ -359,7 +359,7 @@ var Activate = null;
             // hint_number
             hint = HintManager.locate_hint(hint_descriptor);
             if (!hint) {
-                console.log(`The hint ${hint_descriptor} is not currently in use`);
+                Util.vlog(0, `The hint ${hint_descriptor} is not currently in use`);
                 return {};
             }
             const element = hint.hinted_element;
@@ -382,7 +382,7 @@ var Activate = null;
         const lookup   = find_hint_descriptor(hint_descriptor);
         const $element = lookup.$element;
         if (!$element) {
-            console.log("goto_hint_descriptor: unable to find hint descriptor: " + hint_descriptor);
+            Util.vlog(0, "goto_hint_descriptor: unable to find hint descriptor: " + hint_descriptor);
             return;
         }
 
@@ -391,8 +391,8 @@ var Activate = null;
                 operation = "c";
             else
                 operation = "f";
-            console.log($element[0]);
-            console.log("defaulting to: " + operation);
+            Util.vlog(1, $element[0]);
+            Util.vlog(1, "defaulting to: " + operation);
         }
 
         activate($element, lookup.hint_if_known, operation);

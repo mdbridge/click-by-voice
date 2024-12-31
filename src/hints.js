@@ -27,7 +27,7 @@ var Hints = null;
             hinting_on_ = true;
             place_hints();
         } else {
-            console.log("not adding hints: " + options_to_string());
+            Util.vlog(0, "not adding hints: " + options_to_string());
             remove_hints();
         }
     }

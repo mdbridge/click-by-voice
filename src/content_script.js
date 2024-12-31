@@ -53,6 +53,7 @@ if (window == window.top) {
 
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
+            Util.vlog(0, `CBV Command: perform "${request.operation}" on "${request.hint_descriptor}"`);
             perform_operation(request.operation, request.hint_descriptor);
         });
 

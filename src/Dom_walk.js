@@ -37,7 +37,7 @@ let DomWalk = null;
                     each_displaying_helper($(this), pre_callback, post_callback, exclusion);
                 });
             } catch (e) {
-                console.log("[i]frame access failure: " + e);
+                console.error("[i]frame access failure: " + e);
             }
         }
 
