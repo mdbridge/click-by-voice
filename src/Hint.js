@@ -7,55 +7,57 @@ let Hint = null;
 
 (function() {
 
-    let hint_number_to_hint = new Map();
-    let hinted_elements     = new WeakSet();
+    // HintNumberGenerator: responsible for doling out hint numbers
+    //                      that are not currently used.
+    // 
+    // To allow reuse, release hint_numbers when they are no longer in use.
+    // 
+    class HintNumberGenerator {
+        #next_hint_number     = 0;
+        #hints_made           = 0;
+        #hints_retired        = 0;
+        #max_hint_number_used = -1;
+        #retired_hint_numbers = new Set();
+
+        generate() {
+            this.#hints_made++;
+            if (!Hints.option("avoiding_reuse") && this.#retired_hint_numbers.size > 0) {
+                const first_inserted = this.#retired_hint_numbers.values().next().value;
+                this.#retired_hint_numbers.delete(first_inserted);
+                Util.vlog(2, `reusing hint number ${first_inserted}`);
+                return first_inserted;
+            }
+
+            this.#max_hint_number_used = this.#next_hint_number++;
+            return this.#max_hint_number_used;
+        }
+
+        release(hint_number) {
+            this.#hints_retired++;
+            this.#retired_hint_numbers.add(hint_number);
+        }
+
+        get stats() {
+            return {
+                hints_made:           this.#hints_made,
+                max_hint_number_used: this.#max_hint_number_used,
+                hints_in_use:         this.#hints_made - this.#hints_retired
+            };
+        }
+    }
+
+
+    let hint_number_generator = new HintNumberGenerator();
+    let hint_number_to_hint   = new Map();
+    let hinted_elements       = new WeakSet();
 
 
     //
     // Managing hint numbers
     //
 
-    let next_hint_number     = 0;
-    let hints_made           = 0;  // reset by discard_hints()
-    let max_hint_number_used = -1; // reset by discard_hints()
-    let retired_hint_numbers = new Set();
-
-    function _discard_hint_numbers() {
-        next_hint_number     = 0;
-        hints_made           = 0;
-        max_hint_number_used = -1;
-        retired_hint_numbers = new Set();
-    }
-
-    function _allocate_hint_number() {
-        hints_made++;
-        if (!Hints.option("avoiding_reuse") && retired_hint_numbers.size > 0) {
-            const first_inserted = retired_hint_numbers.values().next().value;
-            retired_hint_numbers.delete(first_inserted);
-            Util.vlog(2, `reusing hint number ${first_inserted}`);
-            return first_inserted;
-        }
-
-        max_hint_number_used = next_hint_number++;
-        return max_hint_number_used;
-    }
-
-    function _discard_hint_number(hint_number) {
-        retired_hint_numbers.add(hint_number);
-    }
-
-    // reset by discard_hints()
-    function get_hints_made() {
-        return hints_made;
-    }
-
-    // reset by discard_hints()
-    function get_max_hint_number_used() {
-        return max_hint_number_used;
-    }
-
-    function get_hints_in_use() {
-        return hint_number_to_hint.size;
+    function get_hint_number_stats() {
+        return hint_number_generator.stats;
     }
 
 
@@ -64,7 +66,7 @@ let Hint = null;
     //
 
     function make_hint(hinted_element) {
-        const hint_number = _allocate_hint_number();
+        const hint_number = hint_number_generator.generate();
         let hint = {
             hint_number:    hint_number,
             hinted_element: new WeakRef(hinted_element),
@@ -100,7 +102,7 @@ let Hint = null;
     }
 
     function discard_hints() {
-        _discard_hint_numbers();
+        hint_number_generator = new HintNumberGenerator();
         hint_number_to_hint.clear();
         hinted_elements = new WeakSet();
         _remove_hint_numbers_from(document);
@@ -244,7 +246,7 @@ let Hint = null;
             if (Hints.option("mark_hinted")) {
                 $(`[CBV_hint_number='${hint.hint_number}']`).removeAttr("CBV_hint_number");
             }
-            _discard_hint_number(hint.hint_number);
+            hint_number_generator.release(hint.hint_number);
         });
     }
 
@@ -258,20 +260,18 @@ let Hint = null;
 
 
     Hint = {
-        get_hints_made:            get_hints_made,
-        get_max_hint_number_used:  get_max_hint_number_used,
-        get_hints_in_use:          get_hints_in_use,
+        get_hint_number_stats:  get_hint_number_stats,
 
-        make_hint:                 make_hint,
-        initialize_hint:           initialize_hint,
+        make_hint:              make_hint,
+        initialize_hint:        initialize_hint,
 
-        locate_hint:               locate_hint,
-        is_hinted_element:         is_hinted_element,
-        discard_hints:             discard_hints,
+        locate_hint:            locate_hint,
+        is_hinted_element:      is_hinted_element,
+        discard_hints:          discard_hints,
 
-        dump_hint:                 dump_hint,
-        get_hinted_element:        get_hinted_element,
-        adjust_hint:               adjust_hint,
-        adjust_hints:              adjust_hints
+        dump_hint:              dump_hint,
+        get_hinted_element:     get_hinted_element,
+        adjust_hint:            adjust_hint,
+        adjust_hints:           adjust_hints
     };
 })();
