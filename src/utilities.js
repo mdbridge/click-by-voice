@@ -7,10 +7,10 @@ let Util = null;
 
 (function() {
 
-    function vlog(level, ...arguments) {
-        const verbose_level = Hints.option_value("verbose", 0);
-        if (verbose_level && level <= Number(verbose_level)) {
-            console.log(...arguments);
+    function vlog(level, ...args) {
+        const verbose_level = Hints.option_value("verbose", "0");
+        if (level <= Number(verbose_level)) {
+            console.log(...args);
         }
     }
 
