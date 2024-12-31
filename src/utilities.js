@@ -1,3 +1,41 @@
+///
+/// TBD
+///
+/// Provides Util
+
+let Util = null;
+
+(function() {
+
+    function time(start, end) {
+        if (!end) {
+            end = performance.now();
+        }
+        return `${(end - start).toFixed(1)} ms`;
+    }
+
+
+
+
+
+
+
+
+
+
+    Util = {
+        time: time
+    };
+})();
+
+
+
+
+
+
+
+
+
 //
 // Requesting background script to perform actions on our behalf
 //
@@ -36,13 +74,4 @@ function css($element, property_name, default_value) {
 
 function CBV_inserted_element($element) {
     return $element[0].getAttribute("CBV_hint_element") == "true";
-}
-
-
-
-function time(start, end) {
-    if (!end) {
-        end = performance.now();
-    }
-    return `${(end - start).toFixed(1)} ms`;
 }

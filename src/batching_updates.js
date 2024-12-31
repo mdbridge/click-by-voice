@@ -40,14 +40,14 @@ let Batcher = null;
         work.map(function (thunk) {
             thunk();
         });
-        return time(start);
+        return Util.time(start);
     }
     function run_mutating_stage(work) {
         const start = performance.now();
         work.map(function (thunk) {
             thunk();
         });
-        return time(start);
+        return Util.time(start);
     }
 
 

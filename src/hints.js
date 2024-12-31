@@ -233,7 +233,8 @@ var Hints = null;
             const hints_in_use    = Hint.get_hints_in_use();
             console.log(`+${hints_made} -> ${hints_in_use} hints` +
                         ` (number high water ${max_hint_number})` +
-                        ` in ${time(start)}: walk: ${time(start, work_start)}; add/adjust: ${result}`);
+                        ` in ${Util.time(start)}: walk: ${Util.time(start, work_start)};` +
+                        ` add/adjust: ${result}`);
 
             // for (let i = 1; i < 10; i++) {
             //     Batcher.sensing( () => { Hint.adjust_hints(); } );
