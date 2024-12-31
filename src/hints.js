@@ -42,7 +42,7 @@ var Hints = null;
     }
 
     function remove_hints() {
-        Hint.discard_hints();
+        HintManager.discard_hints();
         remove_hints_from(document)
         hinting_on_ = false;
     }
@@ -204,7 +204,7 @@ var Hints = null;
     function place_hints() {
         Util.vlog(1, "adding hints: " + options_to_string());
 
-        const starting_hint_count = Hint.get_hint_number_stats().hints_made;
+        const starting_hint_count = HintManager.get_hint_number_stats().hints_made;
         const start               = performance.now();
 
         // DomWalk.each_displaying(
@@ -219,16 +219,16 @@ var Hints = null;
         // start = performance.now();
 
         FindHint.each_hintable(function($element) {
-            if (Hint.is_hinted_element($element[0]))
+            if (HintManager.is_hinted_element($element[0]))
                 return;
             AddHint.add_hint($element);
         });
         const work_start = performance.now();
-        Batcher.sensing( () => { Hint.adjust_hints(); } );
+        Batcher.sensing( () => { HintManager.adjust_hints(); } );
         const result = Batcher.do_work();
 
         if (Hints.option("timing")) {
-            const stats           = Hint.get_hint_number_stats();
+            const stats           = HintManager.get_hint_number_stats();
             const hints_made      = stats.hints_made - starting_hint_count;
             const max_hint_number = stats.max_hint_number_used;
             const hints_in_use    = stats.hints_in_use;
@@ -238,7 +238,7 @@ var Hints = null;
                       ` add/adjust: ${result}`);
 
             // for (let i = 1; i < 10; i++) {
-            //     Batcher.sensing( () => { Hint.adjust_hints(); } );
+            //     Batcher.sensing( () => { HintManager.adjust_hints(); } );
             //     console.log("again: " +Batcher.do_work());                
             // }
         }

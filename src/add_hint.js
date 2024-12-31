@@ -252,13 +252,13 @@ let AddHint = null;
             const $hint_tag = $build_hint(hint.hint_number, true, zindex);
             const $inner    = $hint_tag.children().first();
             insert_element($container, $hint_tag, !after, inside);
-            Hint.initialize_hint(hint, $hint_tag[0]);
+            hint.initialize($hint_tag[0]);
 
             // move overlay into place at end after all inline hints have been
             // inserted so their insertion doesn't mess up the overlay's position:
             hint.displacement = displacement;
             hint.show_at_end  = show_at_end;
-            Batcher.sensing(()=>{ Hint.adjust_hint(hint); });
+            Batcher.sensing(()=>{ hint.adjust(); });
         });
     }
 
@@ -386,7 +386,7 @@ let AddHint = null;
             Batcher.mutating(() => {
                 const $hint_tag = $build_hint(hint.hint_number, false, 0);
                 insert_element($current, $hint_tag, put_before, true);
-                Hint.initialize_hint(hint, $hint_tag[0]);
+                hint.initialize($hint_tag[0]);
             });
             return true;
         }
@@ -398,14 +398,14 @@ let AddHint = null;
         Batcher.mutating(() => {
             const $hint_tag = $build_hint(hint.hint_number, false, 0);
             insert_element($element, $hint_tag, false, false);
-            Hint.initialize_hint(hint, $hint_tag[0]);
+            hint.initialize($hint_tag[0]);
         });
     }
 
 
 
     function add_hint($element) {
-        const hint = Hint.make_hint($element[0]);
+        const hint = HintManager.make_hint($element[0]);
         Batcher.sensing(() => {
             if (Hints.option("o")) {
                 add_overlay_hint($element, hint);

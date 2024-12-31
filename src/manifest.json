@@ -60,11 +60,11 @@
                 "jquery-3.7.1.min.js",
                 "utilities.js",
                 "batching_updates.js",
+                "HintManager.js",
                 "Dom_walk.js",
                 "activate.js",
                 "add_hint.js",
                 "find_hint.js",
-                "hint.js",
                 "hints.js",
                 "content_script.js"
             ],

@@ -171,9 +171,9 @@ let FindHint = null;
                     return;
 
                 const parent = $element[0].parentNode;
-                if (Hint.is_hinted_element($element[0]))
+                if (HintManager.is_hinted_element($element[0]))
                     return;
-                if (Hint.is_hinted_element(parent))
+                if (HintManager.is_hinted_element(parent))
                     return;
 
                 if (styles.cursor != "pointer") {

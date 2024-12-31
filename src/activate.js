@@ -216,7 +216,7 @@ var Activate = null;
         case "D":
             console.log("");
             if (hint_if_known) {
-                Hint.dump_hint(hint_if_known);
+                hint_if_known.dump();
                 console.log("");
             }
             console.log("Element information:");
@@ -357,12 +357,12 @@ var Activate = null;
             }
         } else {
             // hint_number
-            hint = Hint.locate_hint(hint_descriptor);
+            hint = HintManager.locate_hint(hint_descriptor);
             if (!hint) {
                 console.log(`The hint ${hint_descriptor} is not currently in use`);
                 return {};
             }
-            const element = Hint.get_hinted_element(hint);
+            const element = hint.hinted_element;
             if (!element) {
                 return {};
             }
