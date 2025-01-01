@@ -41,14 +41,14 @@ let Util = null;
 // Requesting background script to perform actions on our behalf
 //
 
-function act(action, arguments) {
-    arguments.action = action;
-    chrome.runtime.sendMessage(arguments);
+function act(action, args) {
+    args.action = action;
+    chrome.runtime.sendMessage(args);
 }
 
-function request(action, arguments, callback) {
-    arguments.action = action;
-    chrome.runtime.sendMessage(arguments, callback);
+function request(action, args, callback) {
+    args.action = action;
+    chrome.runtime.sendMessage(args, callback);
 }
 
 

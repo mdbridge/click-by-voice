@@ -61,7 +61,7 @@ var Hints = null;
     function reset_option(option_name) {
         options_.delete(option_name);
     }
-    function set_option(option_name, arguments) {
+    function set_option(option_name, args) {
         // The main mode switches are exclusive:
         if (/^[ioh]$/.test(option_name)) {
             reset_option("i");
@@ -73,8 +73,8 @@ var Hints = null;
             options_.set('+', [0]);
             return;
         } else if (option_name == '+') {
-            if (arguments.length > 0) {
-                options_.set('+', arguments);
+            if (args.length > 0) {
+                options_.set('+', args);
             } else {
                 options_.set('+', [option_value('+',0) + 1]);
             }
@@ -82,20 +82,20 @@ var Hints = null;
         }
         // syntax for long option names & reseting options:
         if (option_name == 'X') {
-            if (arguments.length > 0) {
-                option_name = arguments[0];
-                arguments = arguments.slice(1);
+            if (args.length > 0) {
+                option_name = args[0];
+                args = args.slice(1);
                 if (/-$/.test(option_name)) {
                     // X{<option_name>-}
                     reset_option(option_name.substring(0, option_name.length-1));
                 } else {
                     // X{<option_name>}<optional arguments>
-                    set_option(option_name, arguments);
+                    set_option(option_name, args);
                 }
             }
             return;
         }
-        options_.set(option_name, arguments);
+        options_.set(option_name, args);
     }
 
     function option(option_name) {
@@ -142,10 +142,10 @@ var Hints = null;
             // console.log(text);
             const r = parse_option(text);
             const name = r[0];
-            const arguments = r[1];
+            const args = r[1];
             text = r[2];
-            // console.log([name, arguments, text]);
-            set_option(name, arguments);
+            // console.log([name, args, text]);
+            set_option(name, args);
         }
     }
 
