@@ -112,6 +112,7 @@
 	text-indent: 	0px		   !important;
 	text-align:     left		   !important;
 	word-break:     normal		   !important;  /* prevent breaking of hint numbers */
+	overflow-wrap:  normal	           !important;  /* prevent breaking of hint numbers */
 
     }
     [CBV_inner_overlay2][CBV_high_contrast]:not(#CBV_override):not(#CBVISayOverride)::after {
