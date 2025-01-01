@@ -75,7 +75,7 @@ let HintManager = null;
         hinted_elements.delete(hinted_element);
         hint_number_to_hint.delete(hint_number);
         if (Hints.option("mark_hinted")) {
-            $(`[CBV_hint_number='${hint.hint_number}']`).removeAttr("CBV_hint_number");
+            $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
         }
         hint_number_generator.release(hint_number);
     }

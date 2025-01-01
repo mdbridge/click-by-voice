@@ -35,10 +35,6 @@ var Hints = null;
     }
 
     function refresh_hints() {
-        if (document.hidden) {
-            Util.vlog(1, "skipping refresh...");
-            return;
-        }
         if (hinting_on_)
             place_hints();
     }
