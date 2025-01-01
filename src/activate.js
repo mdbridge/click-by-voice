@@ -3,6 +3,8 @@
 ///
 /// Provides Activate
 
+"use strict";
+
 var Activate = null;
 
 (function() {
@@ -357,7 +359,7 @@ var Activate = null;
             }
         } else {
             // hint_number
-            hint = HintManager.locate_hint(hint_descriptor);
+            const hint = HintManager.locate_hint(hint_descriptor);
             if (!hint) {
                 Util.vlog(0, `The hint ${hint_descriptor} is not currently in use`);
                 return {};

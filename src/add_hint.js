@@ -5,6 +5,8 @@
 
 let AddHint = null;
 
+"use strict";
+
 (function() {
 
 

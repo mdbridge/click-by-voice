@@ -3,6 +3,8 @@
 ///
 /// Provides FindHint
 
+"use strict";
+
 let FindHint = null;
 
 (function() {

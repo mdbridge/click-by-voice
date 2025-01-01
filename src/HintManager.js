@@ -3,6 +3,8 @@
 ///
 /// Provides HintManager
 
+"use strict";
+
 let HintManager = null;
 
 (function() {

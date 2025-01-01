@@ -4,6 +4,8 @@
 /// Provides Hints
 ///
 
+"use strict";
+
 var Hints = null;
 
 (function() {

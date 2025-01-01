@@ -4,6 +4,8 @@
 ///
 /// Provides Batcher
 
+"use strict";
+
 let Batcher = null;
 
 (function() {

@@ -2,6 +2,8 @@
 /// Main routine
 ///
 
+"use strict";
+
 let next_major_refresh = 0;
 function major_happened() {
     const major_delay = parseInt(Hints.option_value("refresh", 3000));

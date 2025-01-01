@@ -3,6 +3,8 @@
 ///
 /// Provides Util
 
+"use strict";
+
 let Util = null;
 
 (function() {
