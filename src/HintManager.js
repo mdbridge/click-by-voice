@@ -56,55 +56,8 @@ let HintManager = null;
     }
 
 
-
-    //
-    // Keeping track of hints
-    //
-    
-    let hint_number_generator = new HintNumberGenerator();
-    let hint_number_to_hint   = new Map();
-    let hinted_elements       = new WeakSet();
-
-
-    // make_hint is defined below after class Hint.
-
-    // precondition: call this during a mutating step
-    function _remove_hint(hint_number, hinted_element) {
-        Util.vlog(2, `removing ${hint_number}:`);
-        Util.vlog(2, hinted_element);
-        hinted_elements.delete(hinted_element);
-        hint_number_to_hint.delete(hint_number);
-        if (Hints.option("mark_hinted")) {
-            $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
-        }
-        hint_number_generator.release(hint_number);
-    }
-
-
-    function locate_hint(hint_number) {
-        return hint_number_to_hint.get(Number(hint_number));
-    }
-
-    function is_hinted_element(element) {
-        return hinted_elements.has(element);
-    }
-
-    function discard_hints() {
-        hint_number_generator = new HintNumberGenerator();
-        hint_number_to_hint.clear();
-        hinted_elements = new WeakSet();
-        _remove_hint_numbers_from(document);
-    }
-
-    function _remove_hint_numbers_from(from) {
-        $("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
-        const $frame = $("iframe, frame", from);
-        if ($frame.length != 0) {
-            _remove_hint_numbers_from($frame.contents());
-        }
-    }
-
-
+    // forward: function _remove_hint(hint_number, hinted_element)
+    var _remove_hint;
 
     // Hint: 
     // 
@@ -259,8 +212,13 @@ let HintManager = null;
 
 
     //
-    // Creating hints
+    // Keeping track of hints
     //
+    
+    let hint_number_generator = new HintNumberGenerator();
+    let hint_number_to_hint   = new Map();
+    let hinted_elements       = new WeakSet();
+
 
     function make_hint(hinted_element) {
         const hint_number = hint_number_generator.generate();
@@ -275,6 +233,42 @@ let HintManager = null;
         }
 
         return hint;
+    }
+
+    // precondition: call this during a mutating step
+    var _remove_hint = function _remove_hint(hint_number, hinted_element) {
+        Util.vlog(2, `removing ${hint_number}:`);
+        Util.vlog(2, hinted_element);
+        hinted_elements.delete(hinted_element);
+        hint_number_to_hint.delete(hint_number);
+        if (Hints.option("mark_hinted")) {
+            $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
+        }
+        hint_number_generator.release(hint_number);
+    }
+
+
+    function locate_hint(hint_number) {
+        return hint_number_to_hint.get(Number(hint_number));
+    }
+
+    function is_hinted_element(element) {
+        return hinted_elements.has(element);
+    }
+
+    function discard_hints() {
+        hint_number_generator = new HintNumberGenerator();
+        hint_number_to_hint.clear();
+        hinted_elements = new WeakSet();
+        _remove_hint_numbers_from(document);
+    }
+
+    function _remove_hint_numbers_from(from) {
+        $("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
+        const $frame = $("iframe, frame", from);
+        if ($frame.length != 0) {
+            _remove_hint_numbers_from($frame.contents());
+        }
     }
 
 
