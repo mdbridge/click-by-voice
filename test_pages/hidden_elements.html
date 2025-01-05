@@ -14,22 +14,22 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       function hide_elements() {
-          document.getElementById('display-none').style = "display: none";
+          document.getElementById('display-none').style	     = "display: none";
           document.getElementById('visibility-hidden').style = "visibility: hidden";
-          document.getElementById('direct-opacity').style = "opacity: 0";
-          document.getElementById('indirect-opacity').style = "opacity: 0.01";
-          document.getElementById('z-index').style = "z-index: -1; position: relative";
-          document.getElementById('off-screen').style = "position: relative; left: -200vw";
+          document.getElementById('direct-opacity').style    = "opacity: 0";
+          document.getElementById('indirect-opacity').style  = "opacity: 0.01";
+          document.getElementById('z-index').style	     = "z-index: -1; position: relative";
+          document.getElementById('off-screen').style	     = "position: relative; left: -200vw";
           document.getElementById('removal').remove()
       }
 
       function reveal_elements() {
-          document.getElementById('display-none').style = "";
+          document.getElementById('display-none').style	     = "";
           document.getElementById('visibility-hidden').style = "";
-          document.getElementById('direct-opacity').style = "";
-          document.getElementById('indirect-opacity').style = "";
-          document.getElementById('z-index').style = "";
-          document.getElementById('off-screen').style = "";
+          document.getElementById('direct-opacity').style    = "";
+          document.getElementById('indirect-opacity').style  = "";
+          document.getElementById('z-index').style	     = "";
+          document.getElementById('off-screen').style	     = "";
           $(document.getElementById('removal-host')).append(
 	      '<div id="removal"><a href="#">removed link!</a></div>');
       }

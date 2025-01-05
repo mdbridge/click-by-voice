@@ -10,20 +10,6 @@ let AddHint = null;
 (function() {
 
 
-    // place me <<<>>>
-    function CSS_number($element, property_name) {
-        const value = css($element, property_name, "none");
-        //console.log(property_name + " -> " + value);
-        if (value == "none")
-            return 0;
-        if (/^[0-9]+px$/.test(value))
-            return parseFloat(value);
-        if (value == "100%")
-            return $element.parent().width(); // <<<>>>
-        return 0;
-    }
-
-
     //
     // Generic manipulations of DOM elements
     //
@@ -73,7 +59,7 @@ let AddHint = null;
         // beat hinted element's z-index by at least one;
         // if we are not in a different stacking context, this should
         // put us on top of it.
-        let zindex = css($element, "z-index", 0);
+        let zindex = Util.css($element, "z-index", 0);
         if (Hints.option("zindex")) {
             const min_zindex = Hints.option_value("zindex");
             if (zindex < min_zindex || zindex == "auto")
@@ -173,7 +159,7 @@ let AddHint = null;
         const displacement_up    = parseInt(Hints.option_value('displaceY', displacement));
         let extra_displacement_right = 0;
         if (Hints.option("?") && $element.is("input")) {
-            const padding = CSS_number($element,"padding-right");
+            const padding = Util.css_pixels($element,"padding-right");
             // too large padding mean something's probably being
             // positioned there absolutely so don't put overlay there
             if (padding > 10)
@@ -275,10 +261,10 @@ let AddHint = null;
         if ($element.is("iframe, frame"))
             return [];
 
-        const indent = css($element, "text-indent");
+        const indent = Util.css($element, "text-indent");
         if (indent && /^-999/.test(indent))
             return [];
-        const font_size = css($element, "font-size");
+        const font_size = Util.css($element, "font-size");
         if (font_size && /^0[^0-9]/.test(font_size))
             return [];
 
@@ -288,13 +274,13 @@ let AddHint = null;
 
             // ignore nodes intended solely for screen readers and the like
             if (this.nodeType === Node.ELEMENT_NODE) {
-                if (css($(this),"display") == "none")
+                if (Util.css($(this),"display") == "none")
                     return false;
-                if (css($(this),"visibility") == "hidden")
+                if (Util.css($(this),"visibility") == "hidden")
                     return false;
                 //          if ($(this).width()==0 && $(this).height()==0)
-                if (css($(this),"position")=="absolute"
-                    || css($(this),"position")=="fixed")
+                if (Util.css($(this),"position") == "absolute"
+                    || Util.css($(this),"position") == "fixed")
                     return false;
             }
 
@@ -305,12 +291,13 @@ let AddHint = null;
 
     function get_text_overflow_ellipisis_clip($element) {
         for (;;) {
-            if (css($element, "text-overflow", "clip") != "clip") {
+            if (Util.css($element, "text-overflow", "clip") != "clip") {
                 let clip = {right: $element[0].getBoundingClientRect().right};
 
-                clip.right  -= CSS_number($element,"border-right-width") - 
-                    CSS_number($element,"padding-right");
-                const slop = CSS_number($element,"max-width") - $element.width();
+                clip.right  -= Util.css_pixels($element,"border-right-width")
+                             - Util.css_pixels($element,"padding-right");
+                // We ignore various values like "fit-content" here.
+                const slop = Util.css_pixels($element,"max-width",-1,-1) - $element.width();
                 if (slop>0)
                     clip.right += slop;
                 if (slop>0)
@@ -323,7 +310,7 @@ let AddHint = null;
 
                 return clip;
             }
-            if (css($element, "display") != "inline")
+            if (Util.css($element, "display") != "inline")
                 return null;
             $element = $element.parent();
         }
@@ -374,7 +361,7 @@ let AddHint = null;
             if ($last_inside.text() == " ")  // &nsbp
                 // Google docs uses &nsbp; to take up space for visual items
                 return false;
-            if (css($current, "display") == "flex")
+            if (Util.css($current, "display") == "flex")
                 return false;
 
             let put_before = false;

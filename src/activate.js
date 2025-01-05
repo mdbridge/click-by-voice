@@ -111,7 +111,7 @@ var Activate = null;
             break;
         }
 
-        if (css($element, "cursor", null) == "pointer")
+        if (Util.css($element, "cursor") === "pointer")
             return true;
 
         return false;
@@ -215,7 +215,7 @@ var Activate = null;
 
 
             // Debug information:
-        case "D":
+        case "D": {
             console.log("");
             if (hint_if_known) {
                 hint_if_known.dump();
@@ -224,7 +224,11 @@ var Activate = null;
             console.log("Element information:");
             console.log($element[0].getBoundingClientRect());
             console.log($element[0]);
+            console.log(`display: ${Util.css($element, "display")}; ` +
+                        `visibility: ${Util.css($element, "visibility")}; ` +
+                        `is_under_low_opacity: ${Util.is_under_low_opacity($element[0])}`);
             break;
+        }
 
             // Moving the physical mouse:
         case "Xm":
