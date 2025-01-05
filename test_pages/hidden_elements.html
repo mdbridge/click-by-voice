@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Tests of elements that have been hidden intentionally</title>
+  </head>
+  <body>
+
+    <H1>Tests of elements that have been hidden intentionally (e.g., hover over controls, drop-down menus)</H1>
+
+    <button onclick="hide_elements()">Hide elements</button>
+    <button onclick="reveal_elements()">Reveal elements</button>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      function hide_elements() {
+          document.getElementById('display-none').style = "display: none";
+          document.getElementById('visibility-hidden').style = "visibility: hidden";
+          document.getElementById('direct-opacity').style = "opacity: 0";
+          document.getElementById('indirect-opacity').style = "opacity: 0.01";
+          document.getElementById('z-index').style = "z-index: -1; position: relative";
+          document.getElementById('off-screen').style = "position: relative; left: -200vw";
+          document.getElementById('removal').remove()
+      }
+
+      function reveal_elements() {
+          document.getElementById('display-none').style = "";
+          document.getElementById('visibility-hidden').style = "";
+          document.getElementById('direct-opacity').style = "";
+          document.getElementById('indirect-opacity').style = "";
+          document.getElementById('z-index').style = "";
+          document.getElementById('off-screen').style = "";
+          $(document.getElementById('removal-host')).append(
+	      '<div id="removal"><a href="#">removed link!</a></div>');
+      }
+    </script>
+
+    <p>None of these links should be visible after clicking the hide elements button:</p>
+    <ol style="background-color: white">
+      <li>display: none: 
+	<div id="display-none"><a href="#">display: none link!</a></div></li>
+      <li>visibility: hidden: 
+	<div id="visibility-hidden"><a href="#">visibility: hidden link!</a></div></li>
+      <li>direct opacity 0:
+	<div id = "direct-opacity"><a href="#">opacity: 0 link!</a></div></li>
+      <li>indirect opacity 0.01 (used by Facebook video controls):
+	<div id="indirect-opacity">
+	  <div>
+	    <div>
+	      <a href="#">indirect opacity: 0.01 link!</a>
+	    </div>
+	  </div>
+	</div>
+      </li>
+      <li>offscreen to the left:
+	<div id="off-screen"><a href="#">offscreen link!</a></div></li>
+      <li id="removal-host">outright removal of the element:
+	<div id="removal"><a href="#">removed link!</a></div></li>
+      <li>putting behind using z-index (unlikely ever be used?): 
+	<div style="position: relative">
+	  <div id="z-index">
+	    <a href="#">z-index: -1 link!</a>
+	  </div>
+	</div>
+      </li>
+    </ol>
+
+    <p>All of these links should be visible regardless:</p>
+    <ol>
+      <li>display: inline: 
+	<div style="display: inline"><a href="#">display: inline link!</a></div></li>
+      <li>visibility: visible: 
+	<div style="visibility: visible"><a href="#">visibility: visible link!</a></div></li>
+      <li>direct opacity 0.3:
+	<div style="opacity: 0.3"><a href="#">opacity: 0.3 link!</a></div></li>
+      <li>indirect opacity 0.3:
+	<div style="opacity: 0.3">
+	  <div>
+	    <div>
+	      <a href="#">indirect opacity: 0.3 link!</a>
+	    </div>
+	  </div>
+	</div>
+      </li>
+    </ol>
+
+  </body>
+</html>
