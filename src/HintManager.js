@@ -209,6 +209,11 @@ let HintManager = null;
             //     }
             // }
 
+
+            if (Hints.option("reverse-hiding")) {
+                element_hidden = !element_hidden;
+            }
+
             if (element_hidden) {
                 if (inner_hidden) {
                     return;

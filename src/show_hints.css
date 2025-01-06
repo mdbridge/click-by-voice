@@ -134,5 +134,7 @@
 	outline-style:    dashed !important;
 	outline-color:    red	 !important;
 	outline-width:    3px	 !important;
+	opacity:	  1      !important;
+	visibility:	  visible      !important;
     }
 }

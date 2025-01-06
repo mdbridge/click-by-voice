@@ -227,6 +227,7 @@ var Activate = null;
             console.log(`display: ${Util.css($element, "display")}; ` +
                         `visibility: ${Util.css($element, "visibility")}; ` +
                         `is_under_low_opacity: ${Util.is_under_low_opacity($element[0])}`);
+            console.log(`cursor: ${Util.css($element, "cursor")}`);
             break;
         }
 
@@ -302,9 +303,17 @@ var Activate = null;
                 console.log("X: "              + (event.screenX - event.clientX));
                 console.log("WY: "             + (event.screenY - window.screenY - event.clientY));
                 console.log("WX: "             + (event.screenX - window.screenX - event.clientX));
-                console.log("X ratio: "        + ( event.clientX / event.screenX));
+                console.log("X ratio: "        + (event.clientX / event.screenX));
 
                 console.log("measured Delta: " + (event.screenY - window.screenY - event.clientY*zoom));
+
+                const elements = document.elementsFromPoint(event.clientX, event.clientY);
+                console.log(elements);
+                elements.forEach((element, index) => {
+                    if (index <= 5) {
+                        console.log(element);
+                    }
+                });
             });
             break;
 
