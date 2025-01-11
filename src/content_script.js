@@ -51,9 +51,11 @@ function maybe_refresh() {
     delay_till_next_refresh = Math.min(delay_till_next_refresh, p.maximum_refresh_delay);
 
     const estimated_refresh_cpu = last_refresh_time/(delay_till_next_refresh+last_refresh_time);
-    Util.vlog(2, `refresh took ${last_refresh_time.toFixed(1)} ms;` +
-              ` scheduling next refresh in ${delay_till_next_refresh.toFixed(1)} ms;` +
-              ` estimated refresh CPU ${(estimated_refresh_cpu*100).toFixed(1)}%`);
+    if (Hints.option("timing")) {
+        Util.vlog(2, `refresh took ${last_refresh_time.toFixed(1)} ms;` +
+                     ` scheduling next refresh in ${delay_till_next_refresh.toFixed(1)} ms;` +
+                     ` estimated refresh CPU ${(estimated_refresh_cpu*100).toFixed(1)}%`);
+    }
 
     next_major_refresh = new Date().getTime() + delay_till_next_refresh;
 }

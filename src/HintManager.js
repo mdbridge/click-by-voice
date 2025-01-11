@@ -152,9 +152,13 @@ let HintManager = null;
 
             // Figure out whether the element and/or hint tag are hidden
 
+            let element_hidden = false;
+
             // Below detects display: none.
-            let   element_hidden = (target_box.top == 0 && target_box.left == 0);
-            const inner_hidden   = (inner_box .top == 0 && inner_box .left == 0);
+            if (target_box.top == 0 && target_box.left == 0) {
+                element_hidden = "display: none";
+            }
+            const inner_hidden = (inner_box .top == 0 && inner_box .left == 0);
 
             // Check for other hiding via CSS.  
             //
@@ -162,52 +166,51 @@ let HintManager = null;
             // offscreen as well); under something is handled in next section.
             if (!element_hidden) {
                 if (Util.is_under_low_opacity(hinted_element)) {
-                    element_hidden = true;
-                    console.log(`hint ${this.#hint_number} not visible due to low opacity`);
+                    element_hidden = "low opacity";
                 } else if (Util.css($(hinted_element), "visibility") === "hidden") {
-                    element_hidden = true;
-                    console.log(`hint ${this.#hint_number} not visible due to visibility: hidden`);
+                    element_hidden = "visibility: hidden";
                 }
             }
 
-            // if (!element_hidden) {
-            //     // transparent padding can pass through clicks
-            //     let test_y = target_box.top + Util.css_pixels($element,"padding-top") + 1;
-            //     let test_x;
-            //     if (show_at_end) {
-            //         test_x = target_box.right - Util.css_pixels($element,"padding-right") - 1;
-            //     } else {
-            //         test_x = target_box.left  + Util.css_pixels($element,"padding-left")  + 1;
-            //     }
+            if (false && !element_hidden) {
+                // transparent padding can pass through clicks
+                let test_y = target_box.top + Util.css_pixels($element,"padding-top") + 1;
+                test_y = (target_box.top + target_box.bottom)/2;
+                let test_x;
+                if (show_at_end) {
+                    test_x = target_box.right - Util.css_pixels($element,"padding-right") - 1;
+                } else {
+                    test_x = target_box.left  + Util.css_pixels($element,"padding-left")  + 1;
+                }
 
-            //     // TODO: deal with iframes
-            //     // TODO: consider better test point
-            //     const topmost_element = document.elementFromPoint(test_x, test_y);
-            //     // topmost_element is null if the test point is
-            //     // offscreen, which we don't count as hidden
-            //     if (topmost_element) {
-            //         if (!$element[0].contains(topmost_element)) {
-            //             if (!topmost_element.contains($element[0])) {
-            //                 console.log(`hint ${this.#hint_number} not visible: ${test_x},${test_y}`);
-            //                 // console.log(topmost_element);
-            //                 // console.log(topmost_element.getBoundingClientRect());
-            //                 // console.log($element[0]);
-            //                 // console.log($element[0].getBoundingClientRect());
-            //                 // if (topmost_element.contains($element[0])) {
-            //                 //     console.log("fell through?")
-            //                 // }
-            //                 // const elements = document.elementsFromPoint(test_x, test_y)
-            //                 // elements.forEach((element, index) => {
-            //                 //     console.log(element);
-            //                 // });
-            //                 console.log(`${target_box.right - target_box.left}x${target_box.bottom - target_box.top}`);
-
-
-            //                 element_hidden = true;
-            //             }
-            //         }
-            //     }
-            // }
+                // TODO: deal with iframes
+                // TODO: consider better test point
+                const topmost_element = document.elementFromPoint(test_x, test_y);
+                // topmost_element is null if the test point is
+                // offscreen, which we don't count as hidden
+                if (topmost_element) {
+                    if (!$element[0].contains(topmost_element)) {
+                        if (true || !topmost_element.contains($element[0])) {
+                            // console.log(`hint ${this.#hint_number} not visible: ${test_x},${test_y}`);
+                            // console.log(topmost_element);
+                            // console.log(topmost_element.getBoundingClientRect());
+                            // console.log($element[0]);
+                            // console.log($element[0].getBoundingClientRect());
+                            // if (topmost_element.contains($element[0])) {
+                            //     console.log("fell through?")
+                            // }
+                            const elements = document.elementsFromPoint(test_x, test_y)
+                            elements.forEach((element, index) => {
+                                if (index <= 2) {
+                                    // console.log(element);
+                                }
+                            });
+                            // console.log(`${target_box.right - target_box.left}x${target_box.bottom - target_box.top}`);
+                            element_hidden = "not visible";
+                        }
+                    }
+                }
+            }
 
 
             if (Hints.option("reverse-hiding")) {
@@ -219,7 +222,8 @@ let HintManager = null;
                     return;
                 }
                 Batcher.mutating(() => {
-                    Util.vlog(3, `hiding hint for hidden element ${hint_number}`);
+                    Util.vlog(3, `hiding hint for hidden element ${hint_number};` +
+                              ` due to ${element_hidden}`);
                     $inner.attr("CBV_hidden", "true"); 
                 });
                 return;
