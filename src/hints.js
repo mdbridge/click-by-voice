@@ -27,7 +27,7 @@ var Hints = null;
         set_hinting_parameters(parameters);
         if (option_value('+', 1) > 0) {
             hinting_on_ = true;
-            place_hints();
+            place_hints(false);
         } else {
             Util.vlog(0, "not adding hints: " + options_to_string());
             remove_hints();
@@ -36,7 +36,7 @@ var Hints = null;
 
     function refresh_hints() {
         if (hinting_on_)
-            place_hints();
+            place_hints(true);
     }
 
     function remove_hints() {
@@ -199,8 +199,10 @@ var Hints = null;
     // 
     //
 
-    function place_hints() {
-        Util.vlog(1, "adding hints: " + options_to_string());
+    function place_hints(refreshing) {
+        if (!refreshing) {
+            Util.vlog(0, "adding hints: " + options_to_string());
+        }
 
         const starting_hint_count = HintManager.get_hint_number_stats().hints_made;
         const start               = performance.now();
@@ -225,9 +227,9 @@ var Hints = null;
         Batcher.sensing( () => { HintManager.adjust_hints(); } );
         const result = Batcher.do_work();
 
-        if (Hints.option("timing")) {
-            const stats           = HintManager.get_hint_number_stats();
-            const hints_made      = stats.hints_made - starting_hint_count;
+        const stats      = HintManager.get_hint_number_stats();
+        const hints_made = stats.hints_made - starting_hint_count;
+        if (Hints.option("timing") || hints_made > 0) {
             const max_hint_number = stats.max_hint_number_used;
             const hints_in_use    = stats.hints_in_use;
             Util.vlog(1, `+${hints_made} -> ${hints_in_use} hints` +
