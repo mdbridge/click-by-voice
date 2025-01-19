@@ -310,7 +310,7 @@ var Activate = null;
                 const elements = document.elementsFromPoint(event.clientX, event.clientY);
                 console.log(elements);
                 elements.forEach((element, index) => {
-                    if (index <= 5) {
+                    if (index <= 10) {
                         console.log(element);
                     }
                 });
