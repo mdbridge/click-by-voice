@@ -165,14 +165,14 @@ let HintManager = null;
             // Don't need to worry about offscreen (the tag moves
             // offscreen as well); under something is handled in next section.
             if (!element_hidden) {
-                if (Util.is_under_low_opacity(hinted_element)) {
+                if (Util.is_under_low_opacity(hinted_element) && Hints.option("hide_opacity")) {
                     element_hidden = "low opacity";
-                } else if (Util.css($(hinted_element), "visibility") === "hidden") {
+                } else if (Hints.option("hide_visibility") && Util.css($(hinted_element), "visibility") === "hidden") {
                     element_hidden = "visibility: hidden";
                 }
             }
 
-            if (false && !element_hidden) {
+            if (Hints.option("hide_seen") && !element_hidden) {
                 // transparent padding can pass through clicks
                 let test_y = target_box.top + Util.css_pixels($element,"padding-top") + 1;
                 test_y = (target_box.top + target_box.bottom)/2;
