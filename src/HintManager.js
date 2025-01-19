@@ -206,7 +206,7 @@ let HintManager = null;
                                 }
                             });
                             // console.log(`${target_box.right - target_box.left}x${target_box.bottom - target_box.top}`);
-                            element_hidden = "not visible";
+                            element_hidden = "not seen";
                         }
                     }
                 }

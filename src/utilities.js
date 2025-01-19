@@ -60,7 +60,7 @@ let Util = null;
         if (value === undefined) {
             return default_value;
         }
-        if (/^-?[0-9]+(.[0-9]*)?$/.test(value))
+        if (/^-?[0-9]+(.[0-9]*)?(e-?[0-9]+)?$/.test(value))
             return parseFloat(value);
         console.error(`property ${property_name} fails to have a numeric value: ${value}`);
         return unparsable_value;
