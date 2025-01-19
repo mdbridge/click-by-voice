@@ -223,6 +223,7 @@ var Activate = null;
             }
             console.log("Element information:");
             console.log($element[0].getBoundingClientRect());
+            console.log($element[0].getClientRects());
             console.log($element[0]);
             console.log(`display: ${Util.css($element, "display")}; ` +
                         `visibility: ${Util.css($element, "visibility")}; ` +
