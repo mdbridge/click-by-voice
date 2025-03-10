@@ -362,7 +362,7 @@ var Activate = null;
             // ${CSS selector} or ${CSS selector}"text"
             let $element = $(match[1], ...contents);
             if (match[3]) {
-                target = match[3].toLowerCase();
+                const target = match[3].toLowerCase();
                 $element = $element.filter(function(index, e) {
                     return e.textContent.toLowerCase().includes(target);
                 });
