@@ -13,67 +13,78 @@ var Activate = null;
     // Working with points
     //
 
-    // return position relative to viewpoint to click
+    // return position in viewpoint to click on $element
     function point_to_click($element) {
+        // If $element takes up multiple boxes, pretend it just is the first box
         const rectangles = $element[0].getClientRects();
         const rectangle  = rectangles[0];
 
-        const x = (rectangle.left + rectangle.right) /2;
-        const y = (rectangle.top  + rectangle.bottom)/2;
+        let x = (rectangle.left + rectangle.right) /2;
+        let y = (rectangle.top  + rectangle.bottom)/2;
+
+        // If inside iframes, accumulate offsets up to the top window
+        let win = $element[0].ownerDocument.defaultView;
+        while (win && win.frameElement) {
+            const fr = win.frameElement.getBoundingClientRect();
+            x += fr.left;
+            y += fr.top;
+            win = win.parent;
+        }
 
         return {x: x, y: y};
     }
 
-    // return position relative to viewpoint of top right point of element
+    // return position in viewpoint of top right point of $element
     function top_right_point($element) {
+        // If $element takes up multiple boxes, pretend it just is the first box
         const rectangles = $element[0].getClientRects();
         const rectangle  = rectangles[0];
 
-        const x = rectangle.right;
-        const y = rectangle.top;
+        let x = rectangle.right;
+        let y = rectangle.top;
+
+        // If inside iframes, accumulate offsets up to the top window
+        let win = $element[0].ownerDocument.defaultView;
+        while (win && win.frameElement) {
+            const fr = win.frameElement.getBoundingClientRect();
+            x += fr.left;
+            y += fr.top;
+            win = win.parent;
+        }
 
         return {x: x, y: y};
     }
 
-    // Convert viewpoint point to screen coordinates relative to inner
-    // top-left corner of browser (aka, just inside window borders).
+    // Convert viewpoint point to physical(*) pixel offset relative to
+    // inner bottom-left corner of browser Windows client area.
+    // 
+    // * - at least physical as far as the PC sees; the monitor might
+    //     do some stretching after the fact.
     // 
     // This is accurate to within +/- 1 after rounding so long as
-    // there isn't any UI stuff like a downloads bar at the bottom of the
-    // browser.
-    function clientToRelativeScreen(clientX, clientY, externalZoom, isMaximized) {
-        const zoom = window.devicePixelRatio / externalZoom;
-        let borderSize = 8;
-        if (isMaximized) {
-            borderSize = 0;
-        }
-        // Unfortunately this includes any space at the bottom of the
-        // browser like a downloads section.
-        const browserHeader = window.outerHeight - borderSize*2 - window.innerHeight*zoom;
-        //console.log("browserHeader: "+ browserHeader);
-
-        const screenX = clientX*zoom;
-        const screenY = clientY*zoom + browserHeader;
+    // there isn't any UI stuff like a downloads bar at the bottom or
+    // left of the browser.  This also may be inaccurate if the
+    // browser window crosses monitors with different DPIs.
+    function viewportToBottomLeftPhysicalOffset(clientX, clientY) {
+        const stretch = window.devicePixelRatio;  // includes both in-browser zoom and monitor stretch
+        const screenX =                       clientX  * stretch;
+        const screenY = (window.innerHeight - clientY) * stretch;
         return {x: screenX, y: screenY};
     }
 
     // Convert viewpoint point to screen coordinates relative to window
     // and place in clipboard
-    function output_viewport_point(point, externalZoom, isMaximized) {
-        const screenPoint = clientToRelativeScreen(point.x, point.y, externalZoom, isMaximized);
-        const answer      = screenPoint.x + "," + screenPoint.y;
+    function output_bottom_left_physical_offset(point) {
+        const physicalPixelOffset = viewportToBottomLeftPhysicalOffset(point.x, point.y);
+        const answer              = physicalPixelOffset.x + "," + physicalPixelOffset.y;
 
         Util.vlog(1, "********************************************************************************");
-        Util.vlog(1, "input client point: " + point.x + " , " + point.y);
-        Util.vlog(1, "assumed externalZoom: " + externalZoom);
-        const zoom = window.devicePixelRatio / externalZoom;
-        Util.vlog(1, "zoom: " + zoom);
-        Util.vlog(1, "isMaximized: " + isMaximized);
-        Util.vlog(1, "output screen point: " +answer);
+        Util.vlog(1, "input viewport point: " + point.x + " , " + point.y);
+        Util.vlog(1, "window.devicePixelRatio: " + window.devicePixelRatio);
+        Util.vlog(1, "bottom left physical offset: " +answer);
 
         act("copy_to_clipboard", {text: answer});
     }
-
 
 
     //
@@ -151,8 +162,6 @@ var Activate = null;
         // we are just assuming it's 1.0, which means that the
         // physical-move-the-mouse commands will only work on monitors
         // with no DPI scaling.
-        const externalZoom = 1.0;
-
         switch (operation) {
             // Focusing:
         case "f":
@@ -233,17 +242,11 @@ var Activate = null;
         }
 
             // Moving the physical mouse:
-        case "Xm":
-            output_viewport_point(point_to_click($element), externalZoom, true);
+        case "Xnew":
+            output_bottom_left_physical_offset(point_to_click($element));
             break;
-        case "XXm":
-            output_viewport_point(top_right_point($element), externalZoom, true);
-            break;
-        case "Xn":
-            output_viewport_point(point_to_click($element), externalZoom, false);
-            break;
-        case "XXn":
-            output_viewport_point(top_right_point($element), externalZoom, false);
+        case "XnewTL":
+            output_bottom_left_physical_offset(top_right_point($element));
             break;
 
 
@@ -298,13 +301,29 @@ var Activate = null;
 
         case "INSPECT":
             $('body').click(function (event) {
-                const zoom = window.devicePixelRatio;
                 console.log(event.originalEvent);
+                console.log("window.devicePixelRatio: "           + window.devicePixelRatio);
                 console.log("Y: "              + (event.screenY - event.clientY));
                 console.log("X: "              + (event.screenX - event.clientX));
                 console.log("WY: "             + (event.screenY - window.screenY - event.clientY));
                 console.log("WX: "             + (event.screenX - window.screenX - event.clientX));
                 console.log("X ratio: "        + (event.clientX / event.screenX));
+                console.log("outer height: "           + window.outerHeight);
+                console.log("inner height: "           + window.innerHeight);
+
+                // Viewport coordinates (CSS px)
+                console.log("Viewport (CSS px): x=" + event.clientX + ", y=" + event.clientY);
+
+                // Same point in device pixels (after page zoom / DPR)
+                const zoom = window.devicePixelRatio;
+                console.log("Viewport (device px): x=" + Math.round(event.clientX * zoom) 
+                            + ", y=" + Math.round(event.clientY * zoom));
+
+                // Optional: normalized within the viewport [0..1]
+                console.log("Viewport [0..1]: x=" + (event.clientX / window.innerWidth).toFixed(4) +
+                            ", y=" + (event.clientY / window.innerHeight).toFixed(4));
+
+                output_viewport_point({x:0, y:0}, 1, false);
 
                 console.log("measured Delta: " + (event.screenY - window.screenY - event.clientY*zoom));
 
