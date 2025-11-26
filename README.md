@@ -197,6 +197,12 @@ more on how this shortcut works, see
 
 ## News
 
+* 11/2025: New major version 0.32 released
+  * now reuses hint numbers of no longer existing/connected elements
+  * refreshes hints more often while limiting CPU
+  * no longer adds attribute CBV_hint_element to hinted_elements by default
+    * this should reduce interference with some applications
+  * only logs to console in response to user actions or if verbosity level has been raised
 * 6/2024: New major version 0.30 released
   * switched to using manifest version 3
 * 11/2021: New version 0.23.4 released
