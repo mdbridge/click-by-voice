@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Clickable & Pointer-Default Elements Demo (Extended)</title>
+<style>
+  body {
+    font-family: sans-serif;
+    line-height: 1.8;
+    margin: 1.5em;
+  }
+  .section {
+    margin-bottom: 2em;
+  }
+  iframe {
+    border: 1px solid #ccc;
+  }
+</style>
+</head>
+<body>
+
+<h1>Clickable and Pointer-Default Elements (Extended)</h1>
+
+<div class="section">
+  <h2>Elements with <code>cursor: pointer</code> by default</h2>
+
+  <p><a href="#">Clickable &lt;a href&gt; (pointer)</a></p>
+  <p><button>Button (pointer)</button></p>
+  <p><input type="button" value="Input Button (pointer)"></p>
+  <p><input type="submit" value="Submit (pointer)"></p>
+  <p><input type="reset" value="Reset (pointer)"></p>
+
+  <p>
+    <label for="chk">Label (pointer – toggles checkbox)</label>
+    <input id="chk" type="checkbox">
+  </p>
+</div>
+
+<div class="section">
+  <h2>Clickable form controls WITHOUT default <code>cursor: pointer</code></h2>
+
+  <p><input type="checkbox"> Checkbox</p>
+  <p><input type="radio" name="r"> Radio button</p>
+  <p><input type="file"> File input (opens file picker)</p>
+  <p><input type="color" value="#ff0000"> Color picker</p>
+  <p><input type="date"> Date</p>
+  <p><input type="time"> Time</p>
+  <p><input type="datetime-local"> Datetime-local</p>
+
+  <p>
+    <select>
+      <option>Option 1</option>
+      <option>Option 2</option>
+    </select> Select dropdown
+  </p>
+
+  <p><input type="text" value="Text input (focuses)"></p>
+  <p><textarea rows="3" cols="30">Textarea (caret moves)</textarea></p>
+</div>
+
+<div class="section">
+  <h2>Structural elements with built-in click behavior</h2>
+
+  <details>
+    <summary>Summary (click toggles details)</summary>
+    Inside details content
+  </details>
+</div>
+
+<div class="section">
+  <h2>Media elements with clickable controls</h2>
+
+  <p>
+    <video width="240" controls>
+      <source src="" type="video/mp4">
+      Video element
+    </video>
+  </p>
+
+  <p>
+    <audio controls>
+      <source src="" type="audio/mpeg">
+      Audio element
+    </audio>
+  </p>
+</div>
+
+<div class="section">
+  <h2>Map-related elements (default click behavior)</h2>
+
+  <p>Image map: clicking left vs right half goes to different URLs.</p>
+  <p>
+    <img
+      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='80'%3E%3Crect width='200' height='80' fill='lightgray'/%3E%3Cline x1='100' y1='0' x2='100' y2='80' stroke='black' stroke-width='2'/%3E%3Ctext x='20' y='45' font-size='14'%3ELeft%3C/text%3E%3Ctext x='130' y='45' font-size='14'%3ERight%3C/text%3E%3C/svg%3E"
+      usemap="#demo-map"
+      alt="Image with map">
+    <map name="demo-map">
+      <area coords="0,0,100,80" shape="rect" href="https://example.com/left">
+      <area coords="100,0,200,80" shape="rect" href="https://example.com/right">
+    </map>
+  </p>
+
+  <p>
+    <a href="https://example.com/ismap">
+      <img
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='80'%3E%3Crect width='200' height='80' fill='lightblue'/%3E%3Ctext x='20' y='45' font-size='14'%3Eismap%20image%3C/text%3E%3C/svg%3E"
+        ismap
+        alt="ismap example">
+    </a><br>
+    &lt;img ismap&gt; sends click coordinates in the query string.
+  </p>
+</div>
+
+<div class="section">
+  <h2>Other elements with built-in click effects</h2>
+
+  <p>Iframe (clicking focuses content inside)</p>
+  <iframe width="320" height="120"
+    srcdoc="
+      <!DOCTYPE html>
+      <html>
+      <body style='font-family:sans-serif'>
+        <p>This is inside the iframe.</p>
+        <input type='text' value='Click me to focus iframe' style='width:95%'>
+      </body>
+      </html>
+    ">
+  </iframe>
+
+  <p>Plain paragraph: click sets caret/selection.</p>
+</div>
+
+<!-- NEW SVG MAP SECTION HERE -->
+<div class="section">
+  <h2>SVG interactive map using &lt;path&gt; regions</h2>
+
+  <p>Click inside left or right shape — each navigates separately.</p>
+
+  <svg width="240" height="120" viewBox="0 0 240 120" style="border:1px solid #ccc;">
+    <a xlink:href="https://example.com/svg-left" target="_blank">
+      <path d="M0 0 H120 V120 H0 Z"
+            fill="#c8e6c9"
+            stroke="black"
+            stroke-width="2"></path>
+      <text x="40" y="65" font-size="20" fill="black">Left</text>
+    </a>
+
+    <a xlink:href="https://example.com/svg-right" target="_blank">
+      <path d="M120 0 H240 V120 H120 Z"
+            fill="#bbdefb"
+            stroke="black"
+            stroke-width="2"></path>
+      <text x="150" y="65" font-size="20" fill="black">Right</text>
+    </a>
+  </svg>
+
+  <p>This uses SVG's native hit-testing on individual &lt;path&gt; shapes.</p>
+</div>
+
+<div class="section">
+  <h2>Miscellaneous</h2>
+  <a>This anchor has no href and is thus not applicable or focusable</a>
+</div>
+
+<div class="section">
+  <h2>Focus only?: HTML inside &lt;object&gt;</h2>
+
+<object
+  type="text/html"
+  width="300"
+  height="140"
+  data="data:text/html;charset=utf-8,%3C!DOCTYPE%20html%3E%0A%3Chtml%3E%3Cbody%20style%3D'font-family%3Asans-serif'%3E%0A%3Cp%3EThis%20is%20HTML%20inside%20an%20%3Cobject%3E.%3C%2Fp%3E%0A%3Cbutton%20onclick%3D'alert(%5C%22Button%20inside%20object%20clicked%5C%22)'%3EClick%20me%3C%2Fbutton%3E%0A%3Cp%3E%3Cinput%20value%3D'Type%20here'%3E%3C%2Fp%3E%0A%3C%2Fbody%3E%3C%2Fhtml%3E">
+  Fallback: HTML failed to load.
+</object>
+</div>
+
+<div class="section">
+  <h2>Elements made focusable via <code>contenteditable</code></h2>
+
+  <p>
+    Normally, a plain &lt;div&gt; or &lt;span&gt; is not focusable.
+    Adding <code>contenteditable</code> makes it an editable region
+    that can receive focus and caret.
+  </p>
+
+  <div
+    contenteditable="true"
+    style="border: 1px solid #999; padding: 6px; min-height: 2em; background: #f9f9f9;">
+    This is a &lt;div&gt; with <code>contenteditable="true"</code>.<br>
+    Click here and type to test focus and caret.
+  </div>
+
+  <p>
+    You can also make inline elements editable:
+  </p>
+
+  <p>
+    Normal text before –
+    <span
+      contenteditable="true"
+      style="border-bottom: 1px dashed #666; padding: 2px;">
+      editable &lt;span&gt; (click and type)
+    </span>
+    – normal text after.
+  </p>
+</div>
+
+<div class="section">
+  <h2>Elements made focusable via <code>tabindex</code></h2>
+
+  <p>
+    The <code>tabindex</code> attribute controls whether an element is focusable,
+    and where it appears in the tab order.
+  </p>
+
+  <ul>
+    <li><code>tabindex="0"</code> &rarr; focusable, participates in normal tab order</li>
+    <li><code>tabindex="&gt;0"</code> &rarr; focusable, custom tab order (discouraged)</li>
+    <li><code>tabindex="-1"</code> &rarr; focusable by script only (no tab stop)</li>
+  </ul>
+
+  <p>Try tabbing through the controls below and watch the order.</p>
+
+  <!-- Natural focusable control for reference -->
+  <p>
+    <button>Normal button (no tabindex)</button>
+  </p>
+
+  <!-- tabindex="0" -->
+  <div
+    tabindex="0"
+    style="border: 1px solid #4caf50; padding: 6px; margin-bottom: 6px;">
+    &lt;div tabindex="0"&gt; — focusable, in normal tab order
+  </div>
+
+  <!-- tabindex="2" -->
+  <div
+    tabindex="2"
+    style="border: 1px solid #2196f3; padding: 6px; margin-bottom: 6px;">
+    &lt;div tabindex="2"&gt; — focusable, with positive tabindex (comes earlier in tab order than some elements)
+  </div>
+
+  <!-- tabindex="1" -->
+  <div
+    tabindex="1"
+    style="border: 1px solid #ff9800; padding: 6px; margin-bottom: 6px;">
+    &lt;div tabindex="1"&gt; — focusable, custom tab order (will usually get focus before tabindex="2" and 0)
+  </div>
+
+  <!-- tabindex="-1" -->
+  <div
+    id="tabminus1"
+    tabindex="-1"
+    style="border: 1px solid #f44336; padding: 6px; margin-bottom: 6px;">
+    &lt;div tabindex="-1"&gt; — focusable via script only; you cannot tab to this.
+  </div>
+
+  <p>
+    <button onclick="document.getElementById('tabminus1').focus();">
+      Focus the <code>tabindex="-1"</code> div via script
+    </button>
+  </p>
+</div>
+
+</body>
+</html>

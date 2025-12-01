@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .button {
+      width: 200px;
+      height: 100px;
+      background: lightgray;
+      position: relative;
+      cursor: default;
+    }
+    .button::before {
+      content: "CLICK ME";
+      position: absolute;
+      inset: 0;
+      background: #007bff;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="button"></div>
+  <script>
+    document.querySelector('.button').addEventListener('click', () => {
+      alert('clicked');
+    });
+  </script>
+</body>
+</html>
