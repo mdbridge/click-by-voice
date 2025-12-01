@@ -13,7 +13,8 @@ let DomWalk = null;
         if (CBV_inserted_element($element))
             return;
 
-        const styles = window.getComputedStyle($element[0]);
+        const element = $element[0];
+        const styles = window.getComputedStyle(element);
         if (styles.display == "none") {
             return;
         }
@@ -24,16 +25,22 @@ let DomWalk = null;
         if (pre_callback)
             pre_callback($element, styles);
 
+        // Walk normal light-DOM children if any
         $element.children().each(function(index) {
             each_displaying_helper($(this), pre_callback, post_callback, exclusion);
         });
 
-        const element_tag = $element[0].nodeName.toLowerCase();
+        // Walk open shadow-root children if any
+        if (element.shadowRoot) {
+            Array.from(element.shadowRoot.children).forEach(child => {
+                each_displaying_helper($(child), pre_callback, post_callback, exclusion);
+            });
+        }
+
+        // Walk [i]frame contents if any
+        const element_tag = element.nodeName.toLowerCase();
         if (element_tag == "iframe" || element_tag == "frame") {
             try {
-                // const sub_body = $('body', element.contents());
-                // each_displaying_helper(sub_body, pre_callback, post_callback);
-
                 // some popover ads are after <body> element
                 $("html", $element.contents()).children().filter(":not(head)").each(function (index) {
                     each_displaying_helper($(this), pre_callback, post_callback, exclusion);
@@ -57,9 +64,6 @@ let DomWalk = null;
     // pre_callback is the preorder traversal, post_callback the
     // post-order traversal
     function each_displaying(pre_callback, post_callback, exclusion) {
-        // const root = $("body");
-        // each_displaying_helper(root, pre_callback, post_callback);
-
         // some popover ads are after <body> element
         $("html").children().filter(":not(head)").each(function (index) {
             each_displaying_helper($(this), pre_callback, post_callback, exclusion);

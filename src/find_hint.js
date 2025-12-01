@@ -121,6 +121,27 @@ let FindHint = null;
 
     }
 
+    // Ascend traversing through shadow roots as needed.
+    function getVisualParentElement(node) {
+        const parent = node.parentNode;
+        if (!parent) return null;  // Removed nodes, etc.
+
+        // Handle parent Element (realm-safe)
+        if (parent.nodeType === Node.ELEMENT_NODE) {
+            return parent;
+        }
+
+        // Handle ShadowRoot
+        if (parent.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
+            parent.host &&
+            parent.host.nodeType === Node.ELEMENT_NODE) {
+            return parent.host;
+        }
+
+        // Note: You cannot traverse out of an [i]frame.
+        return null;
+    }
+
     function hintable($element, styles) {
         // for timing how much hintable costs:
         if (Hints.option("N"))
@@ -156,7 +177,7 @@ let FindHint = null;
             let e = $element[0];
             do {
                 has_hinted_element.add(e);
-                e = e.parentNode;
+                e = getVisualParentElement(e);
             } while (e);
         }
         DomWalk.each_displaying(
@@ -172,9 +193,9 @@ let FindHint = null;
                 if (Hints.option('$') && !Hints.option("C"))
                     return;
 
-                const parent = $element[0].parentNode;
                 if (HintManager.is_hinted_element($element[0]))
                     return;
+                const parent = getVisualParentElement($element[0]);
                 if (HintManager.is_hinted_element(parent))
                     return;
 
@@ -184,7 +205,8 @@ let FindHint = null;
                 if (styles.visibility == "hidden") {
                     return;  // visibility blocks cursor: pointer
                 }
-                if (window.getComputedStyle(parent).cursor=="pointer")
+
+                if (parent && window.getComputedStyle(parent).cursor=="pointer")
                     return;
 
                 if (!clickable_space($element))
