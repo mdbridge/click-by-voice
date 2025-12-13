@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>srcdoc iframe button demo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    iframe {
+      width: 400px;
+      height: 200px;
+      border: 2px solid #333;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Iframe srcdoc button test</h1>
+
+<p>The iframe below uses <code>srcdoc</code> to define its contents.</p>
+
+<iframe
+  srcdoc="
+    <html>
+      <body style='font-family: sans-serif; padding: 20px;'>
+        <p>This content lives inside an <code>iframe srcdoc</code>.</p>
+        <button id='inside-btn'
+                style='padding: 10px 16px; font-size: 16px; cursor: pointer;'>
+          Click me
+        </button>
+        <script>
+          document.getElementById('inside-btn').addEventListener('click', function () {
+            alert('Button inside srcdoc iframe clicked!');
+          });
+        </script>
+      </body>
+    </html>
+  ">
+</iframe>
+
+</body>
+</html>
