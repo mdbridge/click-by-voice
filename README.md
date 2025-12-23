@@ -121,7 +121,22 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues (7/12/2024)
+## Known issues and limitations (12/22/2025)
+
+### Limitations due to click-by-voice being a browser extension
+
+* Chrome limits extensions from running on certain pages, including:
+  * `chrome://` URLs like the settings and extensions pages 
+  * built-in dialog boxes like the "add bookmarks" dialog box
+  * built-in error pages like "are you sure you want to proceed to this unsafe URL?"
+  * other extensions' pages (`chrome-extension://<other-extension-id>/*`)
+  * the Chrome Web store
+    * `https://chrome.google.com`, `https://chromewebstore.google.com/*`
+  * view-source pages (e.g., `view-source:https://example.com`)
+
+* Chrome allows extensions to draw only within the viewport
+  * this prevents creating hints for tabs, bookmarks, the address bar,
+    Chrome menus, and similar UI elements outside the viewport
 
 ### Selection of elements to hint
 
@@ -177,10 +192,6 @@ more on how this shortcut works, see
 
 ### Other issues
 
-* Click by Voice, like any Chrome extension, is unable to run on
-  `chrome://` URLs like the settings and extensions pages or in built-in
-  dialog boxes like the "add bookmarks" dialog box
-  * ditto `https://chrome.google.com` URLs (e.g., the developer dashboard)
 * Some applications actually read out data from the browser webpage
   representation (DOM) and can become confused by the hints
   * this unfortunately appears to include Dragon's Chrome extension
@@ -200,7 +211,7 @@ more on how this shortcut works, see
 * 11/2025: New major version 0.32 released
   * now reuses hint numbers of no longer existing/connected elements
   * refreshes hints more often while limiting CPU
-  * no longer adds attribute CBV_hint_element to hinted_elements by default
+  * no longer adds attribute `CBV_hint_element` to hinted_elements by default
     * this should reduce interference with some applications
   * only logs to console in response to user actions or if verbosity level has been raised
 * 6/2024: New major version 0.30 released
