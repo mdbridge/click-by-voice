@@ -142,14 +142,13 @@ more on how this shortcut works, see
 ### Selection of elements to hint
 
 * CBV cannot hint internal controls of built-in video/audio players
-  * does hint the player itself, however, allowing focusing then use of
-    keyboard shortcuts
+  * workaround: use the hint on the player itself to focus it then use
+    keyboard shortcuts to control the player
 * Elements inside of cross-origin iframes are missed
-  * workaround: iframes themselves are hinted and can be opened in a
-    new tab or window; this often allows interaction with the iframe
-	material
+  * workaround: use the hint on the iframe to open it in a new window or
+    tab; this often allows interaction with the iframe material
 * CBV cannot discover clickable regions in non-SVG maps
-* CBV ignores map `<area>`s
+* CBV ignores map `<area>`'s
 * Elements added after a page is first loaded can take a while to get
   hinted
   * to keep performance reasonable, Click by Voice only automatically
@@ -165,7 +164,7 @@ more on how this shortcut works, see
   another element; although hinted once they appear, the hover action
   may be necessary to make them appear.
 * [rare] CBV ignores clickable pseudo-elements
-* [rare] CBV does not look at elements inside of `<object data=...html>`s
+* [rare] CBV does not look at elements inside of `<object data=...html>`'s
 * [rare] CBV does not look at elements inside of closed shadow roots
 * [rare] CBV ignores `<frame>`s (these have been obsolete for a long time)
 
