@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Iframe Test Matrix</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+
+    .case {
+      margin-bottom: 30px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 80px;
+      border: 2px solid #444;
+    }
+
+    .label {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Iframe Origin & Sandbox Test Page</h1>
+
+  <!-- SAME ORIGIN -->
+  <div class="case">
+    <div class="label">Standard iframe — same origin</div>
+    <iframe src="iframe-child.html"></iframe>
+  </div>
+
+  <!-- CROSS ORIGIN -->
+  <div class="case">
+    <div class="label">Standard iframe — cross origin</div>
+    <iframe src="https://example.com"></iframe>
+    <!-- example.com intentionally has its own content;
+         replace with a hosted copy of iframe-child.html
+         if you want an exact equivalent -->
+  </div>
+
+  <!-- SANDBOX: NO FLAGS -->
+  <div class="case">
+    <div class="label">Sandbox iframe — no allow flags</div>
+    <iframe src="iframe-child.html"
+            sandbox></iframe>
+  </div>
+
+  <!-- SANDBOX: allow-scripts -->
+  <div class="case">
+    <div class="label">Sandbox iframe — allow-scripts</div>
+    <iframe src="iframe-child.html"
+            sandbox="allow-scripts"></iframe>
+  </div>
+
+  <!-- SANDBOX: allow-same-origin -->
+  <div class="case">
+    <div class="label">Sandbox iframe — allow-same-origin</div>
+    <iframe src="iframe-child.html"
+            sandbox="allow-same-origin"></iframe>
+  </div>
+
+  <!-- SANDBOX: allow-scripts + allow-same-origin -->
+  <div class="case">
+    <div class="label">Sandbox iframe — allow-scripts + allow-same-origin</div>
+    <iframe src="iframe-child.html"
+            sandbox="allow-scripts allow-same-origin"></iframe>
+  </div>
+
+</body>
+</html>

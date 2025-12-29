@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Open vs Closed Shadow Root Test</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+
+    .host {
+      border: 2px solid #444;
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+
+    .label {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Shadow Root Test Page</h1>
+
+  <div id="open-host" class="host">
+    <div class="label">Open Shadow Root Host</div>
+  </div>
+
+  <div id="closed-host" class="host">
+    <div class="label">Closed Shadow Root Host</div>
+  </div>
+
+  <script>
+    // OPEN shadow root
+    const openHost = document.getElementById("open-host");
+    const openShadow = openHost.attachShadow({ mode: "open" });
+    openShadow.innerHTML = `
+      <a href="https://www.google.com" target="_blank">
+        Google link (open shadow)
+      </a>
+    `;
+
+    // CLOSED shadow root
+    const closedHost = document.getElementById("closed-host");
+    const closedShadow = closedHost.attachShadow({ mode: "closed" });
+    closedShadow.innerHTML = `
+      <a href="https://www.google.com" target="_blank">
+        Google link (closed shadow)
+      </a>
+    `;
+
+    // Demonstrate access difference
+    console.log("openHost.shadowRoot:", openHost.shadowRoot);   // non-null
+    console.log("closedHost.shadowRoot:", closedHost.shadowRoot); // null
+  </script>
+
+</body>
+</html>
