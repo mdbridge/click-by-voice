@@ -333,9 +333,9 @@ let HintManager = null;
 
     function _remove_hint_numbers_from(from) {
         $("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
-        const $frame = $("iframe, frame", from);
-        if ($frame.length != 0) {
-            _remove_hint_numbers_from($frame.contents());
+        const $iframe = $("iframe", from);
+        if ($iframe.length != 0) {
+            _remove_hint_numbers_from($iframe.contents());
         }
     }
 

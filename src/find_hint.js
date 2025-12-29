@@ -138,7 +138,7 @@ let FindHint = null;
             return parent.host;
         }
 
-        // Note: You cannot traverse out of an [i]frame.
+        // Note: You cannot traverse out of an iframe.
         return null;
     }
 

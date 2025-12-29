@@ -365,7 +365,7 @@ var Activate = null;
             setTimeout(function() {
                 $element.removeClass("CBV_highlight_class");
                 // sometimes elements get cloned so do this globally also...
-                // TODO: do we need to make this work inside of [i]frames also? <<<>>>
+                // TODO: do we need to make this work inside of iframes also? <<<>>>
                 $(".CBV_highlight_class").removeClass("CBV_highlight_class");
             }, 500);
 
@@ -373,7 +373,7 @@ var Activate = null;
         }, 250);
     }
 
-    // Locate an element described by a hint descriptor in the page, or in a nested [i]frame.
+    // Locate an element described by a hint descriptor in the page, or in a (nested) iframe.
     // Returns object with optional fields $element, hint_if_known.
     function find_hint_descriptor(hint_descriptor, ...contents) {
         const match = hint_descriptor.match(/^\$\{(.*)\}("(.*)")?$/);
@@ -404,10 +404,10 @@ var Activate = null;
             return { $element: $(element), hint_if_known: hint };
         }
 
-        // If the hint_descriptor was not found, search recursively in any [i]frames.
-        const $frames = $("iframe, frame", ...contents);
-        if ($frames.length > 0) {
-            return find_hint_descriptor(hint_descriptor, $frames.contents());
+        // If the hint_descriptor was not found, search recursively in any iframes.
+        const $iframes = $("iframe", ...contents);
+        if ($iframes.length > 0) {
+            return find_hint_descriptor(hint_descriptor, $iframes.contents());
         }
 
         return {};

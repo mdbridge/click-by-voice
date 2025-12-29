@@ -114,7 +114,7 @@ function perform_operation(operation, hint_descriptor) {
 //
 
 if (window == window.top) {
-    // the following only runs outside of any [i]frames
+    // the following only runs outside of any iframes
 
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {

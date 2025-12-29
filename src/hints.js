@@ -46,9 +46,9 @@ var Hints = null;
     }
     function remove_hints_from(from) {
         $("[CBV_hint_element]", from).remove();
-        const $frame = $("iframe, frame", from);
-        if ($frame.length != 0) {
-            remove_hints_from($frame.contents());
+        const $iframe = $("iframe", from);
+        if ($iframe.length != 0) {
+            remove_hints_from($iframe.contents());
         }
     }
 

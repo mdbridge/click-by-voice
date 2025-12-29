@@ -37,16 +37,16 @@ let DomWalk = null;
             });
         }
 
-        // Walk [i]frame contents if any
+        // Walk iframe contents if any
         const element_tag = element.nodeName.toLowerCase();
-        if (element_tag == "iframe" || element_tag == "frame") {
+        if (element_tag == "iframe") {
             try {
                 // some popover ads are after <body> element
                 $("html", $element.contents()).children().filter(":not(head)").each(function (index) {
                     each_displaying_helper($(this), pre_callback, post_callback, exclusion);
                 });
             } catch (e) {
-                console.error("[i]frame access failure: " + e);
+                console.error("iframe access failure: " + e);
             }
         }
 
