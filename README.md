@@ -121,17 +121,18 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues and limitations (12/22/2025)
+## Known issues and limitations (12/29/2025)
 
 ### Limitations due to click-by-voice being a browser extension
 
 * Chrome limits extensions from running on certain pages, including:
   * `chrome://` URLs like the settings and extensions pages 
   * built-in dialog boxes like the "add bookmarks" dialog box
-  * built-in error pages like "are you sure you want to proceed to this unsafe URL?"
-  * other extensions' pages (`chrome-extension://<other-extension-id>/*`)
+  * built-in error pages like "are you sure you want to proceed to this
+    unsafe URL?"
+  * other extensions' pages (`chrome-extension://<other-extension-id>`)
   * the Chrome Web store
-    * `https://chrome.google.com`, `https://chromewebstore.google.com/*`
+    * `https://chrome.google.com`, `https://chromewebstore.google.com`
   * view-source pages (e.g., `view-source:https://example.com`)
 
 * Chrome allows extensions to draw only within the viewport
@@ -140,10 +141,15 @@ more on how this shortcut works, see
 
 ### Selection of elements to hint
 
+* CBV cannot hint internal controls of built-in video/audio players
+  * does hint the player itself, however, allowing focusing then use of
+    keyboard shortcuts
 * Elements inside of cross-origin iframes are missed
-  * same-origin [i]frames should work fine now
-  * iframes themselves are now hinted and can be focused or opened in a
-    new tab or window
+  * workaround: iframes themselves are hinted and can be opened in a
+    new tab or window; this often allows interaction with the iframe
+	material
+* CBV cannot discover clickable regions in non-SVG maps
+* CBV ignores map `<area>`s
 * Elements added after a page is first loaded can take a while to get
   hinted
   * to keep performance reasonable, Click by Voice only automatically
@@ -158,6 +164,10 @@ more on how this shortcut works, see
 * Some elements come into existence only after a mouse hovers over
   another element; although hinted once they appear, the hover action
   may be necessary to make them appear.
+* [rare] CBV ignores clickable pseudo-elements
+* [rare] CBV does not look at elements inside of `<object data=...html>`s
+* [rare] CBV does not look at elements inside of closed shadow roots
+* [rare] CBV ignores `<frame>`s (these have been obsolete for a long time)
 
 ### Hint activation
 
@@ -169,8 +179,11 @@ more on how this shortcut works, see
     hover does not simulate moving the mouse over all the parent
     elements to the target element
 * Chrome clipboard bugs:
-  * using !!! without following text (e.g., wanted an empty clipboard afterwards) leaves the command in the clipboard because there is no way to empty the clipboard in Chrome extensions
-  * using !!! with thousands of lines can hang the browser for quite a long time
+  * using !!! without following text (e.g., wanted an empty clipboard
+    afterwards) leaves the command in the clipboard because there is no
+    way to empty the clipboard in Chrome extensions
+  * using !!! with thousands of lines can hang the browser for quite a
+    long time
 
 ### Hint display
 
