@@ -2,7 +2,7 @@
     "manifest_version": 3,
 
     "name": "Click by Voice",
-    "version": "0.32.3",
+    "version": "0.32.4",
     "description": "This Chrome browser extension provides support for activating links and other HTML elements using voice commands.",
 
     "permissions": [
@@ -69,7 +69,12 @@
                 "content_script.js"
             ],
             "css": ["show_hints.css"],
-            "all_frames": true     // Inject CSS into all frames to ensure hints are displayed everywhere
+            // Inject CSS into all frames to ensure hints are displayed everywhere:
+            "all_frames": true,
+            // Handle about:srcdoc (i.e., iframe srcdoc=...)
+            "match_about_blank": true,
+            // Handle iframes sandbox (srcdoc?) w/o allow-same-origin:
+            "match_origin_as_fallback": true
         }
     ],
 

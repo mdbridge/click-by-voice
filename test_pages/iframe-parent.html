@@ -29,6 +29,13 @@
 
   <h1>Iframe Origin & Sandbox Test Page</h1>
 
+
+  <!-- SAME ORIGIN EXCEPT FOR file:// -->
+  <div class="case">
+    <div class="label">Standard iframe without srcdoc — same origin if not file://</div>
+    <iframe src="iframe-child.html"></iframe>
+  </div>
+
   <!-- SAME ORIGIN -->
   <div class="case">
     <div class="label">Standard iframe — same origin</div>

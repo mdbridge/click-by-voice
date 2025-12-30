@@ -121,7 +121,7 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues and limitations (12/29/2025)
+## Known issues and limitations (12/30/2025)
 
 ### Limitations due to click-by-voice being a browser extension
 
@@ -144,7 +144,8 @@ more on how this shortcut works, see
 * CBV cannot hint internal controls of built-in video/audio players
   * workaround: use the hint on the player itself to focus it then use
     keyboard shortcuts to control the player
-* Elements inside of cross-origin iframes are missed
+* Elements inside of cross-origin iframes (including sandboxed iframes without
+  `allow-same-origin`) are missed
   * workaround: use the hint on the iframe to open it in a new window or
     tab; this often allows interaction with the iframe material
 * CBV cannot discover clickable regions in non-SVG maps
