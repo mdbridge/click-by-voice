@@ -25,6 +25,28 @@ let Util = null;
     }
 
 
+    // Ascend traversing through shadow roots as needed.
+    function getVisualParentElement(node) {
+        const parent = node.parentNode;
+        if (!parent) return null;  // Removed nodes, etc.
+
+        // Handle parent Element (realm-safe)
+        if (parent.nodeType === Node.ELEMENT_NODE) {
+            return parent;
+        }
+
+        // Handle ShadowRoot
+        if (parent.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
+            parent.host &&
+            parent.host.nodeType === Node.ELEMENT_NODE) {
+            return parent.host;
+        }
+
+        // Note: You cannot traverse out of an iframe.
+        return null;
+    }
+
+
     //
     // Inspecting (safely) CSS properties
     //
@@ -93,6 +115,8 @@ let Util = null;
         time: time,
         vlog: vlog,
 
+        getVisualParentElement: getVisualParentElement,
+
         css: css,
         css_number: css_number,
         css_pixels: css_pixels,
@@ -134,3 +158,5 @@ function request(action, args, callback) {
 function CBV_inserted_element($element) {
     return $element[0].getAttribute("CBV_hint_element") == "true";
 }
+
+

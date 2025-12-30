@@ -200,19 +200,17 @@ let AddHint = null;
         let after = true;
 
         if (Hints.option("exclude")) {
-            while ($container.is(Hints.option_value("exclude"))) {
-                $container = $container.parent();
+            while ($container && $container.is(Hints.option_value("exclude"))) {
+                $container = Util.getVisualParentElement($container);
             }
         }
 
-        if (Hints.option("f")) {
-            $container = $("body, frameset");
-            inside = false;
-            after = true;
+        if (! $container || Hints.option("f")) {
+            $container = null;
         } else if ($container.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {
             // temporary kludge for Gmail: <<<>>>
-            while ($container.is("table, tr, td, th, colgroup, tbody, thead, tfoot"))
-                $container = $container.parent();
+            while ($container && $container.is("table, tr, td, th, colgroup, tbody, thead, tfoot"))
+                $container = Util.getVisualParentElement($container);
             inside = false;
             after = false;
         } else {
@@ -229,6 +227,11 @@ let AddHint = null;
                 inside = false;
                 after = !span_before_okay($container);
             }
+        }
+        if (! $container) {
+            $container = $("body, frameset");
+            inside = false;
+            after = true;
         }
 
         const zindex = compute_z_index($element);
@@ -290,7 +293,7 @@ let AddHint = null;
 
 
     function get_text_overflow_ellipisis_clip($element) {
-        for (;;) {
+        while ($element) {
             if (Util.css($element, "text-overflow", "clip") != "clip") {
                 let clip = {right: $element[0].getBoundingClientRect().right};
 
@@ -312,8 +315,9 @@ let AddHint = null;
             }
             if (Util.css($element, "display") != "inline")
                 return null;
-            $element = $element.parent();
+            $element = Util.getVisualParentElement($element);
         }
+        return null;
     }
 
 
