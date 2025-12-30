@@ -32,13 +32,14 @@
   <!-- SAME ORIGIN -->
   <div class="case">
     <div class="label">Standard iframe — same origin</div>
-    <iframe src="iframe-child.html"></iframe>
+    <!-- file:// doesn't treat other file:// as same origin so use srcdoc -->
+    <iframe srcdoc='<!doctype html><a href="https://google.com">Google link inside iframe</a>'></iframe>
   </div>
 
   <!-- CROSS ORIGIN -->
   <div class="case">
     <div class="label">Standard iframe — cross origin</div>
-    <iframe src="https://example.com"></iframe>
+    <iframe src="https://example.com" style="height: 200px;"></iframe>
     <!-- example.com intentionally has its own content;
          replace with a hosted copy of iframe-child.html
          if you want an exact equivalent -->
@@ -47,28 +48,28 @@
   <!-- SANDBOX: NO FLAGS -->
   <div class="case">
     <div class="label">Sandbox iframe — no allow flags</div>
-    <iframe src="iframe-child.html"
+    <iframe srcdoc='<!doctype html><a href="https://google.com">Google link inside iframe</a>'
             sandbox></iframe>
   </div>
 
   <!-- SANDBOX: allow-scripts -->
   <div class="case">
     <div class="label">Sandbox iframe — allow-scripts</div>
-    <iframe src="iframe-child.html"
+    <iframe srcdoc='<!doctype html><a href="https://google.com">Google link inside iframe</a>'
             sandbox="allow-scripts"></iframe>
   </div>
 
   <!-- SANDBOX: allow-same-origin -->
   <div class="case">
     <div class="label">Sandbox iframe — allow-same-origin</div>
-    <iframe src="iframe-child.html"
+    <iframe srcdoc='<!doctype html><a href="https://google.com">Google link inside iframe</a>'
             sandbox="allow-same-origin"></iframe>
   </div>
 
   <!-- SANDBOX: allow-scripts + allow-same-origin -->
   <div class="case">
     <div class="label">Sandbox iframe — allow-scripts + allow-same-origin</div>
-    <iframe src="iframe-child.html"
+    <iframe srcdoc='<!doctype html><a href="https://google.com">Google link inside iframe</a>'
             sandbox="allow-scripts allow-same-origin"></iframe>
   </div>
 
