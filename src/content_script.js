@@ -138,4 +138,15 @@ if (window == window.top) {
         setInterval(maybe_refresh, 50);
     });
 
+} else {
+    // Are we same origin as our parent?
+    let sameOrigin = false;
+    try {
+        void window.parent.document;
+        sameOrigin = true;
+    } catch {}
+
+    if (!sameOrigin) {
+        console.log("Unable to provide hints for cross-origin", location.href);
+    }
 }
