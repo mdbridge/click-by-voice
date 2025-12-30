@@ -152,13 +152,16 @@ let HintManager = null;
 
             // Figure out whether the element and/or hint tag are hidden
 
+            const inner_hidden = $inner[0].getClientRects().length === 0;
+
             let element_hidden = false;
 
-            // Below detects display: none.
-            if (target_box.top == 0 && target_box.left == 0) {
+            if ($element[0].getClientRects().length === 0) {
+                // Technically does element have no layout boxes?
+                // In addition to display: none, this includes
+                // disconnected elements, non-rendered DOMs, and the like.
                 element_hidden = "display: none";
             }
-            const inner_hidden = (inner_box .top == 0 && inner_box .left == 0);
 
             // Check for other hiding via CSS.  
             //
