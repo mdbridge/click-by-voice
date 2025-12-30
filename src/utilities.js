@@ -46,6 +46,14 @@ let Util = null;
         return null;
     }
 
+    function getVisualParent$Element($node) {
+        let parentNode = getVisualParentElement($node[0]);
+        if (parentNode) {
+            return $(parentNode);
+        }
+        return null;
+    }
+
 
     //
     // Inspecting (safely) CSS properties
@@ -116,6 +124,7 @@ let Util = null;
         vlog: vlog,
 
         getVisualParentElement: getVisualParentElement,
+        getVisualParent$Element: getVisualParent$Element,
 
         css: css,
         css_number: css_number,

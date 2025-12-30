@@ -106,6 +106,24 @@ let AddHint = null;
     // Analysis routines
     //
 
+    function is_in_shadow_root(node) {
+        const root = node.getRootNode?.();
+        return !!(root && root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && root.host);
+    }
+
+    function hints_excluded($element) {
+        if (is_in_shadow_root($element[0])) {
+            return true;
+        }
+        if (Hints.option("exclude") && $element.is(Hints.option_value("exclude"))) {
+            return true;
+        }
+        if ($element.is("[contenteditable], [contenteditable] > *")) {
+            return true;
+        }
+        return false;
+    }
+
     // Can we legally put a span element inside of element and have it be
     // visible?  Does not take CSS properties into account.
     function can_put_span_inside($element) {
@@ -199,10 +217,8 @@ let AddHint = null;
         let inside = false;
         let after = true;
 
-        if (Hints.option("exclude")) {
-            while ($container && $container.is(Hints.option_value("exclude"))) {
-                $container = Util.getVisualParentElement($container);
-            }
+        while ($container && hints_excluded($container)) {
+            $container = Util.getVisualParent$Element($container);
         }
 
         if (! $container || Hints.option("f")) {
@@ -210,7 +226,7 @@ let AddHint = null;
         } else if ($container.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {
             // temporary kludge for Gmail: <<<>>>
             while ($container && $container.is("table, tr, td, th, colgroup, tbody, thead, tfoot"))
-                $container = Util.getVisualParentElement($container);
+                $container = Util.getVisualParent$Element($container);
             inside = false;
             after = false;
         } else {
@@ -315,7 +331,7 @@ let AddHint = null;
             }
             if (Util.css($element, "display") != "inline")
                 return null;
-            $element = Util.getVisualParentElement($element);
+            $element = Util.getVisualParent$Element($element);
         }
         return null;
     }
@@ -340,7 +356,7 @@ let AddHint = null;
 
     // returns false iff unable to safely add hint
     function add_inline_hint_inside($element, hint) {
-        if (Hints.option("exclude") && $element.is(Hints.option_value("exclude"))) {
+        if (hints_excluded($element)) {
             return false;
         }
 
