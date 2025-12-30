@@ -206,7 +206,7 @@ let AddHint = null;
         }
 
         if (Hints.option("f")) {
-            $container = $("body");
+            $container = $("body, frameset");
             inside = false;
             after = true;
         } else if ($container.is("table, tr, td, th, colgroup, tbody, thead, tfoot")) {

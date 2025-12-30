@@ -5,8 +5,9 @@
     <title>Frame Test</title>
   </head>
 
-  <frameset rows="100%">
-    <!-- THIS is the <frame> element -->
-    <frame src="frame-content.html">
+  <!-- Use cols instead of rows for horizontal split -->
+  <frameset cols="50%,50%">
+    <frame src="frame-content.html" name="leftFrame">
+    <frame src="frame-content.html" name="rightFrame">
   </frameset>
 </html>
