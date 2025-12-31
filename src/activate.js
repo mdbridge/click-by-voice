@@ -231,6 +231,8 @@ var Activate = null;
                 console.log("");
             }
             console.log("Element information:");
+            if (Util.is_in_shadow_root($element[0]))
+                console.log("element is in a shadow root.");
             console.log($element[0].getBoundingClientRect());
             console.log($element[0].getClientRects());
             console.log($element[0]);
