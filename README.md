@@ -121,7 +121,7 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues and limitations (12/30/2025)
+## Known issues and limitations (12/31/2025)
 
 ### Limitations due to click-by-voice being a browser extension
 
@@ -171,18 +171,22 @@ more on how this shortcut works, see
 
 ### Hint activation
 
-* Some elements can be difficult to select even using CSS selectors
-  * e.g., multiple elements that differ only by their contained text
 * Some hint activations do not work properly due to insufficient
   fidelity of the synthetically generated events
   * e.g., the generated mouse events do not include coordinates and
     hover does not simulate moving the mouse over all the parent
     elements to the target element
+* Normally when a hint is activated, the associated element is briefly
+  highlighted; this fails in some cases including
+  * elements inside open shadow roots that have in-line styling
+  * SVG path elements
+* Some elements can be difficult to select even using CSS selectors
+  * e.g., multiple elements that differ only by their contained text
 * Chrome clipboard bugs:
-  * using !!! without following text (e.g., wanted an empty clipboard
+  * using `!!!` without following text (e.g., wanted an empty clipboard
     afterwards) leaves the command in the clipboard because there is no
     way to empty the clipboard in Chrome extensions
-  * using !!! with thousands of lines can hang the browser for quite a
+  * using `!!!` with thousands of lines can hang the browser for quite a
     long time
 
 ### Hint display
@@ -221,6 +225,8 @@ more on how this shortcut works, see
 
 ## News
 
+* TBD:
+  * elements in open shadow roots are now hinted and activatable
 * 11/2025: New major version 0.32 released
   * now reuses hint numbers of no longer existing/connected elements
   * refreshes hints more often while limiting CPU
