@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>contenteditable + link test</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        margin: 24px;
+        line-height: 1.4;
+      }
+      .editable {
+        border: 2px solid #888;
+        padding: 12px;
+        border-radius: 8px;
+        min-height: 120px;
+      }
+      .hint {
+        margin: 0 0 10px 0;
+        font-size: 0.95rem;
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Editable content area with link</h1>
+    <p class="hint">
+      Click inside the box to edit. The link is inside the editable region.
+    </p>
+
+    <div class="editable" contenteditable="true" spellcheck="false">
+      <p>
+        This is editable text. Here is a link:
+        <a href="https://google.com" target="_blank" rel="noopener noreferrer">Google</a>.
+      </p>
+      <p>Try editing this text, adding new links, or deleting content.</p>
+    </div>
+  </body>
+</html>

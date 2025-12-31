@@ -129,7 +129,7 @@ let AddHint = null;
         if (Hints.option("exclude") && $element.is(Hints.option_value("exclude"))) {
             return true;
         }
-        if ($element.is("[contenteditable], [contenteditable] > *")) {
+        if ($element.is("[contenteditable], [contenteditable] *")) {
             return true;
         }
         return false;
