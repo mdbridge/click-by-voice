@@ -306,6 +306,17 @@ let HintManager = null;
         return hint;
     }
 
+    function discard_uninitialized_hint(hint) {
+        const hint_number    = hint.hint_number;
+        const hinted_element = hint.hinted_element;
+        hinted_elements.delete(hinted_element);
+        hint_number_to_hint.delete(hint_number);
+        if (Hints.option("mark_hinted")) {
+            $(`[CBV_hint_number='${hint_number}']`).removeAttr("CBV_hint_number");
+        }
+        hint_number_generator.release(hint_number);
+    }
+
     // precondition: call this during a mutating step
     var _remove_hint = function _remove_hint(hint_number, hinted_element) {
         Util.vlog(2, `removing ${hint_number}:`);
@@ -335,6 +346,8 @@ let HintManager = null;
     }
 
     function _remove_hint_numbers_from(from) {
+        // This doesn't search open shadow roots, but that's okay for
+        // now because this is a debug feature.  <<<>>>
         $("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
         const $iframe = $("iframe", from);
         if ($iframe.length != 0) {
@@ -366,14 +379,14 @@ let HintManager = null;
 
 
     HintManager = {
-        get_hint_number_stats:  get_hint_number_stats,
+        get_hint_number_stats:      get_hint_number_stats,
 
-        make_hint:              make_hint,
+        make_hint:                  make_hint,
+        discard_uninitialized_hint: discard_uninitialized_hint,
+        locate_hint:                locate_hint,
+        is_hinted_element:          is_hinted_element,
+        discard_hints:              discard_hints,
 
-        locate_hint:            locate_hint,
-        is_hinted_element:      is_hinted_element,
-        discard_hints:          discard_hints,
-
-        adjust_hints:           adjust_hints
+        adjust_hints:               adjust_hints
     };
 })();

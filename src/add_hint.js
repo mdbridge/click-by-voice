@@ -365,7 +365,7 @@ let AddHint = null;
     // Adding inline hints
     //
 
-    // returns false iff unable to safely add hint
+    // Returns false iff unable to safely add hint.
     function add_inline_hint_inside($element, hint) {
         if (hints_excluded($element)) {
             return false;
@@ -413,13 +413,19 @@ let AddHint = null;
     }
 
 
-    // this is often unsafe; prefer add_inline_hint_inside
+    // This is often unsafe; prefer add_inline_hint_inside.
+    // Returns false if unable to add hint.
     function add_inline_hint_outside($element, hint) {
+        if (hints_excluded($element)) {
+            return false;
+        }
+
         Batcher.mutating(() => {
             const $hint_tag = $build_hint(hint.hint_number, false, 0);
             insert_element($element, $hint_tag, false, false);
             hint.initialize($hint_tag[0]);
         });
+        return true;
     }
 
 
@@ -445,8 +451,14 @@ let AddHint = null;
 
             // current fallback is inline
             if (Hints.option("i") || true) {
-                if (!add_inline_hint_inside($element, hint))
-                    add_inline_hint_outside($element, hint);
+                if (add_inline_hint_inside($element, hint))
+                    return;
+                if (add_inline_hint_outside($element, hint))
+                    return;
+                Util.vlog(4, "skipping adding inline hint because inline location is excluded");
+                // This is a bit of a Kluge as we will keep attempting
+                // (unsuccessfully) to hint this element.  <<<>>>
+                HintManager.discard_uninitialized_hint(hint);
                 return;
             }
         });
