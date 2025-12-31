@@ -103,16 +103,21 @@ var Activate = null;
             return true;
         } else if ($element.is("summary")) {
             return true;
+        } else if ($element.is("select")) {
+            return true;
         } else if ($element.is(":input")) {
-            if ($element.attr("type") == "submit")
+            switch ($element.attr("type")) {
+                case "button":
+                case "checkbox":
+                case "color":
+                case "file":
+                case "radio":
+                case "reset":
+                case "submit":
                 return true;
-            if ($element.attr("type") == "checkbox")
-                return true;
-            if ($element.attr("type") == "radio")
-                return true;
-            if ($element.attr("type") == "button")
-                return true;
+            }
         }
+
         if ($element.attr("onclick")) {
             return true;
         }
