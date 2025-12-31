@@ -30,23 +30,32 @@ let FindHint = null;
         //
         const element_tag = $element[0].nodeName.toLowerCase();
         switch (element_tag) {
-            case "a":
-            case "button":
-            case "select":
-            case "textarea":
-            case "keygen":
-            case "iframe":
-            case "frame":
+        case "a":
+        case "button":
+        case "frame":
+        case "iframe":
+        case "keygen":
+        case "select":
+        case "summary":
+        case "textarea":
             return true;
 
-            case "input":
-            let input_type = $element[0].getAttribute("type");
-            if (input_type)
-                input_type = input_type.toLowerCase();
-            if (input_type != "hidden" 
-                // not sure false is actually kosher; spec says otherwise <<<>>>
-                && ($element[0].getAttribute("disabled")=="false" 
-                    || $element[0].getAttribute("disabled")===null))
+        case "input": 
+            {
+                let input_type = $element[0].getAttribute("type");
+                if (input_type)
+                    input_type = input_type.toLowerCase();
+                if (input_type != "hidden" 
+                    // not sure false is actually kosher; spec says otherwise <<<>>>
+                    && ($element[0].getAttribute("disabled")=="false" 
+                        || $element[0].getAttribute("disabled")===null))
+                    return true;
+            }
+            break;
+
+        case "audio":
+        case "video":
+            if ($element[0].hasAttribute("controls"))
                 return true;
             break;
         }

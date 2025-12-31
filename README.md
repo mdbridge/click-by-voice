@@ -227,6 +227,7 @@ more on how this shortcut works, see
 
 * TBD:
   * elements in open shadow roots are now hinted and activatable
+  * additional hintable elements: summary, audio/video players with controls
 * 11/2025: New major version 0.32 released
   * now reuses hint numbers of no longer existing/connected elements
   * refreshes hints more often while limiting CPU

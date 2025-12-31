@@ -101,6 +101,8 @@ var Activate = null;
             return true;
         } else if ($element.is("a")) {
             return true;
+        } else if ($element.is("summary")) {
+            return true;
         } else if ($element.is(":input")) {
             if ($element.attr("type") == "submit")
                 return true;
