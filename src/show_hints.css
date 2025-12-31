@@ -129,6 +129,7 @@
 
 
 
+    /* Keep this consistent with activate function. */
     .CBV_highlight_class:not(#CBV_override):not(#CBVISayOverride) {
 	background-color: yellow  !important;
 	outline-style:    dashed  !important;

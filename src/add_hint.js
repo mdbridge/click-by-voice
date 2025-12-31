@@ -106,13 +106,8 @@ let AddHint = null;
     // Analysis routines
     //
 
-    function is_in_shadow_root(node) {
-        const root = node.getRootNode?.();
-        return !!(root && root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && root.host);
-    }
-
     function hints_excluded($element) {
-        if (is_in_shadow_root($element[0])) {
+        if (Util.is_in_shadow_root($element[0])) {
             // Don't put hints inside shadow roots because we don't
             // have our CBV CSS rules there.
             return true;

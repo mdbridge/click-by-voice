@@ -54,6 +54,11 @@ let Util = null;
         return null;
     }
 
+    function is_in_shadow_root(node) {
+        const root = node.getRootNode?.();
+        return !!(root && root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && root.host);
+    }
+
 
     //
     // Inspecting (safely) CSS properties
@@ -125,6 +130,7 @@ let Util = null;
 
         getVisualParentElement: getVisualParentElement,
         getVisualParent$Element: getVisualParent$Element,
+        is_in_shadow_root: is_in_shadow_root,
 
         css: css,
         css_number: css_number,

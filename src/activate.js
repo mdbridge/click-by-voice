@@ -359,19 +359,49 @@ var Activate = null;
         }
 
 
-        $element.addClass("CBV_highlight_class");
+        if (!Util.is_in_shadow_root($element[0])) {
+            $element.addClass("CBV_highlight_class");
 
-        setTimeout(function() {
             setTimeout(function() {
-                $element.removeClass("CBV_highlight_class");
-                // sometimes elements get cloned so do this globally also...
-                // TODO: do we need to make this work inside of iframes also? <<<>>>
-                $(".CBV_highlight_class").removeClass("CBV_highlight_class");
-            }, 500);
+                setTimeout(function() {
+                    $element.removeClass("CBV_highlight_class");
+                    // sometimes elements get cloned so do this globally also...
+                    // TODO: do we need to make this work inside of iframes also? <<<>>>
+                    $(".CBV_highlight_class").removeClass("CBV_highlight_class");
+                }, 500);
 
+                silently_activate($element, hint_if_known, operation);
+            }, 250);
+
+        } else if (!$element[0].hasAttribute("style")) {
+            // We can't use our content script CSS rule so let's just
+            // instead use an inline style attribute temporarily if
+            // there is not already one:
+            $element[0].setAttribute(
+                "style",
+                [
+                    "background-color: yellow",
+                    "outline-style: dashed",
+                    "outline-color: red",
+                    "outline-width: 3px",
+                    "opacity: 1",
+                    "visibility: visible"
+                ].join("; ")
+            );
+            setTimeout(function() {
+                setTimeout(function() {
+                    $element[0].removeAttribute("style");
+                }, 500);
+                silently_activate($element, hint_if_known, operation);
+            }, 250);
+
+        } else {
+            // Do no highlighting if the element already has inline
+            // styles.  Hopefully this is very rare.
             silently_activate($element, hint_if_known, operation);
-        }, 250);
+        }
     }
+
 
     // Locate an element described by a hint descriptor in the page, or in a (nested) iframe.
     // Returns object with optional fields $element, hint_if_known.
