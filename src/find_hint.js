@@ -58,6 +58,12 @@ let FindHint = null;
             if ($element[0].hasAttribute("controls"))
                 return true;
             break;
+
+        case "area":
+            // We don't handle these because they can occur in
+            // multiple places simultaneously, which would be quite a
+            // bit of additional work.  <<<>>>
+            return false;
         }
 
 
@@ -67,6 +73,10 @@ let FindHint = null;
         if ($element[0].hasAttribute("onclick")) 
             return true;
         if ($element[0].hasAttribute("tabindex") && $element[0].getAttribute("tabindex") >= 0)
+            return true;
+        const v = $element[0].getAttribute("contenteditable");
+        const content_editable = v === "" || v === "true" || v === "plaintext-only";
+        if (content_editable)
             return true;
 
 
