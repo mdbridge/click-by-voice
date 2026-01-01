@@ -20,7 +20,7 @@ let HintManager = null;
         #hints_retired                  = 0;
         #max_hint_number_used           = -1;
 
-        #retired_hint_numbers           = [];
+        #retired_hint_numbers           = [];  // For now, these are all integers.
         #is_retired_hint_numbers_sorted = true;
 
         generate() {
@@ -28,7 +28,8 @@ let HintManager = null;
             if (!Hints.option("avoiding_reuse") && this.#retired_hint_numbers.length > 0) {
                 if (!this.#is_retired_hint_numbers_sorted) {
                     // Sort on demand so we sort only once per batch of numbers generated.
-                    this.#retired_hint_numbers.sort();
+                    // Sort numerically (default JS sort is lexicographic).
+                    this.#retired_hint_numbers.sort((a, b) => a - b);
                     this.#is_retired_hint_numbers_sorted = true;
                 }
                 const number = this.#retired_hint_numbers.shift();
