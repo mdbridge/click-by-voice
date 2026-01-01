@@ -19,8 +19,15 @@ let FindHint = null;
 
 
     function fast_hintable($element) {
+        const element = $element[0];
+
         if (Hints.option('$'))
             return $element.is(Hints.option_value('$'));
+
+        // Disabled elements cannot be focused or clicked so do not hint them.
+        if ("disabled" in element && element.disabled)
+            return false;
+            
 
         //
         // Standard clickable or focusable HTML elements
@@ -28,7 +35,7 @@ let FindHint = null;
         //   Quora has placeholder links with click handlers so allow a's
         //   w/o hrefs...
         //
-        const element_tag = $element[0].nodeName.toLowerCase();
+        const element_tag = element.nodeName.toLowerCase();
         switch (element_tag) {
         case "a":
         case "button":
@@ -40,22 +47,14 @@ let FindHint = null;
         case "textarea":
             return true;
 
-        case "input": 
-            {
-                let input_type = $element[0].getAttribute("type");
-                if (input_type)
-                    input_type = input_type.toLowerCase();
-                if (input_type != "hidden" 
-                    // not sure false is actually kosher; spec says otherwise <<<>>>
-                    && ($element[0].getAttribute("disabled")=="false" 
-                        || $element[0].getAttribute("disabled")===null))
-                    return true;
-            }
-            break;
+        case "input":
+            if (element.type && element.type.toLowerCase() === "hidden")
+                return false;
+            return true;
 
         case "audio":
         case "video":
-            if ($element[0].hasAttribute("controls"))
+            if (element.hasAttribute("controls"))
                 return true;
             break;
 
@@ -70,11 +69,11 @@ let FindHint = null;
         //
         // HTML elements directly made clickable or focusable
         //
-        if ($element[0].hasAttribute("onclick")) 
+        if (element.hasAttribute("onclick")) 
             return true;
-        if ($element[0].hasAttribute("tabindex") && $element[0].getAttribute("tabindex") >= 0)
+        if (element.hasAttribute("tabindex") && Number(element.getAttribute("tabindex")) >= 0)
             return true;
-        const v = $element[0].getAttribute("contenteditable");
+        const v = element.getAttribute("contenteditable");
         const content_editable = v === "" || v === "true" || v === "plaintext-only";
         if (content_editable)
             return true;
@@ -85,7 +84,7 @@ let FindHint = null;
         // focusable via tabindex=-1
         //
         if (!Hints.option("A")) {
-            const role = $element[0].getAttribute("role");
+            const role = element.getAttribute("role");
             switch (role) {
             case "button":
             case "checkbox":
@@ -123,7 +122,7 @@ let FindHint = null;
         //
 
         // this is *everything* focusable:
-        if ($element[0].hasAttribute("tabindex")) 
+        if (element.hasAttribute("tabindex")) 
             return true;
 
         if (element_tag == "li") 
