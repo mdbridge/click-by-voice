@@ -41,11 +41,15 @@ chrome.commands.onCommand.addListener(async function(command) {
 
 // returns the response to send back
 async function handle_content_script_message(request, sender) {
+    const tab_id   = sender.tab.id;
+    const frame_id = sender.frameId;
+    console.log(request, sender, tab_id, frame_id); // <<<>>>
+
     switch (request.action) {
 
     case "CBV_HELLO":
         const config = await option_storage.get_per_session_options();
-        await do_user_command(config.startingCommand);
+        await do_user_command(config.startingCommand, tab_id);
         return;
 
         /*

@@ -5,33 +5,37 @@
 
 import * as option_storage from './option_storage.js';
 
-async function do_show_hints(show_hints_parameters, once) {
+async function do_show_hints(tab_id, show_hints_parameters, once) {
     let config = await option_storage.get_per_session_options();
     if (!once) {
         config.startingCommand = ":=" + show_hints_parameters;
         await option_storage.put_per_session_options(config);
     }
 
-    // Get tab ID for current tab:
-    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-    const tab_id = tabs[0].id;
+    // tab_id of -1 means use current tab:
+    if (tab_id < 0) {
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+        tab_id = tabs[0].id;
+    }
 
     send_message_to_frame(tab_id, "CBV_NEW_EPOCH",
                           {config: config,
                            show_hint_parameters: show_hints_parameters});    
 }
 
-async function do_activate_hint(hint_descriptor, operation) {
-    // Get tab ID for current tab:
-    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-    const tab_id = tabs[0].id;
+async function do_activate_hint(tab_id, hint_descriptor, operation) {
+    // tab_id of -1 means use current tab:
+    if (tab_id < 0) {
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+        tab_id = tabs[0].id;
+    }
 
     send_message_to_frame(tab_id, "CBV_PERFORM",
                           {hint_descriptor: hint_descriptor,
                            operation:       operation});    
 }
 
-export async function do_user_command(command_text) {
+export async function do_user_command(command_text, tab_id = -1) {
     // optional operation field is :<suffix> at end
     let hint_descriptor = command_text;
     let operation       = "";
@@ -51,11 +55,11 @@ export async function do_user_command(command_text) {
     }
 
     if (operation.startsWith("=")) {
-        await do_show_hints(operation.substr(1), false);
+        await do_show_hints(tab_id, operation.substr(1), false);
     } else if (operation.startsWith("once=")) {
-        await do_show_hints(operation.substr(5), true);
+        await do_show_hints(tab_id, operation.substr(5), true);
     } else {
-        await do_activate_hint(hint_descriptor, operation);
+        await do_activate_hint(tab_id, hint_descriptor, operation);
     }
 }
 
