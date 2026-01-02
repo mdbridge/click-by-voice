@@ -113,6 +113,7 @@ function perform_operation(operation, hint_descriptor) {
 // Startup of a page code
 //
 
+HintManager.add_hint_number_block(0, 100000); // <<<>>>
 if (window == window.top) {
     // the following only runs outside of any iframes
 

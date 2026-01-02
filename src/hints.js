@@ -41,6 +41,7 @@ var Hints = null;
 
     function remove_hints() {
         HintManager.discard_hints();
+        HintManager.add_hint_number_block(0, 100000); // <<<>>>
         remove_hints_from(document)
         hinting_on_ = false;
     }

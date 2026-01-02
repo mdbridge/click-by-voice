@@ -9,26 +9,53 @@ let HintManager = null;
 
 (function() {
 
-    // HintNumberGenerator: responsible for doling out hint numbers
-    //                      that are not currently used.
-    // 
-    // To allow reuse, release hint_numbers when they are no longer in use.
-    // We attempt to use the smallest hint numbers possible.
+    // HintNumberGenerator: responsible for doling out hint numbers for new hints.
+    //
+    // These are originally taken from externally supplied
+    // non-overlapping blocks of numbers.  Released hint numbers are
+    // be reused; we attempt to use the smallest hint numbers
+    // possible.
     class HintNumberGenerator {
-        #next_hint_number               = 0;
         #hints_made                     = 0;
         #hints_retired                  = 0;
         #max_hint_number_used           = -1;
 
-        #retired_hint_numbers           = [];  // For now, these are all integers.
+        // List of available hint number blocks, each as { first, last }.
+        // Each includes at least one number.
+        #available_number_blocks        = [];
+
+        // Released numbers available for reuse.
+        #retired_hint_numbers           = [];
         #is_retired_hint_numbers_sorted = true;
 
+        // Adds a new inclusive range of available hint numbers
+        // [first, last].  
+        // Precondition: the range will never overlap any previously
+        // added range.  Ideally, it is also greater than any
+        // previously added range (this ensures we use smallest hint
+        // numbers first).
+        add_number_block(first, last) {
+            if (last < first)
+                return;
+            this.#available_number_blocks.push({ first, last });
+        }
+
+        compute_number_available() {
+            let remaining = this.#retired_hint_numbers.length;
+            for (const b of this.#available_number_blocks)
+                remaining += (b.last - b.first + 1);
+            return remaining;
+        }
+
+        // This throws if there are no available hint numbers; caller
+        // should strive to ensure that never happens.
         generate() {
             this.#hints_made++;
+
             if (!Hints.option("avoiding_reuse") && this.#retired_hint_numbers.length > 0) {
                 if (!this.#is_retired_hint_numbers_sorted) {
                     // Sort on demand so we sort only once per batch of numbers generated.
-                    // Sort numerically (default JS sort is lexicographic).
+                    // Sort numerically; default JS sort is lexicographic.
                     this.#retired_hint_numbers.sort((a, b) => a - b);
                     this.#is_retired_hint_numbers_sorted = true;
                 }
@@ -37,8 +64,14 @@ let HintManager = null;
                 return number;
             }
 
-            this.#max_hint_number_used = this.#next_hint_number++;
-            return this.#max_hint_number_used;
+            if (this.#available_number_blocks.length === 0)
+                throw new RangeError("HintNumberGenerator: no hint numbers available");
+            const available_number_block = this.#available_number_blocks[0];
+            const number = available_number_block.first++;
+            if (available_number_block.first > available_number_block.last)
+                this.#available_number_blocks.shift();
+            this.#max_hint_number_used = Math.max(this.#max_hint_number_used, number);
+            return number;
         }
 
         release(hint_number) {
@@ -51,7 +84,8 @@ let HintManager = null;
             return {
                 hints_made:           this.#hints_made,
                 max_hint_number_used: this.#max_hint_number_used,
-                hints_in_use:         this.#hints_made - this.#hints_retired
+                hints_in_use:         this.#hints_made - this.#hints_retired,
+                numbers_available:    this.compute_number_available(),
             };
         }
     }
@@ -359,8 +393,12 @@ let HintManager = null;
 
 
     //
-    // Inspecting hint numbers
+    // Provisioning hint numbers
     //
+
+    function add_hint_number_block(first, last) {
+        hint_number_generator.add_number_block(first, last);
+    }
 
     function get_hint_number_stats() {
         return hint_number_generator.stats;
@@ -380,6 +418,7 @@ let HintManager = null;
 
 
     HintManager = {
+        add_hint_number_block:      add_hint_number_block,
         get_hint_number_stats:      get_hint_number_stats,
 
         make_hint:                  make_hint,
