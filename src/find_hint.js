@@ -170,31 +170,39 @@ let FindHint = null;
     // Enumerate each element that we should hint.  callback is
     // called once for each hintable element found as callback($element, reason).
     function each_hintable(callback) {
-        let has_hinted_element = new WeakSet();
-        function set_hinted($element) {
+        let is_hintable_element       = new WeakSet();
+        let contains_hintable_element = new WeakSet();
+        function set_hintable($element) {
             let e = $element[0];
-            do {
-                has_hinted_element.add(e);
+            is_hintable_element.add(e);
+            e = Util.getVisualParentElement(e);
+            while (e) {
+                contains_hintable_element.add(e);
                 e = Util.getVisualParentElement(e);
-            } while (e);
+            }
         }
         DomWalk.each_displaying(
             // pre-order traversal:
             function ($element, styles) {
                 if (hintable($element, styles)) {
-                    set_hinted($element);
+                    set_hintable($element);
                     callback($element, "hintable");
                 }
 
-                // post-order traversal:
+            // post-order traversal:
             }, function ($element, styles) {
+                if (is_hintable_element.has($element[0]))
+                    return;  // Already did callback for this element.
+
                 if (Hints.option('$') && !Hints.option("C"))
                     return;
 
-                if (HintManager.is_hinted_element($element[0]))
-                    return;
+                //
+                // Code for determining hintable due to cursor style.
+                //
+
                 const parent = Util.getVisualParentElement($element[0]);
-                if (HintManager.is_hinted_element(parent))
+                if (is_hintable_element.has(parent))
                     return;
 
                 if (styles.cursor != "pointer") {
@@ -210,13 +218,13 @@ let FindHint = null;
                 if (!clickable_space($element))
                     return;
 
-                if (has_hinted_element.has($element[0]))
+                if (contains_hintable_element.has($element[0]))
                     return;
 
                 if (Hints.option('^') && $element.is(Hints.option_value('^')))
                     return false;
 
-                set_hinted($element);
+                set_hintable($element);
                 callback($element, "cursor: pointer");
             },
             Hints.option_value('!') // exclusion
