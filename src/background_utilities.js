@@ -3,7 +3,35 @@
 // Assumes we are either the service worker or the pop-up window's JavaScript.
 //
 
-export function do_user_command(command_text, close_window) {
+import * as option_storage from './option_storage.js';
+
+async function do_show_hints(show_hints_parameters, once) {
+    let config = await option_storage.get_per_session_options();
+    if (!once) {
+        config.startingCommand = ":=" + show_hints_parameters;
+        await option_storage.put_per_session_options(config);
+    }
+
+    // Get tab ID for current tab:
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const tab_id = tabs[0].id;
+
+    send_message_to_frame(tab_id, "CBV_NEW_EPOCH",
+                          {config: config,
+                           show_hint_parameters: show_hints_parameters});    
+}
+
+async function do_activate_hint(hint_descriptor, operation) {
+    // Get tab ID for current tab:
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const tab_id = tabs[0].id;
+
+    send_message_to_frame(tab_id, "CBV_PERFORM",
+                          {hint_descriptor: hint_descriptor,
+                           operation:       operation});    
+}
+
+export async function do_user_command(command_text) {
     // optional operation field is :<suffix> at end
     let hint_descriptor = command_text;
     let operation       = "";
@@ -14,17 +42,21 @@ export function do_user_command(command_text, close_window) {
         operation       = match[2];
     }
 
-    // Send hint number and operation to content_script.js for current tab:
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        send_message_to_frame(tabs[0].id, "CBV_PERFORM",
-                                {hint_descriptor: hint_descriptor,
-                                 operation:       operation});
-        if (close_window) {
-            // Closing the pop up window ends its JavaScript execution
-            // so need to do it only after all done here.
-            window.close();
-        }
-    });
+    // handle legacy show hints commands, rewriting them to use =:
+    if (/^(\+|-)/.test(operation)) {
+        operation = '=' + operation;
+    }
+    if (/^once(\+|-)/.test(operation)) {
+        operation = 'once=' + operation.substr(4);
+    }
+
+    if (operation.startsWith("=")) {
+        await do_show_hints(operation.substr(1), false);
+    } else if (operation.startsWith("once=")) {
+        await do_show_hints(operation.substr(5), true);
+    } else {
+        await do_activate_hint(hint_descriptor, operation);
+    }
 }
 
 

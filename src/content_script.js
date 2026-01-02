@@ -84,35 +84,28 @@ function perform_operation(operation, hint_descriptor) {
         return;
     }
 
-    // handle legacy show hints commands, rewriting them to use =:
-    if (/^(\+|-)/.test(operation)) {
-        operation = '=' + operation;
-    }
-    if (/^once(\+|-)/.test(operation)) {
-        operation = 'once=' + operation.substr(4);
-    }
-
-    if (operation.startsWith("=")) {
-        act("set_initial_operation", {initial_operation: ":" + operation});
-        Hints.remove_hints();
-        Hints.add_hints(operation.substr(1));
-        hints_replaced();
-    } else if (operation.startsWith("once=")) {
-        Hints.remove_hints();
-        Hints.add_hints(operation.substr(5));
-        hints_replaced();
-    } else {
-        Activate.goto_hint_descriptor(hint_descriptor, operation);
-        hint_activated();
-    }
+    Activate.goto_hint_descriptor(hint_descriptor, operation);
+    hint_activated();
 }
 
 
 function handle_service_worker_request(request, sendResponse) {
+    console.log(request); // <<<>>>
     const type = request.type;
     const data = request.data;
 
     switch (type) {
+    case "CBV_NEW_EPOCH":
+        {
+            Util.vlog(0, `New CBV epoch with show_hints "${data.show_hint_parameters}"`);
+            Hints.remove_hints();
+
+            Hints.set_config(data.config.config);
+            Hints.add_hints(data.show_hint_parameters);
+            hints_replaced();
+        }
+        break;
+
     case "CBV_PERFORM":
         {
             Util.vlog(0, `CBV Command: perform "${data.operation}" on "${data.hint_descriptor}"`);
@@ -141,18 +134,7 @@ if (window == window.top) {
         });
 
     $(document).ready(function() {
-        chrome.runtime.sendMessage({action: "get_per_session_options"}, function(response) {
-            if (chrome.runtime.lastError) {
-                console.error(chrome.runtime.lastError);
-            }
-            Hints.set_config(response.config);
-            // kludge: strip off (hopefully) leading colon:
-            perform_operation(response.startingCommand.substring(1), "");
-        });
-
-        // try and let initial operation above do 1st hint placement,
-        // but fall back on defaults if no response in five seconds:
-        next_major_refresh = new Date().getTime() + 5000;
+        act("CBV_HELLO", {});
         setInterval(maybe_refresh, 50);
     });
 

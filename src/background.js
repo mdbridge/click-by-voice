@@ -16,7 +16,7 @@ import * as option_storage from './option_storage.js';
 
 chrome.commands.onCommand.addListener(async function(command) {
     if (command == "blur") {
-        do_user_command(":blur", false);
+        await do_user_command(":blur");
 
     } else if (command == "execute_command_from_clipboard") {
         const input        = await clipboard.getClipboard();
@@ -27,7 +27,7 @@ chrome.commands.onCommand.addListener(async function(command) {
             command_text = match[1];
             await clipboard.putClipboard(match[2]);
         }
-        do_user_command(command_text, false);
+        await do_user_command(command_text);
     } else {
         console.error(`Unexpected keyboard shortcut name received by CBV: ${command}`);
     }
@@ -43,17 +43,10 @@ chrome.commands.onCommand.addListener(async function(command) {
 async function handle_content_script_message(request, sender) {
     switch (request.action) {
 
-        /*
-         * Accessing extension option storage
-         */
-    case "get_per_session_options":
-        return option_storage.get_per_session_options();
-    case "set_initial_operation":
-        let setOptions = await option_storage.get_per_session_options();
-        setOptions.startingCommand = request.initial_operation;
-        await option_storage.put_per_session_options(setOptions);
-        // console.log(`Initial_operation is now: ${request.initial_operation}`);
-        return { status: "success" };
+    case "CBV_HELLO":
+        const config = await option_storage.get_per_session_options();
+        await do_user_command(config.startingCommand);
+        return;
 
         /*
          * Opening URLs in a new tab/window
