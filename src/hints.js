@@ -193,13 +193,10 @@ var Hints = null;
     // 
     //
 
-    function place_hints(refreshing) {
-        if (!refreshing) {
-            Util.vlog(0, "adding hints: " + options_to_string());
-        }
+    function collect_unhinted_hintables() {
+        // Temporarily uncomment code here to measuring pure steps.
 
-        const starting_hint_count = HintManager.get_hint_number_stats().hints_made;
-        const start               = performance.now();
+        // const start = performance.now();
 
         // DomWalk.each_displaying(
         //     function (element, styles) {},
@@ -210,16 +207,45 @@ var Hints = null;
 
         // FindHint.each_hintable(function(element) {});
         // console.log("  just FindHint.each_hintable time:   " + (performance.now()-start) + " ms");
-        // start = performance.now();
 
+        let unhinted_hintables = [];
         FindHint.each_hintable(function($element, reason) {
             if (HintManager.is_hinted_element($element[0]))
                 return;
-            if (reason == "cursor: pointer" && Hints.option("C"))
-                AddHint.add_hint($element, /*force_high_contrast=*/true);
-            else
-                AddHint.add_hint($element, /*force_high_contrast=*/false);
+            unhinted_hintables.push({$element: $element, reason: reason});
         });
+        return unhinted_hintables;
+    }
+
+    function add_hints_to_hintables(hintables_info) {
+        hintables_info.forEach(({ $element, reason }) => {
+            // Later will need to check for $element[0] having become unconnected <<<>>>
+            if (HintManager.is_hinted_element($element[0]))
+                return;
+
+            const force_high_contrast =
+                  (reason === "cursor: pointer") && Hints.option("C");
+            AddHint.add_hint($element, force_high_contrast);
+        });
+    }
+
+    function place_hints(refreshing) {
+        if (!refreshing) {
+            Util.vlog(0, "adding hints: " + options_to_string());
+        }
+
+        const starting_hint_count = HintManager.get_hint_number_stats().hints_made;
+        const start               = performance.now();
+
+        const unhinted_hintables = collect_unhinted_hintables();
+
+        const needed_hint_numbers = unhinted_hintables.length;
+        if (needed_hint_numbers > 0) {
+            Util.vlog(1, `found ${needed_hint_numbers} elements that need hints`);
+        }
+
+        add_hints_to_hintables(unhinted_hintables);
+
         const work_start = performance.now();
         Batcher.sensing( () => { HintManager.adjust_hints(); } );
         const result = Batcher.do_work();
