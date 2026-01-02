@@ -68,7 +68,7 @@ let AddHint = null;
         return zindex;
     }
 
-    function $build_hint(hint_number, use_overlay, zindex) {
+    function $build_hint(hint_number, use_overlay, zindex, use_high_contrast) {
         const $outer = $build_base_element();
         $outer.attr("CBV_hint_tag", hint_number);
 
@@ -80,7 +80,7 @@ let AddHint = null;
 
             $inner.attr("CBV_inner_overlay2", "true");
             $inner.attr("CBV_hint_tag", hint_number);
-            if (Hints.option("c"))
+            if (use_high_contrast)
                 $inner.attr("CBV_high_contrast", "true");
 
             // IMPORTANT: need to have top, left set so offset(-[,-])
@@ -93,7 +93,7 @@ let AddHint = null;
 
         } else {
             $outer.attr("CBV_outer_inline", "true");
-            if (Hints.option("c"))
+            if (use_high_contrast)
                 $outer.attr("CBV_high_contrast", "true");
         }
 
@@ -210,7 +210,7 @@ let AddHint = null;
     }
 
 
-    function add_overlay_hint($element, hint) {
+    function add_overlay_hint($element, hint, use_high_contrast) {
         let show_at_end = !Hints.option("s");
 
         // needs to be before we insert the hint tag <<<>>>
@@ -262,7 +262,7 @@ let AddHint = null;
             // console.log("added hint " +  hint.hint_number);
             // console.log($element[0]);
 
-            const $hint_tag = $build_hint(hint.hint_number, true, zindex);
+            const $hint_tag = $build_hint(hint.hint_number, true, zindex, use_high_contrast);
             const $inner    = $hint_tag.children().first();
             insert_element($container, $hint_tag, !after, inside);
             hint.initialize($hint_tag[0]);
@@ -361,7 +361,7 @@ let AddHint = null;
     //
 
     // Returns false iff unable to safely add hint.
-    function add_inline_hint_inside($element, hint) {
+    function add_inline_hint_inside($element, hint, use_high_contrast) {
         if (hints_excluded($element)) {
             return false;
         }
@@ -399,7 +399,7 @@ let AddHint = null;
             }
 
             Batcher.mutating(() => {
-                const $hint_tag = $build_hint(hint.hint_number, false, 0);
+                const $hint_tag = $build_hint(hint.hint_number, false, 0, use_high_contrast);
                 insert_element($current, $hint_tag, put_before, true);
                 hint.initialize($hint_tag[0]);
             });
@@ -410,13 +410,13 @@ let AddHint = null;
 
     // This is often unsafe; prefer add_inline_hint_inside.
     // Returns false if unable to add hint.
-    function add_inline_hint_outside($element, hint) {
+    function add_inline_hint_outside($element, hint, use_high_contrast) {
         if (hints_excluded($element)) {
             return false;
         }
 
         Batcher.mutating(() => {
-            const $hint_tag = $build_hint(hint.hint_number, false, 0);
+            const $hint_tag = $build_hint(hint.hint_number, false, 0, use_high_contrast);
             insert_element($element, $hint_tag, false, false);
             hint.initialize($hint_tag[0]);
         });
@@ -425,30 +425,31 @@ let AddHint = null;
 
 
 
-    function add_hint($element) {
+    function add_hint($element, force_high_contrast) {
+        const use_high_contrast = force_high_contrast || !!Hints.option("c");
         const hint = HintManager.make_hint($element[0]);
         Batcher.sensing(() => {
             if (Hints.option("o")) {
-                add_overlay_hint($element, hint);
+                add_overlay_hint($element, hint, use_high_contrast);
                 return;
             }
 
             if (Hints.option("h")) {
-                if (!add_inline_hint_inside($element, hint)) {
+                if (!add_inline_hint_inside($element, hint, use_high_contrast)) {
                     // if ($element.is("input[type=checkbox], input[type=radio]")) {
                     //     add_inline_hint_outside($element, hint);
                     //     return null;
                     // }
-                    return add_overlay_hint($element, hint);
+                    return add_overlay_hint($element, hint, use_high_contrast);
                 }
                 return;
             }
 
             // current fallback is inline
             if (Hints.option("i") || true) {
-                if (add_inline_hint_inside($element, hint))
+                if (add_inline_hint_inside($element, hint, use_high_contrast))
                     return;
-                if (add_inline_hint_outside($element, hint))
+                if (add_inline_hint_outside($element, hint, use_high_contrast))
                     return;
                 Util.vlog(4, "skipping adding inline hint because inline location is excluded");
                 // This is a bit of a Kluge as we will keep attempting

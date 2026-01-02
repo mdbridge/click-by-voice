@@ -220,10 +220,13 @@ var Hints = null;
         // console.log("  just FindHint.each_hintable time:   " + (performance.now()-start) + " ms");
         // start = performance.now();
 
-        FindHint.each_hintable(function($element) {
+        FindHint.each_hintable(function($element, reason) {
             if (HintManager.is_hinted_element($element[0]))
                 return;
-            AddHint.add_hint($element);
+            if (reason == "cursor: pointer" && Hints.option("C"))
+                AddHint.add_hint($element, /*force_high_contrast=*/true);
+            else
+                AddHint.add_hint($element, /*force_high_contrast=*/false);
         });
         const work_start = performance.now();
         Batcher.sensing( () => { HintManager.adjust_hints(); } );

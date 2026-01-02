@@ -167,7 +167,8 @@ let FindHint = null;
         }
     }
 
-    // Enumerate each element that we should hint:
+    // Enumerate each element that we should hint.  callback is
+    // called once for each hintable element found as callback($element, reason).
     function each_hintable(callback) {
         let has_hinted_element = new WeakSet();
         function set_hinted($element) {
@@ -182,7 +183,7 @@ let FindHint = null;
             function ($element, styles) {
                 if (hintable($element, styles)) {
                     set_hinted($element);
-                    callback($element);
+                    callback($element, "hintable");
                 }
 
                 // post-order traversal:
@@ -216,11 +217,7 @@ let FindHint = null;
                     return false;
 
                 set_hinted($element);
-                if (Hints.option("C"))
-                    Hints.with_high_contrast(
-                        function () { callback($element); });
-                else
-                    callback($element);
+                callback($element, "cursor: pointer");
             },
             Hints.option_value('!') // exclusion
         );
