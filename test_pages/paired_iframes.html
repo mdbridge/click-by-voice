@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iframe Test Page</title>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, sans-serif;
+    }
+
+    .topbar {
+      padding: 10px 12px;
+      border-bottom: 1px solid #ccc;
+      background: #f7f7f7;
+    }
+
+    .topbar a {
+      margin-right: 16px;
+    }
+
+    .split {
+      height: calc(100% - 48px);
+      display: flex;
+    }
+
+    .split iframe {
+      flex: 1 1 50%;
+      border: 0;
+      width: 50%;
+      height: 100%;
+    }
+
+    .split iframe + iframe {
+      border-left: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">Google</a>
+    <a href="https://www.bing.com" target="_blank" rel="noopener noreferrer">Bing</a>
+  </div>
+
+  <div class="split">
+    <iframe src="https://example.com" title="Example.com"></iframe>
+    <iframe src="https://example.org" title="Example.org"></iframe>
+  </div>
+
+</body>
+</html>

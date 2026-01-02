@@ -5,9 +5,9 @@
 // console for the service worker, not the webpage.
 //
 
-import * as clipboard      from './background_clipboard.js';
-import { do_user_command } from './background_utilities.js';
-import * as option_storage from './option_storage.js';
+import * as clipboard            from './background_clipboard.js';
+import * as background_utilities from './background_utilities.js';
+import * as option_storage       from './option_storage.js';
 
 
 //
@@ -16,7 +16,7 @@ import * as option_storage from './option_storage.js';
 
 chrome.commands.onCommand.addListener(async function(command) {
     if (command == "blur") {
-        await do_user_command(":blur");
+        await background_utilities.do_user_command(":blur");
 
     } else if (command == "execute_command_from_clipboard") {
         const input        = await clipboard.getClipboard();
@@ -27,7 +27,7 @@ chrome.commands.onCommand.addListener(async function(command) {
             command_text = match[1];
             await clipboard.putClipboard(match[2]);
         }
-        await do_user_command(command_text);
+        await background_utilities.do_user_command(command_text);
     } else {
         console.error(`Unexpected keyboard shortcut name received by CBV: ${command}`);
     }
@@ -48,9 +48,18 @@ async function handle_content_script_message(request, sender) {
     switch (request.action) {
 
     case "CBV_HELLO":
-        const config = await option_storage.get_per_session_options();
-        await do_user_command(config.startingCommand, tab_id);
-        return;
+        {
+            if (frame_id === 0) {
+                const config = await option_storage.get_per_session_options();
+                await background_utilities.do_user_command(config.startingCommand, tab_id);
+                // The above will send CBV_NEW_EPOCH to all frames.
+                return { status: "welcome" };
+            } else {
+                await background_utilities.notify_new_epoch(tab_id, frame_id);
+                return { status: "welcome iframe" };
+            }
+        }
+
 
         /*
          * Opening URLs in a new tab/window

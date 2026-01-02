@@ -93,10 +93,12 @@ function handle_service_worker_request(request, sendResponse) {
     console.log(request); // <<<>>>
     const type = request.type;
     const data = request.data;
+    const frame_id = request.frame_id;
 
     switch (type) {
     case "CBV_NEW_EPOCH":
         {
+            Util.set_my_frame_id(frame_id);
             Util.vlog(0, `New CBV epoch with show_hints "${data.show_hint_parameters}"`);
             Hints.remove_hints();
 
@@ -144,9 +146,22 @@ if (window == window.top) {
     try {
         void window.parent.document;
         sameOrigin = true;
-    } catch {}
+    } catch (e) {}
 
     if (!sameOrigin) {
         console.log("Unable to provide hints for cross-origin", location.href);
+    }
+
+    // <<<>>>
+    if (!sameOrigin) {
+        chrome.runtime.onMessage.addListener(
+            function(request, sender, sendResponse) {
+                handle_service_worker_request(request, sendResponse);
+            });
+
+        $(document).ready(function() {
+            act("CBV_HELLO", {});
+            setInterval(maybe_refresh, 50);
+        });
     }
 }

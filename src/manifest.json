@@ -7,9 +7,10 @@
 
     "permissions": [
 	"clipboardRead",
-	"clipboardWrite", // not required but polite
+	"clipboardWrite",  // Not required but polite
 	"storage",
-	"offscreen"       // needed for clipboard access from background service worker
+	"offscreen",       // Needed for clipboard access from background service worker
+        "webNavigation"    // Needed to enumerate all frames
     ],
 
     // icons for elsewhere than the toolbar (e.g., chrome://extensions, chrome web store)

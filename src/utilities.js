@@ -9,10 +9,16 @@ let Util = null;
 
 (function() {
 
+    let my_frame_id = -1;
+
+    function set_my_frame_id(frame_id) {
+        my_frame_id = frame_id;
+    }
+
     function vlog(level, ...args) {
         const verbose_level = Hints.option_value("verbose", "0");
         if (level <= Number(verbose_level)) {
-            console.log(...args);
+            console.log(my_frame_id, ...args);
         }
     }
 
@@ -125,6 +131,8 @@ let Util = null;
 
 
     Util = {
+        set_my_frame_id: set_my_frame_id,
+
         time: time,
         vlog: vlog,
 
