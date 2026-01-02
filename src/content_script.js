@@ -108,6 +108,24 @@ function perform_operation(operation, hint_descriptor) {
 }
 
 
+function handle_service_worker_request(request, sendResponse) {
+    const type = request.type;
+    const data = request.data;
+
+    switch (type) {
+    case "CBV_PERFORM":
+        {
+            Util.vlog(0, `CBV Command: perform "${data.operation}" on "${data.hint_descriptor}"`);
+            perform_operation(data.operation, data.hint_descriptor);
+        }
+        break;
+
+    default:
+        console.log(`Unknown CBV service worker message type: ${type}`);
+        break;
+    }
+}
+
 
 //
 // Startup of a page code
@@ -119,8 +137,7 @@ if (window == window.top) {
 
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
-            Util.vlog(0, `CBV Command: perform "${request.operation}" on "${request.hint_descriptor}"`);
-            perform_operation(request.operation, request.hint_descriptor);
+            handle_service_worker_request(request, sendResponse);
         });
 
     $(document).ready(function() {

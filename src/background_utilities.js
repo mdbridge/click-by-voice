@@ -16,7 +16,7 @@ export function do_user_command(command_text, close_window) {
 
     // Send hint number and operation to content_script.js for current tab:
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, 
+        send_message_to_frame(tabs[0].id, "CBV_PERFORM",
                                 {hint_descriptor: hint_descriptor,
                                  operation:       operation});
         if (close_window) {
@@ -25,4 +25,10 @@ export function do_user_command(command_text, close_window) {
             window.close();
         }
     });
+}
+
+
+export function send_message_to_frame(tab_id, message_type, data) {
+    let message = {type: message_type, data: data};
+    chrome.tabs.sendMessage(tab_id, message);
 }
