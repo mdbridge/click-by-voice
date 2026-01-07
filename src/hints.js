@@ -149,15 +149,6 @@ var Hints = null;
         }
     }
 
-    function with_high_contrast(callback) {
-        const saved = options_;
-        options_= new Map(options_);
-        set_option('c', []);
-        callback();
-        options_ = saved;
-    }
-
-
 
     //
     // 
@@ -260,6 +251,5 @@ var Hints = null;
 
         option:              option,
         option_value:        option_value,
-        with_high_contrast:  with_high_contrast,
     };
 })();
