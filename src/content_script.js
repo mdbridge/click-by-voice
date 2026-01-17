@@ -99,9 +99,17 @@ function handle_service_worker_request(request, sendResponse) {
     case "CBV_NEW_EPOCH":
         {
             Util.set_my_frame_id(frame_id);
-            Util.vlog(0, `New CBV epoch with show_hints "${data.show_hint_parameters}"`);
-            Hints.remove_hints();
 
+            if (data.epoch <= Util.get_epoch()) {
+                Util.vlog(1, `Ignoring stale epoch ${data.epoch} (current: ${Util.get_epoch()})`); // <<<>>>
+                break;
+            }
+
+            Util.set_epoch(data.epoch);
+            Util.vlog(0, `New CBV epoch ${data.epoch}` +
+                      ` with show_hints "${data.show_hint_parameters}"`);
+
+            Hints.remove_hints();
             Hints.set_config(data.config.config);
             Hints.add_hints(data.show_hint_parameters);
             hints_replaced();

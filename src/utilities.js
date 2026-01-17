@@ -9,11 +9,23 @@ let Util = null;
 
 (function() {
 
-    let my_frame_id = -1;
+    let my_frame_id   = -1;
+    let current_epoch = 0;
 
     function set_my_frame_id(frame_id) {
         my_frame_id = frame_id;
     }
+
+
+    function get_epoch() {
+        return current_epoch;
+    }
+
+    function set_epoch(epoch) {
+        current_epoch = epoch;
+        vlog(1, `Frame epoch: ${epoch}`); // <<<>>>
+    }
+
 
     function vlog(level, ...args) {
         const verbose_level = Hints.option_value("verbose", "0");
@@ -133,8 +145,11 @@ let Util = null;
     Util = {
         set_my_frame_id: set_my_frame_id,
 
-        time: time,
+        get_epoch: get_epoch,
+        set_epoch: set_epoch,
+
         vlog: vlog,
+        time: time,
 
         getVisualParentElement: getVisualParentElement,
         getVisualParent$Element: getVisualParent$Element,

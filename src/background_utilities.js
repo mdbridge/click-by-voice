@@ -5,6 +5,34 @@
 
 import * as option_storage from './option_storage.js';
 
+
+async function generate_next_epoch() {
+    const result = await chrome.storage.session.get('next_global_epoch');
+    const next_epoch = (result.next_global_epoch || 0);
+    await chrome.storage.session.set({ next_global_epoch: next_epoch + 1 });
+    return next_epoch;
+}
+
+async function get_tab_info(tab_id) {
+    const key = `tab_${tab_id}`;
+    const result = await chrome.storage.session.get(key);
+    return result[key] || null;
+}
+
+async function initialize_tab_info(tab_id, show_hints_parameters) {
+    const key = `tab_${tab_id}`;
+    const epoch = await generate_next_epoch();
+    await chrome.storage.session.set({
+        [key]: {
+            epoch: epoch,
+            show_hints_parameters: show_hints_parameters
+        }
+    });
+    console.log(`CBV: initialized tab ${tab_id}, epoch ${epoch}, params: "${show_hints_parameters}"`); // <<<>>>
+    return epoch;
+}
+
+
 async function do_show_hints(tab_id, show_hints_parameters, once) {
     if (!once) {
         let config = await option_storage.get_per_session_options();
@@ -18,7 +46,8 @@ async function do_show_hints(tab_id, show_hints_parameters, once) {
         tab_id = tabs[0].id;
     }
 
-    await notify_all_of_new_epoch(tab_id, show_hints_parameters);
+    await initialize_tab_info(tab_id, show_hints_parameters);
+    await notify_new_epoch(tab_id);
 }
 
 async function do_activate_hint(tab_id, hint_descriptor, operation) {
@@ -76,25 +105,29 @@ export function send_message_to_frame(tab_id, frame_id, message_type, data) {
 }
 
 
-let last_show_hints_parameters = "";  // <<<>>>
-
-export async function notify_all_of_new_epoch(tab_id, show_hints_parameters) {
-    last_show_hints_parameters = show_hints_parameters; // <<<>>>
-
-    const config = await option_storage.get_per_session_options();
-    const data   = {config: config, show_hint_parameters: show_hints_parameters};
-
-    const frames = await chrome.webNavigation.getAllFrames({ tabId: tab_id });
-    frames.forEach(({ frameId }) => {
-        send_message_to_frame(tab_id, frameId, "CBV_NEW_EPOCH", data);
-    });
-}
-
-export async function notify_new_epoch(tab_id, frame_id) {
-    const show_hints_parameters = last_show_hints_parameters; // <<<>>>
+export async function notify_new_epoch(tab_id, frame_id = -1) {
+    const tab_info = await get_tab_info(tab_id);
+    if (!tab_info) {
+        // A non-top frame may have caused us to reach here before the
+        // top frame has done show hints; do nothing -- when the top
+        // frame does show hints we will get notified at that time
+        // with the actual data.
+        return;
+    }
 
     const config = await option_storage.get_per_session_options();
-    const data   = {config: config, show_hint_parameters: show_hints_parameters};
+    const data = {
+        epoch:                tab_info.epoch,
+        config:               config,
+        show_hint_parameters: tab_info.show_hints_parameters
+    };
 
-    send_message_to_frame(tab_id, frame_id, "CBV_NEW_EPOCH", data);
+    if (frame_id === -1) {
+        const frames = await chrome.webNavigation.getAllFrames({ tabId: tab_id });
+        frames.forEach(({ frameId }) => {
+            send_message_to_frame(tab_id, frameId, "CBV_NEW_EPOCH", data);
+        });
+    } else {
+        send_message_to_frame(tab_id, frame_id, "CBV_NEW_EPOCH", data);
+    }
 }
