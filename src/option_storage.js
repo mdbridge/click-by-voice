@@ -1,6 +1,6 @@
-//
-// Routines to store options and per-session changes
-//
+///
+/// Routines to store options and per-browser-session changes
+///
 
 //
 // Our saved options, set via extension options pop-up.
@@ -22,7 +22,7 @@ export async function put_saved_options(options) {
 
 
 //
-// Per-session versions
+// Per-browser-session versions
 //
 
 export async function get_per_session_options() {
