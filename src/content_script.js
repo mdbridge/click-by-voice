@@ -186,11 +186,7 @@ if (window == window.top) {
         sameOrigin = true;
     } catch (e) {}
 
-    if (!sameOrigin) {
-        console.log("Unable to provide hints for cross-origin", location.href);
-    }
-
-    // <<<>>>
+    // Skip running listeners for same origin frames.
     if (!sameOrigin) {
         chrome.runtime.onMessage.addListener(
             function(request, sender, sendResponse) {
