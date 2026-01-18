@@ -20,6 +20,7 @@ export async function allocate_hint_batch(tab_id, frame_id, needed_hint_numbers,
         console.log(`CBV: Allocated hints ${first}-${last} to frame ${frame_id}`); // <<<>>>
 
         tab_info_data.next_hint_number = last + 1;
+        tab_info_data.hint_map[first]  = { frame_id: frame_id, last: last };
         return tab_info_data;
     });
     return answer;
@@ -40,12 +41,41 @@ async function do_show_hints(tab_id, show_hints_parameters, once) {
     }
 
     const initial_data = {show_hints_parameters: show_hints_parameters,
-                          next_hint_number: 0
+                          next_hint_number:      0,
+                          // maps first_hint_number -> {frame_id, last}:
+                          hint_map:              {}
                          };
     const epoch = await background_persistence.initialize_tab_info(tab_id, initial_data);
     console.log(`CBV: initialized tab ${tab_id}, epoch ${epoch},` +
                 ` params: "${show_hints_parameters}"`); // <<<>>>
     await notify_new_epoch(tab_id);
+}
+
+// Returns frame_id that owns the given hint number, or null if not found.
+function get_frame_for_hint(hint_map, hint_number) {
+    // Get range starts as sorted numbers
+    const range_starts = Object.keys(hint_map)
+        .map(Number)
+        .sort((a, b) => a - b);
+
+    // Find largest range start <= hint_number
+    let found_start = null;
+    for (const start of range_starts) {
+        if (start <= hint_number) {
+            found_start = start;
+        } else {
+            break;
+        }
+    }
+    if (found_start === null) {
+        return null;
+    }
+
+    const range = hint_map[found_start];
+    if (hint_number <= range.last) {
+        return range.frame_id;
+    }
+    return null;
 }
 
 async function do_activate_hint(tab_id, hint_descriptor, operation) {
@@ -55,9 +85,25 @@ async function do_activate_hint(tab_id, hint_descriptor, operation) {
         tab_id = tabs[0].id;
     }
 
-    send_message_to_frame(tab_id, 0, "CBV_PERFORM",
+    // Determine which frame to send to.
+    let frame_id = 0;
+    const hint_number = parseInt(hint_descriptor, 10);
+    if (!isNaN(hint_number) && hint_number >= 0 && String(hint_number) === hint_descriptor) {
+        // It's a valid non-negative integer hint number - look up owning frame
+        const tab_info = await background_persistence.get_tab_info(tab_id);
+        if (tab_info) {
+            const owning_frame = get_frame_for_hint(tab_info.data.hint_map, hint_number);
+            if (owning_frame !== null) {
+                frame_id = owning_frame;
+            }
+            // If not found in hint_map, fall through to frame 0
+        }
+    }
+    // Non-integer descriptors (${...}, empty for blur, etc.) use frame 0.
+
+    send_message_to_frame(tab_id, frame_id, "CBV_PERFORM",
                           {hint_descriptor: hint_descriptor,
-                           operation:       operation});    
+                           operation:       operation});
 }
 
 export async function do_user_command(command_text, tab_id = -1) {
