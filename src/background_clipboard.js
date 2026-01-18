@@ -1,7 +1,6 @@
-//
-// Routines for accessing the clipboard from the background service worker.
-//
-
+///
+/// Routines for accessing the clipboard from the background service worker.
+///
 
 //
 // As of September 2023, manifest version 3 requires a workaround to

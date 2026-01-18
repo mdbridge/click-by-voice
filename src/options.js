@@ -1,6 +1,6 @@
-//
-// JavaScript to implement options.html page, which is the pop-up for setting extension options.
-//
+///
+/// JavaScript to implement options.html page, which is the pop-up for setting extension options.
+///
 
 import * as option_storage from './option_storage.js';
 

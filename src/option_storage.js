@@ -1,5 +1,5 @@
 ///
-/// Routines to store options and per-browser-session changes
+/// Routines to store options and per-browser-session changes to them
 ///
 
 //

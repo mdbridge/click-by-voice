@@ -1,9 +1,9 @@
-//
-// JavaScript to implement background_clipboard_offscreen.html page.
-//
-// That is an offscreen document used to implement clipboard access
-// for the service worker; see background_clipboard.js for how it is used.
-//
+///
+/// JavaScript to implement background_clipboard_offscreen.html page.
+///
+/// That is an offscreen document used to implement clipboard access
+/// for the service worker; see background_clipboard.js for how it is used.
+///
 
 
 //
