@@ -44,10 +44,11 @@
   <div class="topbar">
     <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">Google</a>
     <a href="https://www.bing.com" target="_blank" rel="noopener noreferrer">Bing</a>
+    <button onclick="document.getElementById('left-frame').src = document.getElementById('left-frame').src">Reload Left Frame</button>
   </div>
 
   <div class="split">
-    <iframe src="https://example.com" title="Example.com"></iframe>
+    <iframe id="left-frame" src="https://example.com" title="Example.com"></iframe>
     <iframe src="https://example.org" title="Example.org"></iframe>
   </div>
 
