@@ -13,14 +13,14 @@ export async function allocate_hint_batch(tab_id, frame_id, needed_hint_numbers,
     }
 
     let answer = null;
-    await background_persistence.update_tab_info(tab_id, epoch, (tab_info) => {
-        const first = tab_info.next_hint_number;
+    await background_persistence.update_tab_info(tab_id, epoch, (tab_info_data) => {
+        const first = tab_info_data.next_hint_number;
         const last  = first + needed_hint_numbers - 1;
         answer = { first: first, last: last };
         console.log(`CBV: Allocated hints ${first}-${last} to frame ${frame_id}`); // <<<>>>
 
-        tab_info.next_hint_number = last + 1;
-        return tab_info;
+        tab_info_data.next_hint_number = last + 1;
+        return tab_info_data;
     });
     return answer;
 }
@@ -117,7 +117,7 @@ export async function notify_new_epoch(tab_id, frame_id = -1) {
     const data = {
         epoch:                tab_info.epoch,
         config:               config,
-        show_hint_parameters: tab_info.show_hints_parameters
+        show_hint_parameters: tab_info.data.show_hints_parameters
     };
 
     if (frame_id === -1) {
