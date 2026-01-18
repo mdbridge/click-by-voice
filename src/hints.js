@@ -23,27 +23,32 @@ var Hints = null;
         config_= config;
     }
 
-    function add_hints(parameters) {
+    // Returns work time taken in milliseconds.
+    async function add_hints(parameters) {
         set_hinting_parameters(parameters);
         if (option_value('+', 1) > 0) {
             hinting_on_ = true;
-            place_hints(false);
+            return await place_hints(false);
         } else {
             Util.vlog(0, "not adding hints: " + options_to_string());
-            remove_hints();
+            return await remove_hints();
         }
     }
 
-    function refresh_hints() {
+    // Returns work time taken in milliseconds.
+    async function refresh_hints() {
         if (hinting_on_)
-            place_hints(true);
+            return await place_hints(true);
+        return 0;
     }
 
+    // Returns work time taken in milliseconds.
     function remove_hints() {
+        const start = performance.now();
         HintManager.discard_hints();
-        HintManager.add_hint_number_block(0, 100000); // <<<>>>
         remove_hints_from(document)
         hinting_on_ = false;
+        return performance.now() - start;
     }
     function remove_hints_from(from) {
         // This doesn't search open shadow roots, but we should not
@@ -218,53 +223,96 @@ var Hints = null;
     }
 
     function add_hints_to_hintables(hintables_info) {
-        hintables_info.forEach(({ $element, reason }) => {
-            // Later will need to check for $element[0] having become unconnected <<<>>>
-            if (HintManager.is_hinted_element($element[0]))
-                return;
-
+        for (const { $element, reason } of hintables_info) {
+            if (!$element[0].isConnected) {
+                Util.vlog(3, "Skipping hint - element no longer connected"); // <<<>>>
+                continue;
+            }
+            // Safety check; should not be possible.
+            if (HintManager.is_hinted_element($element[0])) {
+                continue;
+            }
             const force_high_contrast =
                   (reason === "cursor: pointer") && Hints.option("C");
             AddHint.add_hint($element, force_high_contrast);
-        });
+        }
     }
 
-    function place_hints(refreshing) {
+
+    // Returns work time taken in milliseconds.
+    async function place_hints(refreshing) {
         if (!refreshing) {
             Util.vlog(0, "adding hints: " + options_to_string());
         }
 
         const starting_hint_count = HintManager.get_hint_number_stats().hints_made;
-        const start               = performance.now();
 
-        const unhinted_hintables = collect_unhinted_hintables();
 
-        const needed_hint_numbers = unhinted_hintables.length;
-        if (needed_hint_numbers > 0) {
-            Util.vlog(1, `found ${needed_hint_numbers} elements that need hints`);
+        // PHASE 1: Collect hintable elements (synchronous DOM walk)
+        let   start                   = performance.now();
+        const unhinted_hintables      = collect_unhinted_hintables();
+        const walk_time               = performance.now() - start;
+        const expected_new_hint_count = unhinted_hintables.length;
+        if (expected_new_hint_count > 0) {
+            Util.vlog(1, `found ${expected_new_hint_count} elements that need hints`);
         }
 
+
+        // PHASE 2: Request exact number of new hint numbers needed from background (async)
+        const needed_hint_numbers = expected_new_hint_count
+              - HintManager.get_hint_number_stats().numbers_available;
+        if (needed_hint_numbers > 0) {
+            const starting_epoch = Util.get_epoch();
+            let response;
+            try {
+                response = await chrome.runtime.sendMessage({
+                    action: "request_hint_batch",
+                    needed_hint_numbers: needed_hint_numbers,
+                    epoch: starting_epoch
+                });
+            } catch (e) {
+                console.error("CBV: Error requesting hints:", e);
+                return walk_time;
+            }
+
+            // Epoch may have changed while we were waiting
+            if (starting_epoch !== Util.get_epoch()) {
+                Util.vlog(1, `Epoch changed during hint request. Aborting.`); // <<<>>>
+                return walk_time;
+            }
+
+            if (response.rejected) {
+                Util.vlog(1, `Hint request rejected (stale epoch). Aborting.`); // <<<>>>
+                return walk_time;
+            }
+            HintManager.add_hint_number_block(response.first, response.last);
+        }
+
+
+        // PHASE 3: Place hints on collected elements, adjust (existing) hints (synchronous)
+        start = performance.now();
         add_hints_to_hintables(unhinted_hintables);
+        Batcher.sensing(() => { HintManager.adjust_hints(); });
+        const result       = Batcher.do_work();
+        const placing_time = performance.now() - start;
 
-        const work_start = performance.now();
-        Batcher.sensing( () => { HintManager.adjust_hints(); } );
-        const result = Batcher.do_work();
 
-        const stats      = HintManager.get_hint_number_stats();
-        const hints_made = stats.hints_made - starting_hint_count;
+        const total_work_time = walk_time + placing_time;
+        const stats           = HintManager.get_hint_number_stats();
+        const hints_made      = stats.hints_made - starting_hint_count;
         if (Hints.option("timing") || hints_made > 0) {
             const max_hint_number = stats.max_hint_number_used;
             const hints_in_use    = stats.hints_in_use;
-            Util.vlog(1, `+${hints_made} -> ${hints_in_use} hints` +
+            Util.vlog(1,
+                      `+${hints_made} -> ${hints_in_use} hints` +
                       ` (number high water ${max_hint_number})` +
-                      ` in ${Util.time(start)}: walk: ${Util.time(start, work_start)};` +
-                      ` add/adjust: ${result}`);
-
-            // for (let i = 1; i < 10; i++) {
-            //     Batcher.sensing( () => { HintManager.adjust_hints(); } );
-            //     console.log("again: " +Batcher.do_work());                
-            // }
+                      ` in ${Util.time(0, total_work_time)}:` +
+                      ` walk: ${Util.time(0, walk_time)};` +
+                      ` add/adjust: ${Util.time(0, placing_time)} via ${result}`);
         }
+
+
+        return total_work_time;
     }
 
 

@@ -5,12 +5,29 @@
 "use strict";
 
 
+// Returns work time taken in milliseconds.
+async function do_refresh(full_refresh, show_hint_parameters) {
+    if (full_refresh) {
+        const removal_time = await Hints.remove_hints();
+        return removal_time + await Hints.add_hints(show_hint_parameters);
+    } else {
+        return await Hints.refresh_hints();
+    }
+}
+
+
 //
 // When to refresh hints
 //
 
 // -1 means we are hidden
 let next_major_refresh = 0;
+
+// State for async refresh control
+let refresh_in_progress          = false;
+let full_refresh_requested       = false;
+let pending_show_hint_parameters = "";       // used when full_refresh_requested is true.
+
 
 function get_refresh_parameters() {
     return {
@@ -21,8 +38,15 @@ function get_refresh_parameters() {
     };
 }
 
-// This runs even when our tab is in the background:
+// This is run every 50 ms for frames with refreshing once we have started.
 function maybe_refresh() {
+    // Run at most one refresh at a time.
+    if (refresh_in_progress) {
+        return;
+    }
+
+    // This functions runs even when our tab is in the background;
+    // avoid refreshing in that case.
     if (document.hidden) {
         if (next_major_refresh < 0)
             return;
@@ -35,35 +59,44 @@ function maybe_refresh() {
         Util.vlog(1, "resuming refreshing due to being unhidden");
     }
 
-    const now = new Date().getTime();
-    if (now <= next_major_refresh) {
-        return;
+    if (! full_refresh_requested) {
+        const now = new Date().getTime();
+        if (now <= next_major_refresh) {
+            return;
+        }
     }
 
-    const start_time = performance.now();
-    Hints.refresh_hints();
-    const last_refresh_time = performance.now() - start_time;
+    refresh_in_progress      = true;
+    const doing_full_request = full_refresh_requested;
+    full_refresh_requested   = false;
 
-    const p = get_refresh_parameters();
-    let delay_till_next_refresh = last_refresh_time *
-                                  (1-p.maximum_refresh_cpu)/p.maximum_refresh_cpu;
-    delay_till_next_refresh = Math.max(delay_till_next_refresh, p.minimum_refresh_delay);
-    delay_till_next_refresh = Math.min(delay_till_next_refresh, p.maximum_refresh_delay);
+    do_refresh(doing_full_request, pending_show_hint_parameters).then((work_time_taken) => {
+        const last_refresh_time = work_time_taken;
+        const p = get_refresh_parameters();
+        if (doing_full_request) {
+            // We don't know how long the next refresh will take so let's be aggressive.
+            next_major_refresh = new Date().getTime() + p.minimum_refresh_delay;
+        } else {
+            let delay_till_next_refresh = last_refresh_time *
+                (1-p.maximum_refresh_cpu)/p.maximum_refresh_cpu;
+            delay_till_next_refresh = Math.max(delay_till_next_refresh, p.minimum_refresh_delay);
+            delay_till_next_refresh = Math.min(delay_till_next_refresh, p.maximum_refresh_delay);
 
-    const estimated_refresh_cpu = last_refresh_time/(delay_till_next_refresh+last_refresh_time);
-    if (Hints.option("timing")) {
-        Util.vlog(2, `refresh took ${last_refresh_time.toFixed(1)} ms;` +
-                     ` scheduling next refresh in ${delay_till_next_refresh.toFixed(1)} ms;` +
-                     ` estimated refresh CPU ${(estimated_refresh_cpu*100).toFixed(1)}%`);
-    }
+            const estimated_refresh_cpu = last_refresh_time
+                                          / (delay_till_next_refresh+last_refresh_time);
+            if (Hints.option("timing")) {
+                Util.vlog(2, `refresh took ${last_refresh_time.toFixed(1)} ms;` +
+                          ` scheduling next refresh in ${delay_till_next_refresh.toFixed(1)} ms;` +
+                          ` estimated refresh CPU ${(estimated_refresh_cpu*100).toFixed(1)}%`);
+            }
 
-    next_major_refresh = new Date().getTime() + delay_till_next_refresh;
-}
-
-function hints_replaced() {
-    const p = get_refresh_parameters();
-    // We don't know how long the next refresh will take so let's be aggressive.
-    next_major_refresh = new Date().getTime() + p.minimum_refresh_delay;
+            next_major_refresh = new Date().getTime() + delay_till_next_refresh;
+        }
+    }).catch(err => {
+        console.error("CBV: Error during refresh:", err);
+    }).finally(() => {
+        refresh_in_progress    = false;
+    });
 }
 
 function hint_activated() {
@@ -99,7 +132,6 @@ function handle_service_worker_request(request, sendResponse) {
     case "CBV_NEW_EPOCH":
         {
             Util.set_my_frame_id(frame_id);
-
             if (data.epoch <= Util.get_epoch()) {
                 Util.vlog(1, `Ignoring stale epoch ${data.epoch} (current: ${Util.get_epoch()})`); // <<<>>>
                 break;
@@ -109,10 +141,9 @@ function handle_service_worker_request(request, sendResponse) {
             Util.vlog(0, `New CBV epoch ${data.epoch}` +
                       ` with show_hints "${data.show_hint_parameters}"`);
 
-            Hints.remove_hints();
             Hints.set_config(data.config.config);
-            Hints.add_hints(data.show_hint_parameters);
-            hints_replaced();
+            full_refresh_requested       = true;
+            pending_show_hint_parameters = data.show_hint_parameters;
         }
         break;
 
@@ -134,7 +165,6 @@ function handle_service_worker_request(request, sendResponse) {
 // Startup of a page code
 //
 
-HintManager.add_hint_number_block(0, 100000); // <<<>>>
 if (window == window.top) {
     // the following only runs outside of any iframes
 

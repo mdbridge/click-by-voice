@@ -60,6 +60,20 @@ async function handle_content_script_message(request, sender) {
             }
         }
 
+    case "request_hint_batch":
+        {
+            const block = await background_utilities.allocate_hint_batch(
+                tab_id,
+                frame_id,
+                request.needed_hint_numbers,
+                request.epoch
+            );
+            if (block === null) {
+                return { rejected: true };
+            }
+            return { rejected: false, first: block.first, last: block.last };
+        }
+
 
         /*
          * Opening URLs in a new tab/window

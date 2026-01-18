@@ -6,6 +6,17 @@
 import * as option_storage from './option_storage.js';
 
 
+// Promise chain to serialize operations that modify tab state
+let tab_state_queue = Promise.resolve();
+
+async function perform_tab_operation(operation) {
+    const result_promise = tab_state_queue.then(operation);
+    // Update queue, ignore errors for chaining purposes
+    tab_state_queue = result_promise.catch(() => {});
+    return await result_promise;
+}
+
+
 async function generate_next_epoch() {
     const result = await chrome.storage.session.get('next_global_epoch');
     const next_epoch = (result.next_global_epoch || 0);
@@ -20,16 +31,47 @@ async function get_tab_info(tab_id) {
 }
 
 async function initialize_tab_info(tab_id, show_hints_parameters) {
-    const key = `tab_${tab_id}`;
-    const epoch = await generate_next_epoch();
-    await chrome.storage.session.set({
-        [key]: {
-            epoch: epoch,
-            show_hints_parameters: show_hints_parameters
-        }
+    return await perform_tab_operation(async () => {
+        const key = `tab_${tab_id}`;
+        const epoch = await generate_next_epoch();
+        await chrome.storage.session.set({
+            [key]: {
+                epoch: epoch,
+                show_hints_parameters: show_hints_parameters,
+                next_hint_number: 0
+            }
+        });
+        console.log(`CBV: initialized tab ${tab_id}, epoch ${epoch},` +
+                    ` params: "${show_hints_parameters}"`); // <<<>>>
+        return epoch;
     });
-    console.log(`CBV: initialized tab ${tab_id}, epoch ${epoch}, params: "${show_hints_parameters}"`); // <<<>>>
-    return epoch;
+}
+
+export async function allocate_hint_batch(tab_id, frame_id, needed_hint_numbers, epoch) {
+    return await perform_tab_operation(async () => {
+        const tab_info = await get_tab_info(tab_id);
+
+        // Check for stale epoch first
+        if (!tab_info || epoch !== tab_info.epoch) {
+            return null;
+        }
+
+        if (needed_hint_numbers === 0) {
+            return { first: 0, last: -1 };  // Empty block
+        }
+
+        const first = tab_info.next_hint_number;
+        const last = first + needed_hint_numbers - 1;
+
+        tab_info.next_hint_number = last + 1;
+
+        const key = `tab_${tab_id}`;
+        await chrome.storage.session.set({ [key]: tab_info });
+
+        console.log(`CBV: Allocated hints ${first}-${last} to frame ${frame_id}`);
+
+        return { first: first, last: last };
+    });
 }
 
 
