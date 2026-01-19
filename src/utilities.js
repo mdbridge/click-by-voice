@@ -12,6 +12,12 @@ let Util = null;
     let my_frame_id   = -1;
     let current_epoch = 0;
 
+
+    // The top frame always has ID zero.
+    function get_my_frame_id() {
+        return my_frame_id;
+    }
+
     function set_my_frame_id(frame_id) {
         my_frame_id = frame_id;
     }
@@ -143,6 +149,7 @@ let Util = null;
 
 
     Util = {
+        get_my_frame_id: get_my_frame_id,
         set_my_frame_id: set_my_frame_id,
 
         get_epoch: get_epoch,

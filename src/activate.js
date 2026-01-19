@@ -252,10 +252,18 @@ var Activate = null;
 
             // Moving the physical mouse:
         case "Xnew":
-            output_bottom_left_physical_offset(point_to_click($element));
+            if (Util.get_my_frame_id() !== 0) {
+                console.log("Physically moving the mouse only works for top frame");
+                act("copy_to_clipboard", {text: "0,0"});
+            } else
+                output_bottom_left_physical_offset(point_to_click($element));
             break;
         case "XnewTL":
-            output_bottom_left_physical_offset(top_right_point($element));
+            if (Util.get_my_frame_id() !== 0) {
+                console.log("Physically moving the mouse only works for top frame");
+                act("copy_to_clipboard", {text: "0,0"});
+            } else
+                output_bottom_left_physical_offset(top_right_point($element));
             break;
 
 
