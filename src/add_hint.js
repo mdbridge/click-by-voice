@@ -451,7 +451,7 @@ let AddHint = null;
                     return;
                 if (add_inline_hint_outside($element, hint, use_high_contrast))
                     return;
-                Util.vlog(4, "skipping adding inline hint because inline location is excluded");
+                Util.vlog(4)("skipping adding inline hint because inline location is excluded");
                 // This is a bit of a Kluge as we will keep attempting
                 // (unsuccessfully) to hint this element.  <<<>>>
                 HintManager.discard_uninitialized_hint(hint);

@@ -60,7 +60,7 @@ let HintManager = null;
                     this.#is_retired_hint_numbers_sorted = true;
                 }
                 const number = this.#retired_hint_numbers.shift();
-                Util.vlog(2, `reusing hint number ${number}`);
+                Util.vlog(2)(`reusing hint number ${number}`);
                 return number;
             }
 
@@ -123,11 +123,11 @@ let HintManager = null;
         get hinted_element() {
             const element = this.#hinted_element.deref();
             if (!element) {
-                Util.vlog(0, `The element that had hint ${this.#hint_number} longer exists`);
+                Util.vlog(0)(`The element that had hint ${this.#hint_number} longer exists`);
                 return undefined;
             }
             if (!element.isConnected) {
-                Util.vlog(0, `The element with hint ${this.#hint_number} is no longer connected`);
+                Util.vlog(0)(`The element with hint ${this.#hint_number} is no longer connected`);
                 return undefined;
             }
             return element;
@@ -150,7 +150,7 @@ let HintManager = null;
         adjust() {
             const hinted_element = this.#hinted_element.deref();
             if (!hinted_element || !hinted_element.isConnected) {
-                Util.vlog(2, `The element with hint ${this.#hint_number} is no longer connected`);
+                Util.vlog(2)(`The element with hint ${this.#hint_number} is no longer connected`);
                 this.#remove();
                 return;
             }
@@ -173,7 +173,7 @@ let HintManager = null;
                     return;
                 }
                 Batcher.mutating(() => {
-                    Util.vlog(2, `lost hint for ${this.#hint_number}; removing...`);
+                    Util.vlog(2)(`lost hint for ${this.#hint_number}; removing...`);
                     // TODO: automatically reconnect at bottom of body? <<<>>>
                     // do we need to preserve $outer as well then?
                     this.#remove();
@@ -260,7 +260,7 @@ let HintManager = null;
                     return;
                 }
                 Batcher.mutating(() => {
-                    Util.vlog(3, `hiding hint for hidden element ${hint_number};` +
+                    Util.vlog(3)(`hiding hint for hidden element ${hint_number};` +
                               ` due to ${element_hidden}`);
                     $inner.attr("CBV_hidden", "true"); 
                 });
@@ -281,7 +281,7 @@ let HintManager = null;
                 let inner_top  = parseFloat(style.top);
                 let inner_left = parseFloat(style.left);
                 Batcher.mutating(() => {
-                    Util.vlog(3, `unhiding hint for unhidden element ${hint_number}`);
+                    Util.vlog(3)(`unhiding hint for unhidden element ${hint_number}`);
                     $inner.removeAttr("CBV_hidden"); 
                     $inner[0].style.top  = `${inner_top  + target_top  - inner_box.top}px`;
                     $inner[0].style.left = `${inner_left + target_left - inner_box.left}px`;
@@ -296,8 +296,8 @@ let HintManager = null;
                 let inner_top  = parseFloat(style.top);
                 let inner_left = parseFloat(style.left);
                 Batcher.mutating(() => {
-                    Util.vlog(4, `(re)positioning overlay for ${hint_number}`);
-                    Util.vlog(4, `  ${inner_box.top} x ${inner_box.left}` + 
+                    Util.vlog(4)(`(re)positioning overlay for ${hint_number}`);
+                    Util.vlog(4)(`  ${inner_box.top} x ${inner_box.left}` +
                               ` -> ${target_top} x ${target_left}`);
 
                     $inner[0].style.top  = `${inner_top + target_top - inner_box.top}px`;
@@ -354,8 +354,8 @@ let HintManager = null;
 
     // precondition: call this during a mutating step
     var _remove_hint = function _remove_hint(hint_number, hinted_element) {
-        Util.vlog(2, `removing ${hint_number}:`);
-        Util.vlog(2, hinted_element);
+        Util.vlog(2)(`removing ${hint_number}:`);
+        Util.vlog(2)(hinted_element);
         hinted_elements.delete(hinted_element);
         hint_number_to_hint.delete(hint_number);
         if (Hints.option("mark_hinted")) {

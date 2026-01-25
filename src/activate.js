@@ -78,10 +78,10 @@ var Activate = null;
         const physicalPixelOffset = viewportToBottomLeftPhysicalOffset(point.x, point.y);
         const answer              = physicalPixelOffset.x + "," + physicalPixelOffset.y;
 
-        Util.vlog(1, "********************************************************************************");
-        Util.vlog(1, "input viewport point: " + point.x + " , " + point.y);
-        Util.vlog(1, "window.devicePixelRatio: " + window.devicePixelRatio);
-        Util.vlog(1, "bottom left physical offset: " +answer);
+        Util.vlog(1)("********************************************************************************");
+        Util.vlog(1)("input viewport point: " + point.x + " , " + point.y);
+        Util.vlog(1)("window.devicePixelRatio: " + window.devicePixelRatio);
+        Util.vlog(1)("bottom left physical offset: " +answer);
 
         act("copy_to_clipboard", {text: answer});
     }
@@ -222,9 +222,9 @@ var Activate = null;
         case "s": {
             const clone = $element.clone();
             clone.find("[CBV_hint_element]").remove();
-            Util.vlog(1, clone[0]);
+            Util.vlog(1)(clone[0]);
             const text = clone[0].textContent;
-            Util.vlog(1, '"' + text + '"');
+            Util.vlog(1)('"' + text + '"');
             act("copy_to_clipboard", {text: text});
             break;
         }
@@ -356,7 +356,7 @@ var Activate = null;
 
 
         default:
-            Util.vlog(0, "unknown activate operation: " + operation);
+            Util.vlog(0)("unknown activate operation: " + operation);
         }
     }
 
@@ -372,7 +372,7 @@ var Activate = null;
                     $element = $(this);
                 }
             });
-            Util.vlog(1, $parent[1] + " -> " + $element[0]);
+            Util.vlog(1)($parent[1] + " -> " + $element[0]);
         }
 
 
@@ -441,7 +441,7 @@ var Activate = null;
             // hint_number
             const hint = HintManager.locate_hint(hint_descriptor);
             if (!hint) {
-                Util.vlog(0, `The hint ${hint_descriptor} is not currently in use`);
+                Util.vlog(0)(`The hint ${hint_descriptor} is not currently in use`);
                 return {};
             }
             const element = hint.hinted_element;
@@ -464,7 +464,7 @@ var Activate = null;
         const lookup   = find_hint_descriptor(hint_descriptor);
         const $element = lookup.$element;
         if (!$element) {
-            Util.vlog(0, "goto_hint_descriptor: unable to find hint descriptor: " + hint_descriptor);
+            Util.vlog(0)("goto_hint_descriptor: unable to find hint descriptor: " + hint_descriptor);
             return;
         }
 
@@ -473,8 +473,8 @@ var Activate = null;
                 operation = "c";
             else
                 operation = "f";
-            Util.vlog(1, $element[0]);
-            Util.vlog(1, "defaulting to: " + operation);
+            Util.vlog(1)($element[0]);
+            Util.vlog(1)("defaulting to: " + operation);
         }
 
         activate($element, lookup.hint_if_known, operation);

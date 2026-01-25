@@ -29,15 +29,16 @@ let Util = null;
 
     function set_epoch(epoch) {
         current_epoch = epoch;
-        vlog(1, `Frame epoch: ${epoch}`); // <<<>>>
+        vlog(1)(`Frame epoch: ${epoch}`); // <<<>>>
     }
 
 
-    function vlog(level, ...args) {
+    function vlog(level) {
         const verbose_level = Hints.option_value("verbose", "0");
         if (level <= Number(verbose_level)) {
-            console.log(my_frame_id, ...args);
+            return console.log.bind(console, my_frame_id);
         }
+        return () => {};
     }
 
 

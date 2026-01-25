@@ -51,12 +51,12 @@ function maybe_refresh() {
         if (next_major_refresh < 0)
             return;
         next_major_refresh = -1;
-        Util.vlog(1, "stopping refreshing due to being hidden");
+        Util.vlog(1)("stopping refreshing due to being hidden");
         return;
     }
     if (next_major_refresh < 0) {
         next_major_refresh = 0;
-        Util.vlog(1, "resuming refreshing due to being unhidden");
+        Util.vlog(1)("resuming refreshing due to being unhidden");
     }
 
     if (! full_refresh_requested) {
@@ -85,7 +85,7 @@ function maybe_refresh() {
             const estimated_refresh_cpu = last_refresh_time
                                           / (delay_till_next_refresh+last_refresh_time);
             if (Hints.option("timing")) {
-                Util.vlog(2, `refresh took ${last_refresh_time.toFixed(1)} ms;` +
+                Util.vlog(2)(`refresh took ${last_refresh_time.toFixed(1)} ms;` +
                           ` scheduling next refresh in ${delay_till_next_refresh.toFixed(1)} ms;` +
                           ` estimated refresh CPU ${(estimated_refresh_cpu*100).toFixed(1)}%`);
             }
@@ -133,12 +133,12 @@ function handle_service_worker_request(request, sendResponse) {
         {
             Util.set_my_frame_id(frame_id);
             if (data.epoch <= Util.get_epoch()) {
-                Util.vlog(1, `Ignoring stale epoch ${data.epoch} (current: ${Util.get_epoch()})`); // <<<>>>
+                Util.vlog(1)(`Ignoring stale epoch ${data.epoch} (current: ${Util.get_epoch()})`); // <<<>>>
                 break;
             }
 
             Util.set_epoch(data.epoch);
-            Util.vlog(0, `New CBV epoch ${data.epoch}` +
+            Util.vlog(0)(`New CBV epoch ${data.epoch}` +
                       ` with show_hints "${data.show_hint_parameters}"`);
 
             Hints.set_config(data.config.config);
@@ -149,7 +149,7 @@ function handle_service_worker_request(request, sendResponse) {
 
     case "CBV_PERFORM":
         {
-            Util.vlog(0, `CBV Command: perform "${data.operation}" on "${data.hint_descriptor}"`);
+            Util.vlog(0)(`CBV Command: perform "${data.operation}" on "${data.hint_descriptor}"`);
             perform_operation(data.operation, data.hint_descriptor);
         }
         break;

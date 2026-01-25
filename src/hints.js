@@ -30,7 +30,7 @@ var Hints = null;
             hinting_on_ = true;
             return await place_hints(false);
         } else {
-            Util.vlog(0, "not adding hints: " + options_to_string());
+            Util.vlog(0)("not adding hints: " + options_to_string());
             return await remove_hints();
         }
     }
@@ -225,7 +225,7 @@ var Hints = null;
     function add_hints_to_hintables(hintables_info) {
         for (const { $element, reason } of hintables_info) {
             if (!$element[0].isConnected) {
-                Util.vlog(3, "Skipping hint - element no longer connected"); // <<<>>>
+                Util.vlog(3)("Skipping hint - element no longer connected"); // <<<>>>
                 continue;
             }
             // Safety check; should not be possible.
@@ -242,7 +242,7 @@ var Hints = null;
     // Returns work time taken in milliseconds.
     async function place_hints(refreshing) {
         if (!refreshing) {
-            Util.vlog(0, "adding hints: " + options_to_string());
+            Util.vlog(0)("adding hints: " + options_to_string());
         }
 
         const starting_hint_count = HintManager.get_hint_number_stats().hints_made;
@@ -254,7 +254,7 @@ var Hints = null;
         const walk_time               = performance.now() - start;
         const expected_new_hint_count = unhinted_hintables.length;
         if (expected_new_hint_count > 0) {
-            Util.vlog(1, `found ${expected_new_hint_count} elements that need hints`);
+            Util.vlog(1)(`found ${expected_new_hint_count} elements that need hints`);
         }
 
 
@@ -277,12 +277,12 @@ var Hints = null;
 
             // Epoch may have changed while we were waiting
             if (starting_epoch !== Util.get_epoch()) {
-                Util.vlog(1, `Epoch changed during hint request. Aborting.`); // <<<>>>
+                Util.vlog(1)(`Epoch changed during hint request. Aborting.`); // <<<>>>
                 return walk_time;
             }
 
             if (response.rejected) {
-                Util.vlog(1, `Hint request rejected (stale epoch). Aborting.`); // <<<>>>
+                Util.vlog(1)(`Hint request rejected (stale epoch). Aborting.`); // <<<>>>
                 return walk_time;
             }
             HintManager.add_hint_number_block(response.first, response.last);
@@ -303,12 +303,12 @@ var Hints = null;
         if (Hints.option("timing") || hints_made > 0) {
             const max_hint_number = stats.max_hint_number_used;
             const hints_in_use    = stats.hints_in_use;
-            Util.vlog(1,
-                      `+${hints_made} -> ${hints_in_use} hints` +
-                      ` (number high water ${max_hint_number})` +
-                      ` in ${Util.time(0, total_work_time)}:` +
-                      ` walk: ${Util.time(0, walk_time)};` +
-                      ` add/adjust: ${Util.time(0, placing_time)} via ${result}`);
+            Util.vlog(1)(
+                `+${hints_made} -> ${hints_in_use} hints` +
+                ` (number high water ${max_hint_number})` +
+                ` in ${Util.time(0, total_work_time)}:` +
+                ` walk: ${Util.time(0, walk_time)};` +
+                ` add/adjust: ${Util.time(0, placing_time)} via ${result}`);
         }
 
 
