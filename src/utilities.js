@@ -10,7 +10,7 @@ let Util = null;
 (function() {
 
     let my_frame_id   = -1;
-    let current_epoch = 0;
+    let current_epoch = -1;
 
 
     // The top frame always has ID zero.
