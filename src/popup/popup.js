@@ -7,7 +7,7 @@
 /// choose inspect then console.
 ///
 
-import { do_user_command } from '../background_utilities.js';
+import { do_user_command } from '../background/background_utilities.js';
 
 
 $(document).ready(function() {

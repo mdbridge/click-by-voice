@@ -36,7 +36,7 @@ async function setupOffscreenDocument(path) {
 }
 
 async function createOffscreenDocument() {
-    await setupOffscreenDocument('background_clipboard_offscreen.html');
+    await setupOffscreenDocument('background/background_clipboard_offscreen.html');
 }
 
 
