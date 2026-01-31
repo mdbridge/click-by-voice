@@ -11,7 +11,7 @@ import { do_user_command } from '../background/background_utilities.js';
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector(".CBV_popup_form").addEventListener("submit", async function(event) {
+    document.getElementById("CBV_popup_form").addEventListener("submit", async function(event) {
         event.preventDefault();
         const input_text = document.getElementById("hint_number").value;
         await do_user_command(input_text);
