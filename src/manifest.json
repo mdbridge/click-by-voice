@@ -22,7 +22,7 @@
 
     // display popup.html when extension icon clicked or on _execute_action action:
     "action": {
-        "default_popup": "popup.html",
+        "default_popup": "popup/popup.html",
         "default_icon": {
 	    // 16 pixels looks too small
             "38":  "images/icon_38.png",  // resized down automatically to 19 X 19
@@ -85,6 +85,6 @@
     },
 
     "options_ui": {
-	"page": "options.html"
+	"page": "options/options.html"
     }
 }

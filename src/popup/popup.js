@@ -1,12 +1,13 @@
 ///
-/// JavaScript to implement popup.html page, which is the pop up for manually entering hints.
+/// JavaScript to implement popup.html page, which is the pop up for
+/// manually entering hints.
 ///
 /// Note that console messages from this code show up in the console
 /// for the pop-up widget, not the webpage.  Right click on popup then
 /// choose inspect then console.
 ///
 
-import { do_user_command } from './background_utilities.js';
+import { do_user_command } from '../background_utilities.js';
 
 
 $(document).ready(function() {

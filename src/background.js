@@ -7,7 +7,7 @@
 
 import * as clipboard            from './background_clipboard.js';
 import * as background_utilities from './background_utilities.js';
-import * as option_storage       from './option_storage.js';
+import * as option_storage       from './options/option_storage.js';
 
 
 //
