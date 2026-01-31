@@ -12,7 +12,7 @@
 export async function get_saved_options() {
     return chrome.storage.sync.get({
         startingCommand: ":+",
-        config:          "# See https://github.com/mdbridge/click-by-voice/blob/master/doc/config.md"
+        config:          "# None unspecified"
     });
 }
 

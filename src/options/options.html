@@ -1,26 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
     <title>Click-by-Voice Extension Options</title>
     <style>
-      body    { padding: 10px; }
-      #status { padding: 10px; }
+      body {
+        padding: 20px;
+        font-family: system-ui, sans-serif;
+      }
+      h1 {
+        margin-top: 0;
+      }
+      label {
+        display: block;
+        margin-bottom: 4px;
+      }
+      input {
+        padding: 4px;
+        font-family: inherit;
+      }
+      textarea {
+        padding: 4px;
+        font-family: monospace;
+        width: 102ch;
+      }
+      .section {
+        margin-bottom: 16px;
+      }
+      #status {
+        padding: 10px;
+      }
+      button {
+        padding: 8px 16px;
+      }
     </style>
   </head>
 
   <body>
-    <div id="show_numbers_command_area">
-      Startup show numbers command:
-      <input type="text" id="command" value=":+">
+    <h1>Click-by-Voice Extension Options</h1>
+
+    <div class="section">
+      <label for="command">Startup show numbers command:</label>
+      <input type="text" id="command">
     </div>
 
-    <br>
-
-    <div id="config_area">
-      Click-by-Voice config:
-      <textarea name="config" id="config" rows="20" cols="80"></textarea>
+    <div class="section">
+      <label for="config">Click-by-Voice config:
+        (<a href="https://github.com/mdbridge/click-by-voice/blob/master/doc/config.md">
+	  instructions</a>)
+      </label>
+      <textarea id="config" rows="20" spellcheck="false"></textarea>
     </div>
-      
+
     <div id="status"></div>
 
     <button id="save">Save options</button>
