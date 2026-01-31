@@ -1,4 +1,4 @@
-Files for implementing the CBV extension's options dialog box and
-accessing the persistent option data.
+Files for implementing the CBV extension's options page and accessing
+the persistent option data.
 
 These files use ES6 modules.

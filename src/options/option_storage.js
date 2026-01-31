@@ -3,7 +3,7 @@
 ///
 
 //
-// Our saved options, set via extension options pop-up.
+// Our saved options, set via extension options page.
 //
 // The per-session versions are initialized to these but can vary
 // during the session.
@@ -12,7 +12,7 @@
 export async function get_saved_options() {
     return chrome.storage.sync.get({
         startingCommand: ":+",
-        config:          "# None unspecified"
+        config:          "# None specified"
     });
 }
 

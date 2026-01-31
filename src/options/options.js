@@ -33,11 +33,13 @@ async function save_options() {
     // Update button to let user know options were saved.
     const button = document.getElementById('save');
     button.textContent = 'Saved ✓';
-    setTimeout(function() {
+    setTimeout(() => {
         button.textContent = 'Save options';
     }, 2000);
 }
 
 
-document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('save').addEventListener('click', save_options);
+document.addEventListener('DOMContentLoaded', () => {
+    restore_options();
+    document.getElementById('save').addEventListener('click', save_options);
+});
