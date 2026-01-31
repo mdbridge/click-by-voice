@@ -27,11 +27,9 @@
       .section {
         margin-bottom: 16px;
       }
-      #status {
-        padding: 10px;
-      }
       button {
         padding: 8px 16px;
+        min-width: 120px;
       }
     </style>
   </head>
@@ -46,13 +44,10 @@
 
     <div class="section">
       <label for="config">Click-by-Voice config:
-        (<a href="https://github.com/mdbridge/click-by-voice/blob/master/doc/config.md">
-	  instructions</a>)
+        (<a href="https://github.com/mdbridge/click-by-voice/blob/master/doc/config.md">instructions</a>)
       </label>
       <textarea id="config" rows="20" spellcheck="false"></textarea>
     </div>
-
-    <div id="status"></div>
 
     <button id="save">Save options</button>
 

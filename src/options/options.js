@@ -23,18 +23,19 @@ async function save_options() {
     });
 
     // Change only per-session config, not per-session starting command:
-    const current_starting_command = (await option_storage.get_per_session_options()).startingCommand;
+    const per_session_options      = await option_storage.get_per_session_options();
+    const current_starting_command = per_session_options.startingCommand;
     await option_storage.put_per_session_options({
         startingCommand: current_starting_command,
         config:          config,
     });
 
-    // Update status to let user know options were saved.
-    const status = document.getElementById('status');
-    status.textContent = 'Click-by-Voice options successfully saved.';
+    // Update button to let user know options were saved.
+    const button = document.getElementById('save');
+    button.textContent = 'Saved ✓';
     setTimeout(function() {
-        status.textContent = '';
-    }, 750);
+        button.textContent = 'Save options';
+    }, 2000);
 }
 
 
