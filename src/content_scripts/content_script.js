@@ -162,40 +162,15 @@ function handle_service_worker_request(request, sendResponse) {
 
 
 //
-// Startup of a page code
+// Startup of a frame code; this code runs inside of each frame
 //
 
-if (window == window.top) {
-    // the following only runs outside of any iframes
-
-    chrome.runtime.onMessage.addListener(
-        function(request, sender, sendResponse) {
-            handle_service_worker_request(request, sendResponse);
-        });
-
-    $(document).ready(function() {
-        act("CBV_HELLO", {});
-        setInterval(maybe_refresh, 50);
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        handle_service_worker_request(request, sendResponse);
     });
 
-} else {
-    // Are we same origin as our parent?
-    let sameOrigin = false;
-    try {
-        void window.parent.document;
-        sameOrigin = true;
-    } catch (e) {}
-
-    // Skip running listeners for same origin frames.
-    if (!sameOrigin) {
-        chrome.runtime.onMessage.addListener(
-            function(request, sender, sendResponse) {
-                handle_service_worker_request(request, sendResponse);
-            });
-
-        $(document).ready(function() {
-            act("CBV_HELLO", {});
-            setInterval(maybe_refresh, 50);
-        });
-    }
-}
+$(document).ready(function() {
+    act("CBV_HELLO", {});
+    setInterval(maybe_refresh, 50);
+});

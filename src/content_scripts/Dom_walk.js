@@ -1,5 +1,6 @@
 ///
-/// Code for walking the DOM, skipping undesirable elements
+/// Code for walking the DOM belonging to the current frame, skipping
+/// undesirable elements
 ///
 /// Provides DomWalk
 
@@ -37,21 +38,8 @@ let DomWalk = null;
             });
         }
 
-        // Walk accessible iframe contents if any
-        const element_tag = element.nodeName.toLowerCase();
-        if (element_tag == "iframe") {
-            try {
-                // Some popover ads are after <body> element so just filter out head:
-                $("html", $element.contents()).children().filter(":not(head)").each(function (index) {
-                    each_displaying_helper($(this), pre_callback, post_callback, exclusion);
-                });
-            } catch (e) {
-                // .contents() silently excludes iframe content if
-                // inaccessible so this should never fire.  (E.g., cross
-                // origin or sandbox locking allow-same-origin)
-                console.error("iframe access failure: " + e);
-            }
-        }
+        // We do not walk iframe contents here because the content
+        // scripts running in the associated frames will do that.
 
         if (post_callback)
             post_callback($element, styles);

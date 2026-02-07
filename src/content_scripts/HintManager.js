@@ -384,10 +384,6 @@ let HintManager = null;
         // This doesn't search open shadow roots, but that's okay for
         // now because this is a debug feature.  <<<>>>
         $("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
-        const $iframe = $("iframe", from);
-        if ($iframe.length != 0) {
-            _remove_hint_numbers_from($iframe.contents());
-        }
     }
 
 

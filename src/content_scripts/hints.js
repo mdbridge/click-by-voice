@@ -54,10 +54,6 @@ var Hints = null;
         // This doesn't search open shadow roots, but we should not
         // have put any hint elements there so that's okay.
         $("[CBV_hint_element]", from).remove();
-        const $iframe = $("iframe", from);
-        if ($iframe.length != 0) {
-            remove_hints_from($iframe.contents());
-        }
     }
 
     //
