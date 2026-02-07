@@ -31,9 +31,13 @@ let DomWalk = null;
             each_displaying_helper($(this), pre_callback, post_callback, exclusion);
         });
 
-        // Walk open shadow-root children if any
-        if (element.shadowRoot) {
-            Array.from(element.shadowRoot.children).forEach(child => {
+        // Walk shadow-root children (open or closed) if any
+        let shadowRoot = null;
+        try { 
+            shadowRoot = chrome.dom.openOrClosedShadowRoot(element);
+        } catch (e) {}  // openOrClosedShadowRoot rejects non-HTMLElement (e.g., SVGElement)
+        if (shadowRoot) {
+            Array.from(shadowRoot.children).forEach(child => {
                 each_displaying_helper($(child), pre_callback, post_callback, exclusion);
             });
         }

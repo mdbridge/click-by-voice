@@ -112,15 +112,14 @@ let AddHint = null;
             // have our CBV CSS rules there.
             return true;
         }
-        if ($element[0].shadowRoot) {
-            // Don't put hints as children of nodes with open shadow
-            // roots as that may result in them not being shown
-            // because of lack of slots.
-            //
-            // There is a similar problem with closed shadow roots,
-            // but unfortunately we can't detect those.
-            return true;
-        }
+        try {
+            if (chrome.dom.openOrClosedShadowRoot($element[0])) {
+                // Don't put hints as children of nodes with shadow
+                // roots as that may result in them not being shown
+                // because of lack of slots.
+                return true;
+            }
+        } catch (e) {}  // openOrClosedShadowRoot rejects non-HTMLElement (e.g., SVGElement)
         if (Hints.option("exclude") && $element.is(Hints.option_value("exclude"))) {
             return true;
         }

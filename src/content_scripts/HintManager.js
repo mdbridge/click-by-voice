@@ -381,7 +381,7 @@ let HintManager = null;
     }
 
     function _remove_hint_numbers_from(from) {
-        // This doesn't search open shadow roots, but that's okay for
+        // This doesn't search shadow roots, but that's okay for
         // now because this is a debug feature.  <<<>>>
         $("[CBV_hint_number]", from).removeAttr("CBV_hint_number");
     }
