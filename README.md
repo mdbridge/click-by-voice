@@ -121,7 +121,7 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues and limitations (12/31/2025)
+## Known issues and limitations (2/7/2026)
 
 ### Limitations due to click-by-voice being a browser extension
 
@@ -134,6 +134,7 @@ more on how this shortcut works, see
   * the Chrome Web store
     * `https://chrome.google.com`, `https://chromewebstore.google.com`
   * view-source pages (e.g., `view-source:https://example.com`)
+* Extensions are also prevented from running inside the Chrome PDF viewer
 
 * Chrome allows extensions to draw only within the viewport
   * this prevents creating hints for tabs, bookmarks, the address bar,
@@ -144,10 +145,6 @@ more on how this shortcut works, see
 * CBV cannot hint internal controls of built-in video/audio players
   * workaround: use the hint on the player itself to focus it then use
     keyboard shortcuts to control the player
-* Elements inside of cross-origin iframes (including sandboxed iframes without
-  `allow-same-origin`) are missed
-  * workaround: use the hint on the iframe to open it in a new window or
-    tab; this often allows interaction with the iframe material
 * CBV cannot discover clickable regions in non-SVG maps
 * CBV ignores map `<area>`'s
 * Elements added after a page is first loaded can take a while to get
@@ -165,9 +162,6 @@ more on how this shortcut works, see
   another element; although hinted once they appear, the hover action
   may be necessary to make them appear.
 * [rare] CBV ignores clickable pseudo-elements
-* [rare] CBV does not look at elements inside of `<object data=...html>`'s
-* [rare] CBV does not look at elements inside of closed shadow roots
-* [rare] CBV ignores `<frame>`s (these have been obsolete for a long time)
 
 ### Hint activation
 
@@ -178,7 +172,7 @@ more on how this shortcut works, see
     elements to the target element
 * Normally when a hint is activated, the associated element is briefly
   highlighted; this fails in some cases including
-  * elements inside open shadow roots that have in-line styling
+  * elements inside shadow roots that have in-line styling
   * SVG path elements
 * Some elements can be difficult to select even using CSS selectors
   * e.g., multiple elements that differ only by their contained text
@@ -188,6 +182,7 @@ more on how this shortcut works, see
     way to empty the clipboard in Chrome extensions
   * using `!!!` with thousands of lines can hang the browser for quite a
     long time
+* `${...}` selectors only search the top frame
 
 ### Hint display
 
@@ -224,7 +219,8 @@ more on how this shortcut works, see
 ## News
 
 * TBD:
-  * elements in open shadow roots are now hinted and activatable
+  * elements in cross origin [i]frames are now hinted and activatable
+  * elements in shadow roots are now hinted and activatable
   * additional hintable elements: summary, audio/video players with
     controls, contenteditable areas
 * 11/2025: New major version 0.32 released
