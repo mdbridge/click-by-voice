@@ -43,7 +43,6 @@ chrome.commands.onCommand.addListener(async function(command) {
 async function handle_content_script_message(request, sender) {
     const tab_id   = sender.tab.id;
     const frame_id = sender.frameId;
-    console.log(request, sender, tab_id, frame_id); // <<<>>>
 
     if (request.action !== "CBV_HELLO") {
         if (!await background_utilities.epoch_is_current(tab_id, request.epoch)) {
@@ -122,7 +121,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     (async () => {
         try {
             const response = await handle_content_script_message(request, sender);
-            // console.log("Handled content script message:", request, "-->", response);
+            console.log("CBV: Handled content script message from", sender,
+                        request, "-->", response);
             sendResponse(response);
         } catch (error) {
             console.error(`Error while handling content script message ${request}: ${error}`);

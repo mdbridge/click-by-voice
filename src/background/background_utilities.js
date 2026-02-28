@@ -52,7 +52,7 @@ async function do_show_hints(tab_id, show_hints_parameters, once) {
                           hint_map:              {}
                          };
     const epoch = await background_persistence.initialize_tab_info(tab_id, initial_data);
-    console.log(`CBV: initialized tab ${tab_id}, epoch ${epoch},` +
+    console.log(`CBV: Initialized tab ${tab_id}, epoch ${epoch},` +
                 ` params: "${show_hints_parameters}"`); // <<<>>>
     await notify_new_epoch(tab_id);
 }
