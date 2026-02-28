@@ -29,7 +29,6 @@ let Util = null;
 
     function set_epoch(epoch) {
         current_epoch = epoch;
-        vlog(1)(`Frame epoch: ${epoch}`); // <<<>>>
     }
 
 

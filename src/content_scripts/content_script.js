@@ -51,12 +51,12 @@ function maybe_refresh() {
         if (next_major_refresh < 0)
             return;
         next_major_refresh = -1;
-        Util.vlog(1)("stopping refreshing due to being hidden");
+        Util.vlog(2)("stopping refreshing due to being hidden");
         return;
     }
     if (next_major_refresh < 0) {
         next_major_refresh = 0;
-        Util.vlog(1)("resuming refreshing due to being unhidden");
+        Util.vlog(2)("resuming refreshing due to being unhidden");
     }
 
     if (! full_refresh_requested) {
@@ -123,7 +123,6 @@ function perform_operation(operation, hint_descriptor) {
 
 
 function handle_service_worker_request(request, sendResponse) {
-    console.log(request); // <<<>>>
     const type = request.type;
     const data = request.data;
     const frame_id = request.frame_id;
@@ -133,12 +132,11 @@ function handle_service_worker_request(request, sendResponse) {
         {
             Util.set_my_frame_id(frame_id);
             if (data.epoch <= Util.get_epoch()) {
-                Util.vlog(1)(`Ignoring stale epoch ${data.epoch} (current: ${Util.get_epoch()})`); // <<<>>>
                 break;
             }
 
             Util.set_epoch(data.epoch);
-            Util.vlog(0)(`New CBV epoch ${data.epoch}` +
+            Util.vlog(1)(`New CBV epoch ${data.epoch}` +
                       ` with show_hints "${data.show_hint_parameters}"`,
                         window.location.href);
 
