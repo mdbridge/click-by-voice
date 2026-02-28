@@ -263,8 +263,7 @@ var Hints = null;
             try {
                 response = await Util.request("request_hint_batch", {
                     needed_hint_numbers: needed_hint_numbers,
-                    epoch: starting_epoch
-                });
+                }, starting_epoch);
             } catch (e) {
                 console.error("CBV: Error requesting hints:", e);
                 return walk_time;

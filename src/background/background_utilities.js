@@ -7,6 +7,12 @@ import * as background_persistence from './background_persistence.js';
 import * as option_storage         from '../options/option_storage.js';
 
 
+export async function epoch_is_current(tab_id, epoch) {
+    const tab_info = await background_persistence.get_tab_info(tab_id);
+    return tab_info !== null && tab_info.epoch === epoch;
+}
+
+
 export async function allocate_hint_batch(tab_id, frame_id, needed_hint_numbers, epoch) {
     if (needed_hint_numbers === 0) {
         return { first: 0, last: -1 };  // Empty block

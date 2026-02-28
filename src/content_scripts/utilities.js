@@ -153,13 +153,15 @@ let Util = null;
     // Requesting background script to perform actions on our behalf
     //
 
-    function act(action, args) {
+    function act(action, args, epoch=current_epoch) {
         args.action = action;
+        args.epoch  = epoch;
         chrome.runtime.sendMessage(args);
     }
 
-    async function request(action, args) {
+    async function request(action, args, epoch=current_epoch) {
         args.action = action;
+        args.epoch  = epoch;
         return await chrome.runtime.sendMessage(args);
     }
 

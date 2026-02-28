@@ -45,6 +45,12 @@ async function handle_content_script_message(request, sender) {
     const frame_id = sender.frameId;
     console.log(request, sender, tab_id, frame_id); // <<<>>>
 
+    if (request.action !== "CBV_HELLO") {
+        if (!await background_utilities.epoch_is_current(tab_id, request.epoch)) {
+            return { rejected: true };
+        }
+    }
+
     switch (request.action) {
 
     case "CBV_HELLO":
