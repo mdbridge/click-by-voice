@@ -21,6 +21,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         break;
     case 'putClipboard':
         putClipboard(message.value);
+        sendResponse({});
         break;
     default:
         console.error(`Unexpected message type received: '${message.type}'.`);
