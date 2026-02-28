@@ -90,9 +90,9 @@ async function do_activate_hint(tab_id, hint_descriptor, operation) {
     // tab_id of -1 means use current tab:
     if (tab_id < 0) {
         const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-        tab_id = tabs[0].id;
         if (tabs.length === 0)
             return;
+        tab_id = tabs[0].id;
     }
 
     // Determine which frame to send to.
