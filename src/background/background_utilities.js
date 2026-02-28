@@ -132,13 +132,13 @@ export async function do_user_command(command_text, tab_id = -1) {
         operation = '=' + operation;
     }
     if (/^once(\+|-)/.test(operation)) {
-        operation = 'once=' + operation.substr(4);
+        operation = 'once=' + operation.substring(4);
     }
 
     if (operation.startsWith("=")) {
-        await do_show_hints(tab_id, operation.substr(1), false);
+        await do_show_hints(tab_id, operation.substring(1), false);
     } else if (operation.startsWith("once=")) {
-        await do_show_hints(tab_id, operation.substr(5), true);
+        await do_show_hints(tab_id, operation.substring(5), true);
     } else {
         await do_activate_hint(tab_id, hint_descriptor, operation);
     }
@@ -171,9 +171,9 @@ export async function notify_new_epoch(tab_id, frame_id = -1) {
 
     const config = await option_storage.get_per_session_options();
     const data = {
-        epoch:                tab_info.epoch,
-        config:               config,
-        show_hint_parameters: tab_info.data.show_hints_parameters
+        epoch:                 tab_info.epoch,
+        config:                config,
+        show_hints_parameters: tab_info.data.show_hints_parameters
     };
 
     if (frame_id === -1) {

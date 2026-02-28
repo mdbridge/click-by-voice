@@ -6,10 +6,10 @@
 
 
 // Returns work time taken in milliseconds.
-async function do_refresh(full_refresh, show_hint_parameters) {
+async function do_refresh(full_refresh, show_hints_parameters) {
     if (full_refresh) {
         const removal_time = await Hints.remove_hints();
-        return removal_time + await Hints.add_hints(show_hint_parameters);
+        return removal_time + await Hints.add_hints(show_hints_parameters);
     } else {
         return await Hints.refresh_hints();
     }
@@ -26,7 +26,7 @@ let next_major_refresh = 0;
 // State for async refresh control
 let refresh_in_progress          = false;
 let full_refresh_requested       = false;
-let pending_show_hint_parameters = "";       // used when full_refresh_requested is true.
+let pending_show_hints_parameters = "";       // used when full_refresh_requested is true.
 
 
 function get_refresh_parameters() {
@@ -70,7 +70,7 @@ function maybe_refresh() {
     const doing_full_request = full_refresh_requested;
     full_refresh_requested   = false;
 
-    do_refresh(doing_full_request, pending_show_hint_parameters).then((work_time_taken) => {
+    do_refresh(doing_full_request, pending_show_hints_parameters).then((work_time_taken) => {
         const last_refresh_time = work_time_taken;
         const p = get_refresh_parameters();
         if (doing_full_request) {
@@ -137,12 +137,12 @@ function handle_service_worker_request(request, sendResponse) {
 
             Util.set_epoch(data.epoch);
             Util.vlog(1)(`New CBV epoch ${data.epoch}` +
-                      ` with show_hints "${data.show_hint_parameters}"`,
+                      ` with show_hints "${data.show_hints_parameters}"`,
                         window.location.href);
 
             Hints.set_config(data.config.config);
             full_refresh_requested       = true;
-            pending_show_hint_parameters = data.show_hint_parameters;
+            pending_show_hints_parameters = data.show_hints_parameters;
         }
         break;
 

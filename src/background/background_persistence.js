@@ -63,13 +63,13 @@ export async function get_tab_info(tab_id) {
 
 // Returns new epoch.
 export async function initialize_tab_info(tab_id, data) {
-    return await in_critical_section(async () => {
+    return in_critical_section(async () => {
         const key   = `tab_${tab_id}`;
         const epoch = await generate_next_epoch();
         await chrome.storage.session.set({
             [key]: {
                 epoch: epoch,
-                data:   data
+                data:  data
             }
         });
         return epoch;
