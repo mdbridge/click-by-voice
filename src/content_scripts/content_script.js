@@ -139,7 +139,8 @@ function handle_service_worker_request(request, sendResponse) {
 
             Util.set_epoch(data.epoch);
             Util.vlog(0)(`New CBV epoch ${data.epoch}` +
-                      ` with show_hints "${data.show_hint_parameters}"`);
+                      ` with show_hints "${data.show_hint_parameters}"`,
+                        window.location.href);
 
             Hints.set_config(data.config.config);
             full_refresh_requested       = true;
@@ -170,7 +171,14 @@ chrome.runtime.onMessage.addListener(
         handle_service_worker_request(request, sendResponse);
     });
 
-$(document).ready(function() {
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startup);
+} else {
+    startup();
+}                                                         
+
+function startup() {
     Util.act("CBV_HELLO", {});
     setInterval(maybe_refresh, 50);
-});
+}
