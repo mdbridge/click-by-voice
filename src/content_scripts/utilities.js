@@ -162,7 +162,14 @@ let Util = null;
     async function request(action, args, epoch=current_epoch) {
         args.action = action;
         args.epoch  = epoch;
-        return await chrome.runtime.sendMessage(args);
+        try {
+            return await chrome.runtime.sendMessage(args);
+        } catch (e) {
+            if (e.message === "Extension context invalidated.") {
+                return { rejected: true };
+            }
+            throw e;
+        }
     }
 
 
