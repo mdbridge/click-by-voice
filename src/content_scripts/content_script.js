@@ -171,6 +171,6 @@ chrome.runtime.onMessage.addListener(
     });
 
 $(document).ready(function() {
-    act("CBV_HELLO", {});
+    Util.act("CBV_HELLO", {});
     setInterval(maybe_refresh, 50);
 });

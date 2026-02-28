@@ -65,7 +65,7 @@ var Activate = null;
         Util.vlog(1)("window.devicePixelRatio: " + window.devicePixelRatio);
         Util.vlog(1)("bottom left physical offset: " +answer);
 
-        act("copy_to_clipboard", {text: answer});
+        Util.act("copy_to_clipboard", {text: answer});
     }
 
 
@@ -171,20 +171,20 @@ var Activate = null;
         case "t":
             if (href($element))
                 // change focus to new tab
-                act("create_tab", {URL: href($element), active: true});
+                Util.act("create_tab", {URL: href($element), active: true});
             break;
         case "b":
             if (href($element))
                 // do not change focus to new tab
-                act("create_tab", {URL: href($element), active: false});
+                Util.act("create_tab", {URL: href($element), active: false});
             break;
         case "w":
             if (href($element))
-                act("create_window", {URL: href($element)});
+                Util.act("create_window", {URL: href($element)});
             break;
         case "k":
             if (href($element))
-                act("copy_to_clipboard", {text: href($element)});
+                Util.act("copy_to_clipboard", {text: href($element)});
             break;
 
             // Hovering:
@@ -207,7 +207,7 @@ var Activate = null;
             Util.vlog(1)(clone[0]);
             const text = clone[0].textContent;
             Util.vlog(1)('"' + text + '"');
-            act("copy_to_clipboard", {text: text});
+            Util.act("copy_to_clipboard", {text: text});
             break;
         }
 
@@ -236,14 +236,14 @@ var Activate = null;
         case "Xnew":
             if (Util.get_my_frame_id() !== 0) {
                 console.log("Physically moving the mouse only works for top frame");
-                act("copy_to_clipboard", {text: "0,0"});
+                Util.act("copy_to_clipboard", {text: "0,0"});
             } else
                 output_bottom_left_physical_offset(point_to_click($element));
             break;
         case "XnewTL":
             if (Util.get_my_frame_id() !== 0) {
                 console.log("Physically moving the mouse only works for top frame");
-                act("copy_to_clipboard", {text: "0,0"});
+                Util.act("copy_to_clipboard", {text: "0,0"});
             } else
                 output_bottom_left_physical_offset(top_right_point($element));
             break;

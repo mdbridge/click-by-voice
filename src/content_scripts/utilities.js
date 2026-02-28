@@ -149,6 +149,21 @@ let Util = null;
     }
 
 
+    //
+    // Requesting background script to perform actions on our behalf
+    //
+
+    function act(action, args) {
+        args.action = action;
+        chrome.runtime.sendMessage(args);
+    }
+
+    async function request(action, args) {
+        args.action = action;
+        return await chrome.runtime.sendMessage(args);
+    }
+
+
     Util = {
         get_my_frame_id: get_my_frame_id,
         set_my_frame_id: set_my_frame_id,
@@ -167,33 +182,12 @@ let Util = null;
         css_number: css_number,
         css_pixels: css_pixels,
         is_under_low_opacity: is_under_low_opacity,
+
+        act: act,
+        request: request,
     };
+
 })();
-
-
-
-
-
-
-
-
-
-//
-// Requesting background script to perform actions on our behalf
-//
-
-function act(action, args) {
-    args.action = action;
-    chrome.runtime.sendMessage(args);
-}
-
-function request(action, args, callback) {
-    args.action = action;
-    chrome.runtime.sendMessage(args, callback);
-}
-
-
-
 
 
 
@@ -204,5 +198,3 @@ function request(action, args, callback) {
 function CBV_inserted_element($element) {
     return $element[0].getAttribute("CBV_hint_element") == "true";
 }
-
-

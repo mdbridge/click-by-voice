@@ -261,8 +261,7 @@ var Hints = null;
             const starting_epoch = Util.get_epoch();
             let response;
             try {
-                response = await chrome.runtime.sendMessage({
-                    action: "request_hint_batch",
+                response = await Util.request("request_hint_batch", {
                     needed_hint_numbers: needed_hint_numbers,
                     epoch: starting_epoch
                 });
