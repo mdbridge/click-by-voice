@@ -121,7 +121,7 @@ more on how this shortcut works, see
 [on making voice commands](./doc/making_voice_commands.md).
 
 
-## Known issues and limitations (2/7/2026)
+## Known issues and limitations (3/1/2026)
 
 ### Limitations due to click-by-voice being a browser extension
 
@@ -151,7 +151,7 @@ more on how this shortcut works, see
   hinted
   * to keep performance reasonable, Click by Voice only automatically
     refreshes hints every three seconds
-  * CbV will automatically refresh a page's hints shortly after you
+  * CBV will automatically refresh a page's hints shortly after you
     activate a hint to quickly handle cases where activating a hint
     reveals new elements (e.g., a drop-down menu)
 * Normal hint level (`:+`) does not find elements that are only clickable

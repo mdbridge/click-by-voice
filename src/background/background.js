@@ -121,8 +121,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     (async () => {
         try {
             const response = await handle_content_script_message(request, sender);
-            console.log("CBV: Handled content script message from", sender,
-                        request, "-->", response);
+            // console.log("CBV: Handled content script message from", sender,
+            //             request, "-->", response);
             sendResponse(response);
         } catch (error) {
             console.error(`Error while handling content script message ${request}: ${error}`);
