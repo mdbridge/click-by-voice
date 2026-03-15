@@ -218,7 +218,7 @@ more on how this shortcut works, see
 
 ## News
 
-* TBD:
+* 3/2026:
   * elements in cross origin [i]frames are now hinted and activatable
   * elements in shadow roots are now hinted and activatable
   * additional hintable elements: summary, audio/video players with
