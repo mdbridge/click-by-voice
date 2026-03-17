@@ -127,6 +127,7 @@ more on how this shortcut works, see
 
 * Chrome limits extensions from running on certain pages, including:
   * `chrome://` URLs like the settings and extensions pages 
+    * this includes the built-in new tab page
   * built-in dialog boxes like the "add bookmarks" dialog box
   * built-in error pages like "are you sure you want to proceed to this
     unsafe URL?"
