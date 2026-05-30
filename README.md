@@ -136,10 +136,12 @@ more on how this shortcut works, see
     * `https://chrome.google.com`, `https://chromewebstore.google.com`
   * view-source pages (e.g., `view-source:https://example.com`)
 * Extensions are also prevented from running inside the Chrome PDF viewer
-
 * Chrome allows extensions to draw only within the viewport
   * this prevents creating hints for tabs, bookmarks, the address bar,
     Chrome menus, and similar UI elements outside the viewport
+  * If you want to switch between browser tabs or windows using
+    click-by-voice, consider my using [Menu
+    extension](https://github.com/mdbridge/menu-extension).
 
 ### Selection of elements to hint
 
