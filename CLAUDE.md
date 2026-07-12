@@ -72,6 +72,16 @@ unpacked extension in Chrome (`chrome://extensions/` -> Load unpacked ->
 select `src/`), then open test pages to verify behavior.  There is no
 automated test runner.
 
+### Syntax checking
+
+After editing JavaScript files, syntax-check them with node's
+parse-only mode.  On Windows, node is not on the Bash tool's PATH, so
+invoke it by full path:
+
+  '/c/Program Files/nodejs/node.exe' --check <file.js>
+
+On Linux, plain `node --check <file.js>` works.
+
 
 ## Running shell commands
 
