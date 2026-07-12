@@ -24,11 +24,11 @@ var Hints = null;
     }
 
     // Returns work time taken in milliseconds.
-    async function add_hints(parameters) {
+    async function add_hints(parameters, last_activation_time) {
         set_hinting_parameters(parameters);
         if (option_value('+', 1) > 0) {
             hinting_on_ = true;
-            return await place_hints(false);
+            return await place_hints(false, last_activation_time);
         } else {
             Util.vlog(2)("not adding hints: " + options_to_string());
             return await remove_hints();
@@ -36,9 +36,9 @@ var Hints = null;
     }
 
     // Returns work time taken in milliseconds.
-    async function refresh_hints() {
+    async function refresh_hints(last_activation_time) {
         if (hinting_on_)
-            return await place_hints(true);
+            return await place_hints(true, last_activation_time);
         return 0;
     }
 
@@ -236,7 +236,7 @@ var Hints = null;
 
 
     // Returns work time taken in milliseconds.
-    async function place_hints(refreshing) {
+    async function place_hints(refreshing, last_activation_time) {
         if (!refreshing) {
             Util.vlog(2)("adding hints: " + options_to_string());
         }
@@ -295,14 +295,18 @@ var Hints = null;
         const stats           = HintManager.get_hint_number_stats();
         const hints_made      = stats.hints_made - starting_hint_count;
         if (Hints.option("timing") || hints_made > 0) {
-            const max_hint_number = stats.max_hint_number_used;
-            const hints_in_use    = stats.hints_in_use;
+            const max_hint_number    = stats.max_hint_number_used;
+            const hints_in_use       = stats.hints_in_use;
+            const ms_since_activation = last_activation_time
+                  ? (Date.now() - last_activation_time).toFixed(0)
+                  : "n/a";
             Util.vlog(2)(
                 `+${hints_made} -> ${hints_in_use} hints` +
                 ` (number high water ${max_hint_number})` +
                 ` in ${Util.time(0, total_work_time)}:` +
                 ` walk: ${Util.time(0, walk_time)};` +
-                ` add/adjust: ${Util.time(0, placing_time)} via ${result}`);
+                ` add/adjust: ${Util.time(0, placing_time)} via ${result};` +
+                ` ${ms_since_activation} ms since activation`);
         }
 
 

@@ -6,12 +6,12 @@
 
 
 // Returns work time taken in milliseconds.
-async function do_refresh(full_refresh, show_hints_parameters) {
+async function do_refresh(full_refresh, show_hints_parameters, last_activation_time) {
     if (full_refresh) {
         const removal_time = await Hints.remove_hints();
-        return removal_time + await Hints.add_hints(show_hints_parameters);
+        return removal_time + await Hints.add_hints(show_hints_parameters, last_activation_time);
     } else {
-        return await Hints.refresh_hints();
+        return await Hints.refresh_hints(last_activation_time);
     }
 }
 
@@ -28,6 +28,12 @@ let refresh_in_progress          = false;
 let full_refresh_requested       = false;
 let pending_show_hints_parameters = "";       // used when full_refresh_requested is true.
 
+// Post-activation rapid refresh: for POST_ACTIVATION_WINDOW_MS after an activation,
+// cap the refresh delay at POST_ACTIVATION_MAX_DELAY_MS (overriding refresh_min).
+const POST_ACTIVATION_WINDOW_MS    = 3000;
+const POST_ACTIVATION_MAX_DELAY_MS = 100;
+let   last_activation_time         = 0;
+
 
 function get_refresh_parameters() {
     return {
@@ -38,7 +44,7 @@ function get_refresh_parameters() {
     };
 }
 
-// This is run every 50 ms for frames with refreshing once we have started.
+// This is run every 20 ms for frames with refreshing once we have started.
 function maybe_refresh() {
     // Run at most one refresh at a time.
     if (refresh_in_progress) {
@@ -70,17 +76,24 @@ function maybe_refresh() {
     const doing_full_request = full_refresh_requested;
     full_refresh_requested   = false;
 
-    do_refresh(doing_full_request, pending_show_hints_parameters).then((work_time_taken) => {
+    do_refresh(doing_full_request, pending_show_hints_parameters, last_activation_time).then((work_time_taken) => {
         const last_refresh_time = work_time_taken;
         const p = get_refresh_parameters();
+        const now = new Date().getTime();
+        const in_post_activation_window = now < last_activation_time + POST_ACTIVATION_WINDOW_MS;
         if (doing_full_request) {
             // We don't know how long the next refresh will take so let's be aggressive.
-            next_major_refresh = new Date().getTime() + p.minimum_refresh_delay;
+            let delay_till_next_refresh = p.minimum_refresh_delay;
+            if (in_post_activation_window)
+                delay_till_next_refresh = Math.min(delay_till_next_refresh, POST_ACTIVATION_MAX_DELAY_MS);
+            next_major_refresh = now + delay_till_next_refresh;
         } else {
             let delay_till_next_refresh = last_refresh_time *
                 (1-p.maximum_refresh_cpu)/p.maximum_refresh_cpu;
             delay_till_next_refresh = Math.max(delay_till_next_refresh, p.minimum_refresh_delay);
             delay_till_next_refresh = Math.min(delay_till_next_refresh, p.maximum_refresh_delay);
+            if (in_post_activation_window)
+                delay_till_next_refresh = Math.min(delay_till_next_refresh, POST_ACTIVATION_MAX_DELAY_MS);
 
             const estimated_refresh_cpu = last_refresh_time
                                           / (delay_till_next_refresh+last_refresh_time);
@@ -90,7 +103,7 @@ function maybe_refresh() {
                           ` estimated refresh CPU ${(estimated_refresh_cpu*100).toFixed(1)}%`);
             }
 
-            next_major_refresh = new Date().getTime() + delay_till_next_refresh;
+            next_major_refresh = now + delay_till_next_refresh;
         }
     }).catch(err => {
         console.error("CBV: Error during refresh:", err);
@@ -100,9 +113,10 @@ function maybe_refresh() {
 }
 
 function hint_activated() {
+    const now = new Date().getTime();
+    last_activation_time = now;
     const p = get_refresh_parameters();
-    next_major_refresh = Math.min(next_major_refresh, 
-                                  new Date().getTime() + p.refresh_after_activate);
+    next_major_refresh = Math.min(next_major_refresh, now + p.refresh_after_activate);
 }
 
 
@@ -178,5 +192,5 @@ if (document.readyState === "loading") {
 
 function startup() {
     Util.act("CBV_HELLO", {});
-    setInterval(maybe_refresh, 50);
+    setInterval(maybe_refresh, 20);
 }
