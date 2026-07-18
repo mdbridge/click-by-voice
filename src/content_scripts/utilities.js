@@ -151,11 +151,43 @@ let Util = null;
     //
     // Requesting background script to perform actions on our behalf
     //
+    //
+    // When our extension is reloaded, updated, or disabled, already
+    // injected content scripts like us are orphaned: our extension
+    // context is invalidated, and any attempt to message our service
+    // worker throws "Extension context invalidated."  We silently
+    // swallow such errors here but the main content script polls
+    // is_context_invalidated() and halts its refresh loop when it
+    // sees we are orphaned.
+
+    function is_context_invalidated() {
+        // chrome.runtime.id becomes undefined once our extension
+        // context has been invalidated.
+        return !chrome.runtime?.id;
+    }
+
+    function is_invalidation_error(error) {
+        // Checking our context directly is the primary, text-independent
+        // test; the message test covers a teardown window where Chrome
+        // throws before chrome.runtime.id reads as gone.
+        return is_context_invalidated() ||
+               (error && /context invalidated/i.test(error.message));
+    }
+
+    function ignore_invalidation_error(error) {
+        if (!is_invalidation_error(error)) {
+            throw error;
+        }
+    }
 
     function act(action, args, epoch=current_epoch) {
         args.action = action;
         args.epoch  = epoch;
-        chrome.runtime.sendMessage(args);
+        try {
+            chrome.runtime.sendMessage(args).catch(ignore_invalidation_error);
+        } catch (error) {
+            ignore_invalidation_error(error);
+        }
     }
 
     async function request(action, args, epoch=current_epoch) {
@@ -163,11 +195,11 @@ let Util = null;
         args.epoch  = epoch;
         try {
             return await chrome.runtime.sendMessage(args);
-        } catch (e) {
-            if (e.message === "Extension context invalidated.") {
+        } catch (error) {
+            if (is_invalidation_error(error)) {
                 return { rejected: true };
             }
-            throw e;
+            throw error;
         }
     }
 
@@ -193,6 +225,7 @@ let Util = null;
 
         act: act,
         request: request,
+        is_context_invalidated: is_context_invalidated,
     };
 
 })();

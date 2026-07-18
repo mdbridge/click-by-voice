@@ -34,6 +34,21 @@ const POST_ACTIVATION_WINDOW_MS    = 3000;
 const POST_ACTIVATION_MAX_DELAY_MS = 100;
 let   last_activation_time         = 0;
 
+// setInterval ID of our refresh timer; null before startup and once halted.
+// Note: this must be declared before startup() can run (see bottom of file).
+let refresh_interval_id = null;
+
+// Stop refreshing permanently; called by maybe_refresh when it
+// notices our extension context has been invalidated (e.g., our
+// extension was reloaded), orphaning us.
+function halt_refreshing() {
+    if (refresh_interval_id !== null) {
+        clearInterval(refresh_interval_id);
+        refresh_interval_id = null;
+        Util.vlog(1)("extension context invalidated; halting refreshing");
+    }
+}
+
 
 function get_refresh_parameters() {
     return {
@@ -44,8 +59,16 @@ function get_refresh_parameters() {
     };
 }
 
-// This is run every 20 ms for frames with refreshing once we have started.
+// This is run every 20 ms for frames with refreshing once we have
+// started.  Exception: we stop running this if we have been orphaned.
 function maybe_refresh() {
+    // If our extension has been reloaded, updated, or disabled, we
+    // are an orphaned content script; stop refreshing.
+    if (Util.is_context_invalidated()) {
+        halt_refreshing();
+        return;
+    }
+
     // Run at most one refresh at a time.
     if (refresh_in_progress) {
         return;
@@ -192,5 +215,5 @@ if (document.readyState === "loading") {
 
 function startup() {
     Util.act("CBV_HELLO", {});
-    setInterval(maybe_refresh, 20);
+    refresh_interval_id = setInterval(maybe_refresh, 20);
 }
