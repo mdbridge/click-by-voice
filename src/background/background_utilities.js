@@ -1,6 +1,9 @@
 ///
-/// Handling commands by sending the command to the content script of the current active tab.
-/// Assumes we are either the service worker or the pop-up window's JavaScript.
+/// Handling commands by sending the command to the content script of
+/// the current active tab.
+///
+/// Assumes we are the service worker (so that the tab-tracking state
+/// in session storage only ever has a single writer).
 ///
 
 import * as background_persistence from './background_persistence.js';

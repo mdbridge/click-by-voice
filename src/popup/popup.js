@@ -7,16 +7,19 @@
 /// choose inspect then console.
 ///
 
-import { do_user_command } from '../background/background_utilities.js';
-
-
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("CBV_popup_form").addEventListener("submit", async function(event) {
         event.preventDefault();
         const input_text = document.getElementById("hint_number").value;
-        await do_user_command(input_text);
-        // Closing the pop up window ends its JavaScript execution
-        // so need to do it only after above done.
+        // Ask the service worker to run the command rather than
+        // running it ourselves so that session storage only ever has
+        // a single writer (otherwise its critical sections, which are
+        // per JavaScript context, cannot prevent races).
+        await chrome.runtime.sendMessage({ action: "pop_up_user_command", text: input_text });
+        // Close only once the service worker has received the
+        // command; if it could not be reached (a rejection here), we
+        // deliberately stay open so the user can retry by pressing
+        // enter again.
         window.close();
     });
 });

@@ -36,11 +36,19 @@ chrome.commands.onCommand.addListener(async function(command) {
 
 
 //
-// Performing actions on behalf of the content script
+// Performing actions on behalf of our other contexts (content
+// scripts and the popup)
 //
 
 // returns the response to send back
-async function handle_content_script_message(request, sender) {
+async function handle_extension_message(request, sender) {
+    // "pop_up_user_command" comes from our popup, not a content
+    // script; it has no sender.tab and carries no epoch.
+    if (request.action === "pop_up_user_command" && !sender.tab) {
+        await background_utilities.do_user_command(request.text);
+        return { status: "user command performed" };
+    }
+
     const tab_id   = sender.tab.id;
     const frame_id = sender.frameId;
 
@@ -103,7 +111,7 @@ async function handle_content_script_message(request, sender) {
         return { status: "text copied" };
 
     default:
-        console.error("Unknown content script action: " + request.action);
+        console.error("Unknown extension message action: " + request.action);
         return { error: "unknown action" };
     }
 }
@@ -113,19 +121,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // In order to keep the connection open long enough for the
     // response to be received, we need to return true from the callback.
     // (Otherwise, the service worker may go away before the
-    // content script is able to read the response.  :-( )  This cannot
+    // sender is able to read the response.  :-( )  This cannot
     // be done using an async callback, so we need to do a bit of
     // kludging.  For simplicity, we just always send a response.
 
     // Start work in the background, including always sending a response at the end:
     (async () => {
         try {
-            const response = await handle_content_script_message(request, sender);
-            // console.log("CBV: Handled content script message from", sender,
+            const response = await handle_extension_message(request, sender);
+            // console.log("CBV: Handled extension message from", sender,
             //             request, "-->", response);
             sendResponse(response);
         } catch (error) {
-            console.error(`Error while handling content script message ${request}: ${error}`);
+            console.error(`Error while handling extension message ${request}: ${error}`);
             sendResponse({ error: error.message });
         }
     })();
