@@ -403,11 +403,19 @@ var Activate = null;
 
     // Locate an element described by a hint descriptor in this frame.
     // Returns object with optional fields $element, hint_if_known.
-    function find_hint_descriptor(hint_descriptor, ...contents) {
+    function find_hint_descriptor(hint_descriptor) {
         const match = hint_descriptor.match(/^\$\{(.*)\}("(.*)")?$/);
         if (match) {
             // ${CSS selector} or ${CSS selector}"text"
-            let $element = $(match[1], ...contents);
+            let $element;
+            try {
+                // Use .find rather than $(...) so the selector cannot
+                // be interpreted as HTML to instantiate.
+                $element = $(document).find(match[1]);
+            } catch (error) {
+                Util.vlog(0)(`Invalid CSS selector "${match[1]}": ${error.message}`);
+                return {};
+            }
             if (match[3]) {
                 const target = match[3].toLowerCase();
                 $element = $element.filter(function(index, e) {
