@@ -88,6 +88,43 @@ To run the tests:
 
     npx playwright test
 
+### Writing Playwright tests -- gotchas
+
+These cost real debugging time; read them before adding a test.
+
+- **You usually do not need to issue a show-hints command.**  The
+  background runs the configured `startingCommand` on frame 0's
+  `CBV_HELLO`, and that shows hints by default, so hints appear on
+  their own after a plain `page.goto`.  A gratuitous `:+` creates a
+  *second* epoch on top of that one, and every epoch renumbers all
+  frames from scratch -- so a hint number read before the second epoch
+  lands is stale by the time it is activated.  Symptom: intermittent
+  failures where activation clicks nothing or the wrong element.  Do
+  issue show-hints when the test is *about* re-showing, but then treat
+  every previously read number as invalid.
+
+- **Hint numbers are stable only within one epoch.**  Within an epoch
+  a number, once assigned, stays put: the content script's periodic
+  hint refresh adds numbers for newly hintable elements without
+  disturbing existing ones.  A new epoch -- from a page load, a
+  reload, or any show-hints command -- renumbers everything, so
+  re-read after any of those.
+
+- **Activation is not synchronous.**  The element is highlighted for
+  250 ms before the click lands, so poll for the effect rather than
+  asserting immediately after `do_user_command`.
+
+- **`do_user_command` defaults to `tab_id = -1`,** which resolves to
+  the active tab of the current window.  A test driving activation
+  depends on its own page being that tab.
+
+- **An `<iframe>` element is itself hintable,** so a page with one
+  button and one frame owns two hint numbers, not one.
+
+- **Automatic tests own their pages, under `tests/pages/`.**
+  `test_pages/` is for manual testing; do not couple automatic tests
+  to those pages unless the page is stable and you say so in the test.
+
 ### Manual testing
 
 Much testing is still manual, via the HTML files in `test_pages/`.
