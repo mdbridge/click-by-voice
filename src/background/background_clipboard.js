@@ -32,8 +32,14 @@ async function setupOffscreenDocument() {
             reasons: ['CLIPBOARD'],
             justification: 'Reading and writing text from/to the clipboard',
         });
-        await creating;
-        creating = null;
+        try {
+            await creating;
+        } finally {
+            // Clear even on failure so a later call can retry
+            // creation rather than re-awaiting a rejected promise
+            // forever.
+            creating = null;
+        }
     }
 }
 
