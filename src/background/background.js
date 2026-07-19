@@ -148,3 +148,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // Return true to indicate that the response is being sent asynchronously
     return true;
 });
+
+
+
+//
+// Test support
+//
+
+// Expose for Playwright tests (service_worker.evaluate); the service
+// worker global scope is unreachable by web pages, so this adds no
+// attack surface.
+globalThis.do_user_command = background_utilities.do_user_command;
