@@ -1,3 +1,6 @@
-src.tmp
-click_by_voice.zip
 .claude/
+click_by_voice.zip
+node_modules/
+playwright-report/
+src.tmp
+test-results/
