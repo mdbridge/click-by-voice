@@ -49,6 +49,13 @@ async function handle_extension_message(request, sender) {
         return { status: "user command performed" };
     }
 
+    // All other messages must come from content scripts, which
+    // always have a sender tab.
+    if (!sender.tab) {
+        console.error("CBV: unexpected message from a non-tab sender:", request, sender);
+        return { error: "unexpected sender" };
+    }
+
     const tab_id   = sender.tab.id;
     const frame_id = sender.frameId;
 
