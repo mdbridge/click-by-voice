@@ -61,16 +61,38 @@ make clean        # removes temporary files
 ```
 
 The build strips comments from `manifest.json` and zips the `src/`
-directory.  There is no npm, webpack, or transpilation step -- this is
-plain JavaScript loaded directly by Chrome.
+directory.  The build has no npm, webpack, or transpilation step --
+this is plain JavaScript loaded directly by Chrome.  (npm exists in
+this repository only for the dev-only Playwright tests; nothing it
+installs is shipped.)
 
 
 ## Testing
 
-Testing is manual via the HTML files in `test_pages/`.  Load the
-unpacked extension in Chrome (`chrome://extensions/` -> Load unpacked ->
-select `src/`), then open test pages to verify behavior.  There is no
-automated test runner.
+### Automated tests (Playwright)
+
+Playwright tests live in `tests/`; they load the unpacked extension
+from `src/` into a real Chrome.  Run them after any change to `src/`.
+
+Node/npm/npx are run using git bash (not Cygwin bash), but need the
+default path extended to work:
+
+    export PATH="$PATH:/c/Program Files/nodejs"
+
+One-time setup:
+
+    npm install
+    npx playwright install chromium
+
+To run the tests:
+
+    npx playwright test
+
+### Manual testing
+
+Much testing is still manual, via the HTML files in `test_pages/`.
+Load the unpacked extension in Chrome (`chrome://extensions/` -> Load
+unpacked -> select `src/`), then open test pages to verify behavior.
 
 ### Syntax checking
 
