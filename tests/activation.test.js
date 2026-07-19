@@ -6,31 +6,23 @@ test('activating a hint by number clicks the hinted element', async ({ context, 
   const page = await context.newPage();
   await page.goto(test_page_url, { waitUntil: 'domcontentloaded' });
 
-  await service_worker.evaluate((text) => do_user_command(text), ':+');
-
+  // No show-hints command is issued: the background runs the
+  // configured startingCommand on frame 0's CBV_HELLO (background.js),
+  // and that shows hints by default.  Issuing our own would create a
+  // second epoch, and each epoch renumbers every frame from zero --
+  // leaving a window in which the number just read is already stale.
+  //
   // The page has exactly one hintable element, so every element
-  // carrying CBV_hint_tag names that element's hint number.  (There
-  // may be more than one carrier: an overlay marker's outer and
-  // inner elements are both tagged.)
-  const hints = page.locator('[CBV_hint_tag]');
-  function get_hint_tags() {
-    return hints.evaluateAll(
-        (elements) => elements.map((element) => element.getAttribute('CBV_hint_tag')));
-  }
-
-  // Hint numbers are not guaranteed stable across epochs, and page
-  // startup (CBV_HELLO) may re-show hints shortly after our ':+'
-  // does.  Sample until two snapshots 200 ms apart agree, so the
-  // number we activate comes from the settled, current epoch.
+  // carrying CBV_hint_tag names that element.  (There may be more than
+  // one carrier: an overlay marker's outer and inner elements are both
+  // tagged.)  Hints arrive asynchronously, but with a single epoch the
+  // numbers do not change once assigned.
   let hint_tags;
   await expect.poll(async () => {
-    const earlier_sample = await get_hint_tags();
-    await page.waitForTimeout(200);
-    hint_tags = await get_hint_tags();
-    return hint_tags.length > 0 &&
-           hint_tags.length === earlier_sample.length &&
-           hint_tags.every((tag, index) => tag === earlier_sample[index]);
-  }).toBe(true);
+    hint_tags = await page.locator('[CBV_hint_tag]').evaluateAll(
+        (elements) => elements.map((element) => element.getAttribute('CBV_hint_tag')));
+    return hint_tags.length;
+  }).toBeGreaterThan(0);
 
   const hint_numbers = [...new Set(hint_tags)];
   expect(hint_numbers.length).toBe(1);
