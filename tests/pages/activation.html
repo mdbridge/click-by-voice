@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Activation test page</title>
+<!-- Used by ../activation.test.js, which depends on this page
+     containing exactly one hintable element.  Unlike ../../test_pages/
+     (manual testing), pages under tests/pages/ exist for the automatic
+     tests; keep them stable or update the tests with them. -->
+</head>
+<body>
+
+<h1>Activation test page</h1>
+
+<p>This page contains exactly one hintable element:</p>
+
+<button id="target_button">Target button</button>
+
+<script>
+  window.clicks = [];
+  document.getElementById('target_button').addEventListener('click', function() {
+    window.clicks.push('target_button');
+  });
+</script>
+
+</body>
+</html>
