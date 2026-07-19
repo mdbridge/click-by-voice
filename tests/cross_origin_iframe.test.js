@@ -11,13 +11,13 @@ const test_page_url = new URL('./pages/iframe_parent.html', import.meta.url).hre
 // into a frame regardless of origin, so a same-origin child would take
 // the same path.
 //
-// No ":+" command is issued here.  The default startingCommand is ":+"
-// (options/option_storage.js), which the background runs on frame 0's
-// CBV_HELLO (background.js), so hints appear on their own.  Issuing our
-// own would create a second epoch, and each epoch renumbers every frame
-// from zero -- leaving a window in which the number just read is already
-// stale.  Letting the page's own startup be the only epoch removes that
-// race rather than papering over it with polling.
+// No show-hints command is issued here.  The background runs the
+// configured startingCommand on frame 0's CBV_HELLO (background.js),
+// and that shows hints by default.  Issuing our own would create a
+// second epoch, and each epoch renumbers every frame from scratch --
+// leaving a window in which the number just read is already stale.
+// Letting the page's own startup be the only epoch removes that race
+// rather than papering over it with polling.
 test('a hint owned by a cross-origin child frame activates in that frame',
      async ({ context, service_worker }) => {
   const page = await context.newPage();

@@ -9,7 +9,7 @@ test('activating a hint by number clicks the hinted element', async ({ context, 
   // No show-hints command is issued: the background runs the
   // configured startingCommand on frame 0's CBV_HELLO (background.js),
   // and that shows hints by default.  Issuing our own would create a
-  // second epoch, and each epoch renumbers every frame from zero --
+  // second epoch, and each epoch renumbers every frame from scratch --
   // leaving a window in which the number just read is already stale.
   //
   // The page has exactly one hintable element, so every element
