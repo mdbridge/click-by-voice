@@ -140,7 +140,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             //             request, "-->", response);
             sendResponse(response);
         } catch (error) {
-            console.error(`Error while handling extension message ${request}: ${error}`);
+            console.error("CBV: error while handling extension message:", request, error);
             sendResponse({ error: error.message });
         }
     })();
