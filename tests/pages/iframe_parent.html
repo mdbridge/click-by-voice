@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cross-origin iframe test page (parent)</title>
+<!-- Used by ../cross_origin_iframe.test.js, which depends on this page
+     containing exactly one child frame.  Chrome gives each file:// page
+     its own opaque origin, so the child is cross-origin to this page
+     even though both are loaded from disk.  Unlike ../../test_pages/
+     (manual testing), pages under tests/pages/ exist for the automatic
+     tests; keep them stable or update the tests with them. -->
+</head>
+<body>
+
+<h1>Cross-origin iframe test page</h1>
+
+<p>This page has a hintable element of its own:</p>
+
+<button id="parent_button">Parent button</button>
+
+<p>and one cross-origin child frame:</p>
+
+<iframe id="child_frame" src="iframe_child.html" width="400" height="200"></iframe>
+
+<script>
+  window.clicks = [];
+  document.getElementById('parent_button').addEventListener('click', function() {
+    window.clicks.push('parent_button');
+  });
+
+</script>
+
+</body>
+</html>

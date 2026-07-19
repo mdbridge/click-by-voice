@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cross-origin iframe test page (child)</title>
+<!-- Loaded by iframe_parent.html from a different origin; see
+     ../cross_origin_iframe.test.js.  Depends on containing exactly one
+     hintable element. -->
+</head>
+<body>
+
+<h1>Child frame</h1>
+
+<button id="child_button">Child button</button>
+
+<script>
+  window.clicks = [];
+  document.getElementById('child_button').addEventListener('click', function() {
+    window.clicks.push('child_button');
+  });
+</script>
+
+</body>
+</html>
