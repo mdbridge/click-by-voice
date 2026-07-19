@@ -41,7 +41,6 @@ let FindHint = null;
         case "button":
         case "frame":
         case "iframe":
-        case "keygen":
         case "select":
         case "summary":
         case "textarea":
